@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/pkg/errors"
+)
 
 func main() {
-	fmt.Print("hello")
+	fmt.Println("hello")
+	err := errors.New("Error~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+	fmt.Println(err)
 }
