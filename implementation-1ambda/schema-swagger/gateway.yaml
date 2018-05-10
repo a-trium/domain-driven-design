@@ -1,0 +1,52 @@
+swagger: "2.0"
+info:
+  title: Gateway
+  version: 0.0.1
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+
+basePath: /api
+
+paths:
+  /example:
+    post:
+      tags:
+        - example
+      operationId: SomeAction
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/ExampleRequest"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/ExampleResponse"
+        default:
+          description: error
+          schema:
+            $ref: "./common.yaml#/definitions/Error"
+
+definitions:
+  ExampleRequest:
+    type: object
+    required:
+      - someField
+    properties:
+      someField:
+        type: string
+
+  ExampleResponse:
+    type: object
+    required:
+      - someField
+    properties:
+      someField:
+        type: string
+
+
