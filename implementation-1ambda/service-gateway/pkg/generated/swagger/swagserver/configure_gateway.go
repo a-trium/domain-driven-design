@@ -15,7 +15,7 @@ import (
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/example"
 )
 
-//go:generate swagger generate server --target ../pkg/generated/swagger --name  --spec ../../schema-swagger/gateway.yaml --api-package swagapi --model-package swagmodel --server-package swagserver --exclude-main
+//go:generate swagger generate server --target ../pkg/generated/swagger --name  --spec ../../schema-swagger/gateway-rest.yaml --api-package swagapi --model-package swagmodel --server-package swagserver --exclude-main
 
 func configureFlags(api *swagapi.GatewayAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
