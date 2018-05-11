@@ -4,8 +4,6 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
-const RestPort = 30001
-
 var (
 	// These fields are populated by govvv
 	BuildDate string
@@ -24,10 +22,10 @@ type Environment struct {
 	ServiceName   string `default:"service-gateway"`
 	ServiceId     string `default:"0"`
 	MysqlHost     string `default:"localhost"`
-	MysqlPort     string `default:"33306"`
+	MysqlPort     string `default:"3306"`
 	MysqlUserName string `default:"root"`
 	MysqlPassword string `default:"root"`
-	MysqlDatabase string `default:"ddd"`
+	MysqlDatabase string `default:"application"`
 
 	// copied from govvv injected values
 	BuildDate string

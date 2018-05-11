@@ -61,9 +61,12 @@ func main() {
 	api.JSONProducer = runtime.JSONProducer()
 	api.Logger = logger.Infof
 
+	// configure database
+	db := config.GetDatabase()
+
 	// configure REST server handlers, middlewares
 	logger.Info("Configure REST API handlers")
-	restCtrl := rest.NewController(logger)
+	restCtrl := rest.NewController(db, logger)
 	restCtrl.Configure(api)
 
 	handler := api.Serve(nil)
