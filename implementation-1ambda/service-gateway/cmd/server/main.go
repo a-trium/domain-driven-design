@@ -12,13 +12,9 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/jessevdk/go-flags"
 	"github.com/rs/cors"
-	"go.uber.org/zap"
 )
 
 func main() {
-	log, _ := zap.NewDevelopment()
-	defer log.Sync() // flushes buffer, if any
-
 	env := config.Env
 	logger := config.GetLogger().With("service_name", env.ServiceName, "service_id", env.ServiceId, )
 

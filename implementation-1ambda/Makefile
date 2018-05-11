@@ -1,7 +1,13 @@
 TAG 		= "Makefile"
 
-DOCKER = docker
+DOCKER 		= docker
 MYSQLCLIENT = mycli
+PIP 		= pip
+
+.PHONY: prepare
+prepare:
+	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Installing tools"
+	@ $(PIP) install -U mycli
 
 .PHONY: compose
 compose:
