@@ -48,8 +48,8 @@ prepare:
 
 	@ echo ""
 
-.PHONY: dep
-dep:
+.PHONY: install
+install:
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Installing dependencies"
 	@ $(GODEP) ensure
 	@ echo ""
@@ -99,4 +99,4 @@ clean:
 
 
 .PHONY: release
-release: prepare dep clean swagger build
+release: prepare install clean swagger build

@@ -101,6 +101,12 @@
   version = "v1.4.0"
 
 [[projects]]
+  name = "github.com/kelseyhightower/envconfig"
+  packages = ["."]
+  revision = "f611eb38b3875cc3bd991ca91c51d06446afa14c"
+  version = "v1.3.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/mailru/easyjson"
   packages = [
@@ -202,6 +208,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "b203764b5fa43b97a68c7c65ad02c2374640a16fcdbf4c669bd4f79f5ca0c620"
+  inputs-digest = "df0701c4b675ef4add9524697f856d5552ee86404ccb3e94b00cce19ea015a50"
   solver-name = "gps-cdcl"
   solver-version = 1
