@@ -16,8 +16,8 @@ var (
 )
 
 type Environment struct {
-	debug bool   `default:"true"`
-	mode  string `default:"LOCAL"` // `LOCAL`, `TEST`, `DEV`, `PROD`
+	Debug bool   `default:"true"`
+	Mode  string `default:"LOCAL"` // `LOCAL`, `TEST`, `DEV`, `PROD`
 
 	RestPort      int    `default:"30001"`
 	CorsAllowUrl  string `default:"localhost:8080"`
@@ -38,15 +38,15 @@ type Environment struct {
 }
 
 func (e *Environment) DebugEnabled() bool {
-	return e.debug
+	return e.Debug
 }
 
 func (e *Environment) IsTestMode() bool {
-	return e.mode == "TEST"
+	return e.Mode == "TEST"
 }
 
 func (e *Environment) IsLocalMode() bool {
-	return e.mode == "LOCAL"
+	return e.Mode == "LOCAL"
 }
 
 var Env Environment

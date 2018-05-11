@@ -20,7 +20,7 @@ func main() {
 	defer log.Sync() // flushes buffer, if any
 
 	env := config.Env
-	logger := log.Sugar().With("service_name", env.ServiceName, "service_id", env.ServiceId, )
+	logger := config.GetLogger().With("service_name", env.ServiceName, "service_id", env.ServiceId, )
 
 	logger.Infow("Build Manifest",
 		"build_date", env.BuildDate,
