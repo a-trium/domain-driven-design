@@ -19,9 +19,16 @@ func main() {
 	log, _ := zap.NewDevelopment()
 	defer log.Sync() // flushes buffer, if any
 
-	serviceName := "service-gateway"
-	serviceId := "0"
-	logger := log.Sugar().With("service_name", serviceName, "service_id", serviceId, )
+	env := config.Env
+	logger := config.GetLogger().With("service_name", env.ServiceName, "service_id", env.ServiceId, )
+
+	logger.Infow("Build Manifest",
+		"build_date", env.BuildDate,
+		"git_commit", env.GitCommit,
+		"git_branch", env.GitBranch,
+		"git_state", env.GitState,
+		"version", env.Version,
+	)
 
 	swaggerSpec, err := loads.Analyzed(swagserver.SwaggerJSON, "")
 	if err != nil {
@@ -40,7 +47,7 @@ func main() {
 		}
 	}
 
-	server.Port = config.RestPort
+	server.Port = env.RestPort
 	if _, err := parser.Parse(); err != nil {
 		code := 1
 		if fe, ok := err.(*flags.Error); ok {
@@ -54,13 +61,12 @@ func main() {
 	api.JSONProducer = runtime.JSONProducer()
 	api.Logger = logger.Infof
 
-	api.JSONConsumer = runtime.JSONConsumer()
-	api.JSONProducer = runtime.JSONProducer()
-	api.Logger = logger.Infof
+	// configure database
+	db := config.GetDatabase()
 
 	// configure REST server handlers, middlewares
 	logger.Info("Configure REST API handlers")
-	restCtrl := rest.NewController(logger)
+	restCtrl := rest.NewController(db, logger)
 	restCtrl.Configure(api)
 
 	handler := api.Serve(nil)
