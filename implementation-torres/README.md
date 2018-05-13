@@ -9,3 +9,14 @@
 - [service-gateway](./service-gateway)
 - [service-front](./service-front)
 - RDB
+
+### start
+- install & prepare
+```bash
+make prepare # install
+make mycli # use mycli to connect MySQL
+```
+- start docker container
+```bash
+make compose
+```

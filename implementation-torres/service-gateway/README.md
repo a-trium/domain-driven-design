@@ -29,6 +29,10 @@ $ make build
 ```bash
 $ make run
 ```
+- start
+```bash
+$ make clean install build run
+```
 
 ## Makefile
 - usage go command : go build, go install, dep, gometalinter, ginkgo, rm, gofmt
