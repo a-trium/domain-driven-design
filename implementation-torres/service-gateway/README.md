@@ -1,5 +1,16 @@
 # Service - Gateway
 
+## library
+- [Errors](https://github.com/go-errors/errors)
+- [Gin](https://github.com/gin-gonic/gin) 
+- [GORM](http://doc.gorm.io/)
+- [Zap](https://github.com/uber-go/zap)
+
+```bash
+$ dep ensure -add github.com/gin-gonic/gin
+
+```
+
 ## directory
 - /bin
 - /cmd/server/main.go
