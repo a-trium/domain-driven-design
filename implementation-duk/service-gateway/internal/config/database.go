@@ -12,8 +12,9 @@ func GetDatabase() *gorm.DB {
 	var db *gorm.DB
 	var err error
 
+	property := Env.Database
 	dbConnString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		"root", "root", "localhost", "3306", "application")
+		property.UserName, property.Password, property.Host, property.Port, property.Database)
 	db, err = gorm.Open("mysql", dbConnString)
 
 	if err != nil {
