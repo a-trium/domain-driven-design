@@ -84,6 +84,8 @@ type Order struct {
 
 	User    User `gorm:"foreignkey:UserRef"`
 	UserRef uint
+
+	OrderDetails []Order `gorm:"foreignkey:OrderRef"`
 }
 
 func (Order) TableName() string {
