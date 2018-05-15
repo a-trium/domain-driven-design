@@ -12,5 +12,6 @@ func GetLogger() *zap.SugaredLogger {
 	}
 
 	logger := log.Sugar().With("service_name", Env.ServiceName, "service_id", Env.ServiceId, )
+
 	return logger
 }

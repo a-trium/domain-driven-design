@@ -1,61 +1,117 @@
 package config
 
 import (
+	"database/sql"
 	"fmt"
 
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gobuffalo/packr"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"github.com/rubenv/sql-migrate"
 	"github.com/satori/go.uuid"
+	"go.uber.org/zap"
 )
 
+const SqlSchemaDir = "../../asset/sql"
+
 func GetDatabase() *gorm.DB {
-	logger := GetLogger()
+	logger := getDbLogger()
 
 	var db *gorm.DB
 	var err error
 
+	useSqlite := Env.IsTestMode()
+	dialect := "sqlite3"
+
 	// Use sqlite3 for `TEST` env
-	if Env.IsTestMode() {
+	if useSqlite {
 		uuidString := uuid.NewV4().String()
-		filename := fmt.Sprintf("/tmp/go-ref_gateway_%s.db", uuidString)
-		logger.Info("Use sqlite3 database")
-		db, err = gorm.Open("sqlite3", filename)
+		filename := fmt.Sprintf("/tmp/ddd_gateway_%s.db", uuidString)
+		db, err = gorm.Open(dialect, filename)
 	} else {
-		logger.Info("Use mysql database")
+		dialect = "mysql"
 		dbConnString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
 			Env.MysqlUserName, Env.MysqlPassword, Env.MysqlHost, Env.MysqlPort, Env.MysqlDatabase)
-		db, err = gorm.Open("mysql", dbConnString)
+		db, err = gorm.Open(dialect, dbConnString)
+
+		// set performance related options
+		db.DB().SetMaxIdleConns(10)
+		db.DB().SetMaxOpenConns(100)
 	}
 
 	if err != nil {
 		logger.Fatalw("Failed to connect DB", "error", err)
 	}
+	logger.Infow("Database connected", "dialect", dialect)
 
-	// migration
-	logger.Info("Migrating tables")
+	// set gorm options
 	db.SingularTable(true)
-
-	//option := "ENGINE=InnoDB"
-	//if Env.IsTestMode() {
-	//	option = ""
-	//}
-
-	// Automigrate
-	// db.Set("gorm:table_options", option).AutoMigrate(&Session{})
-
-	if !Env.IsTestMode() {
-		// https://github.com/jinzhu/gorm/issues/1824#issuecomment-378123682
-		// gorm doesn't generate FK w/ `AutoMigrate`
-
-		// db.Model(&BrowserHistory{}).AddForeignKey("session_id", "session(session_id)", "RESTRICT", "CASCADE")
-	}
-
 	if (Env.IsLocalMode() && Env.DebugEnabled()) || Env.IsTestMode() {
 		db = db.LogMode(true)
 		db = db.Debug()
 	}
 
+	// migration
+	if useSqlite {
+		option := ""
+		db.Set("gorm:table_options", option).AutoMigrate(&domain.User{})
+	} else {
+		doMigration(db.DB(), dialect)
+	}
+
 	return db
+}
+
+func getDbLogger() *zap.SugaredLogger {
+	logger := GetLogger().With("context", "database")
+
+	return logger
+}
+
+func doMigration(db *sql.DB, dialect string) {
+	logger := getDbLogger()
+
+	migrations := &migrate.PackrMigrationSource{
+		Box: packr.NewBox(SqlSchemaDir),
+	}
+
+	findedMigrations, err := migrations.FindMigrations()
+	if err != nil {
+		logger.Fatalw("Failed to find sql migrations")
+	}
+
+	for _, migr := range findedMigrations {
+		m := []*migrate.Migration{migr}
+		n, err := migrate.Exec(
+			db,
+			dialect,
+			migrate.MemoryMigrationSource{Migrations: m,},
+			migrate.Up,
+		)
+
+		if err != nil {
+			logger.Warnw("Found sql migration error. Doing rollback...", "down", migr.Down)
+			_, downErr := migrate.Exec(
+				db,
+				dialect,
+				migrate.MemoryMigrationSource{Migrations: []*migrate.Migration{migr}},
+				migrate.Down,
+			)
+
+			if downErr != nil {
+				logger.Errorw("Failed to do rollback sql migration", "error", downErr)
+			}
+
+			logger.Fatalw("Failed to do sql migration", "error", err)
+		}
+
+		if n != 0 {
+			logger.Infow("Finished migration", "file", migr.Id)
+		} else {
+			logger.Infow("Skip migration", "file", migr.Id)
+		}
+	}
 }

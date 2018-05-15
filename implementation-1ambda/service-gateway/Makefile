@@ -17,6 +17,7 @@ GOVVV		= govvv
 GOLINT		= gometalinter
 GOBUILD		= GOOS=$(GOOS) GOARCH=$(GOARCH) $(GOCMD) build
 GOFMT		= $(GOCMD)fmt
+GOGET		= go get -u
 
 MAIN		= main.go
 BIN_DIR		= bin
@@ -37,14 +38,20 @@ SWAGGER_SPEC 	= "../schema-swagger/gateway-rest.yaml"
 prepare:
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Installing prerequisites"
 
-	@ echo "\t golang:dep"
-	@ go get -u github.com/golang/dep/cmd/dep
+	@ echo "\t golang:dep \t\t(dependency)"
+	@ $(GOGET) github.com/golang/dep/cmd/dep
 
-	@ echo "\t golang:go-swagger"
-	@ go get -u github.com/go-swagger/go-swagger/cmd/swagger
+	@ echo "\t golang:go-swagger \t(build)"
+	@ $(GOGET) github.com/go-swagger/go-swagger/cmd/swagger
 
-	@ echo "\t golang:govvv"
-	@ go get -u github.com/ahmetb/govvv
+	@ echo "\t golang:govvv \t\t(build)"
+	@ $(GOGET) github.com/ahmetb/govvv
+
+	@ echo "\t golang:ginkgo \t\t(testing)"
+	@ $(GOGET) github.com/ahmetb/govvv
+
+	@ echo "\t golang:gomega \t\t(testing)"
+	@ $(GOGET) github.com/ahmetb/govvv
 
 	@ echo ""
 
