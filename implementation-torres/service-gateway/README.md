@@ -1,13 +1,15 @@
 # Service - Gateway
 
 ## library
-- [Errors](https://github.com/go-errors/errors)
-- [Gin](https://github.com/gin-gonic/gin) 
-- [GORM](http://doc.gorm.io/)
-- [Zap](https://github.com/uber-go/zap)
+- [Errors](https://github.com/go-errors/errors) | ERROR
+- [Gin](https://github.com/gin-gonic/gin) | REST API
+- [GORM](http://doc.gorm.io/) | ORM
+- [Zap](https://github.com/uber-go/zap) | logging
+- [envconfig](https://github.com/kelseyhightower/envconfig) | Env configuration
 
 ```bash
 $ dep ensure -add github.com/gin-gonic/gin
+$ dep ensure -add github.com/uber-go/zap
 
 ```
 
