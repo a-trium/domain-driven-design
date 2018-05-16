@@ -67,13 +67,15 @@ func GetDatabase() *gorm.DB {
 			&order.Order{},
 			&order.OrderDetail{},
 		)
+
+		//db.Model(&product.Product{}).AddForeignKey("category_id", "Category(id)", "RESTRICT", "CASCADE")
+
 	} else {
 		doMigration(db.DB(), dialect)
 	}
 
 	return db
 }
-
 
 func getDbLogger() *zap.SugaredLogger {
 	logger := GetLogger().With("context", "database")
