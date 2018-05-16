@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/order"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/product"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gobuffalo/packr"
@@ -57,7 +59,14 @@ func GetDatabase() *gorm.DB {
 	// migration
 	if useSqlite {
 		option := ""
-		db.Set("gorm:table_options", option).AutoMigrate(&user.User{})
+		db.Set("gorm:table_options", option).AutoMigrate(
+			&user.User{},
+			&product.Category{},
+			&product.Image{},
+			&product.Product{},
+			&order.Order{},
+			&order.OrderDetail{},
+		)
 	} else {
 		doMigration(db.DB(), dialect)
 	}
@@ -65,11 +74,6 @@ func GetDatabase() *gorm.DB {
 	return db
 }
 
-func GetTestDatabase() *gorm.DB {
-	Env.Mode = "TEST"
-
-	return GetDatabase()
-}
 
 func getDbLogger() *zap.SugaredLogger {
 	logger := GetLogger().With("context", "database")

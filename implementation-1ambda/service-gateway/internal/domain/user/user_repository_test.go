@@ -1,8 +1,8 @@
 package user_test
 
 import (
-	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/config"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/test"
 	"github.com/jinzhu/gorm"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -14,12 +14,11 @@ var _ = Describe("UserRepository", func() {
 	var repo user.UserRepository
 
 	BeforeEach(func() {
-		db = config.GetTestDatabase()
+		db = test.GetTestDatabase()
 		repo = user.NewUserRepository(db)
 	})
 
 	AfterEach(func() {
-
 	})
 
 	Describe("create()", func() {
