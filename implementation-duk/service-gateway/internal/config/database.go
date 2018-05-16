@@ -8,11 +8,21 @@ import (
 
 )
 
-func GetDatabase() *gorm.DB {
-	var db *gorm.DB
-	var err error
+type DatabaseProperty struct {
+	Host     string `default:"localhost"`
+	Port     string `default:"3306"`
+	UserName string `default:"root"`
+	Password string `default:"root"`
+	Database string `default:"application"`
+}
 
-	property := Env.Database
+var (
+	db *gorm.DB
+	err error
+)
+
+func GetDatabase(property DatabaseProperty) *gorm.DB {
+
 	dbConnString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		property.UserName, property.Password, property.Host, property.Port, property.Database)
 	db, err = gorm.Open("mysql", dbConnString)
@@ -29,10 +39,11 @@ func GetDatabase() *gorm.DB {
 	// Automigrate
 	db.Set("gorm:table_options", option).AutoMigrate(&domain.User{})
 
-	//if (Env.IsLocalMode() && Env.DebugEnabled()) || Env.IsTestMode() {
+
+	if !IsProdMode() {
 		db = db.LogMode(true)
 		db = db.Debug()
-	//}
+	}
 
 	return db
 }

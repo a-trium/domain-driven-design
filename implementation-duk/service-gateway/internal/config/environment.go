@@ -11,18 +11,11 @@ var (
 	Version   string
 )
 
-type DatabaseProperty struct {
-	Host     string `default:"localhost"`
-	Port     string `default:"3306"`
-	UserName string `default:"root"`
-	Password string `default:"root"`
-	Database string `default:"application"`
-}
-
 type Environment struct {
-	Mode       string `default:"LOCAL"` // LOCAL TEST DEV PROD
-	ServiceNam string `default:"service-gateway"`
-	Database   DatabaseProperty
+	Mode             string `default:"LOCAL"` // LOCAL TEST DEV PROD
+	ServiceName      string `default:"service-gateway"`
+	ServiceId        string `default:"0"`
+	DatabaseProperty DatabaseProperty
 
 	BuildDate string
 	GitCommit string
@@ -31,18 +24,30 @@ type Environment struct {
 	Version   string
 }
 
-var Env Environment
+var env Environment
 
 func init() {
-	err := envconfig.Process("", &Env)
+	err := envconfig.Process("", &env)
 	if err != nil {
 		panic("Failed to get specification")
 	}
 
-	Env.BuildDate = BuildDate
-	Env.GitCommit = GitCommit
-	Env.GitBranch = GitBranch
-	Env.GitState = GitState
-	Env.GitState = GitState
-	Env.Version = Version
+	env.BuildDate = BuildDate
+	env.GitCommit = GitCommit
+	env.GitBranch = GitBranch
+	env.GitState = GitState
+	env.GitState = GitState
+	env.Version = Version
+}
+
+//func (env *Environment) IsProdMode() bool {
+//	return env.Mode == "PROD"
+//}
+
+func IsProdMode() bool {
+	return env.Mode == "PROD"
+}
+
+func GetEnvironment() *Environment {
+	return &env
 }
