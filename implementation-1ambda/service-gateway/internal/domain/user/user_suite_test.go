@@ -1,4 +1,4 @@
-package domain_test
+package user
 
 import (
 	"testing"
@@ -9,5 +9,5 @@ import (
 
 func TestDomain(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Domain Suite")
+	RunSpecs(t, "domain suite")
 }

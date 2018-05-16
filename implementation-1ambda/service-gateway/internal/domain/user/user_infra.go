@@ -1,4 +1,4 @@
-package domain
+package user
 
 import (
 	. "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/exception"
@@ -11,21 +11,21 @@ type userRepositoryImpl struct {
 }
 
 func NewUserRepository(db *gorm.DB) UserRepository {
-	return &userRepositoryImpl{}
+	return &userRepositoryImpl{db: db}
 }
 
-func (r *userRepositoryImpl) create(record *User) (*User, *Error) {
-	err := r.db.Create(record)
+func (r *userRepositoryImpl) Create(record *User) Exception {
+	err := r.db.Create(record).Error
 
 	if err != nil {
-		wrap := errors.Wrap(err.Error, "Failed to create User")
-		return nil, NewInternalServerError(wrap)
+		wrap := errors.Wrap(err, "Failed to create User")
+		return NewInternalServerError(wrap)
 	}
 
-	return record, nil
+	return nil
 }
 
-func (r *userRepositoryImpl) delete(id uint) (bool, *Error) {
+func (r *userRepositoryImpl) Delete(id uint) (bool, Exception) {
 	record := &User{}
 	result := r.db.Where("id = ?", id).Delete(record)
 
@@ -42,7 +42,7 @@ func (r *userRepositoryImpl) delete(id uint) (bool, *Error) {
 	return true, nil
 }
 
-func (r *userRepositoryImpl) findOne(id uint) (*User, *Error) {
+func (r *userRepositoryImpl) FindOne(id uint) (*User, Exception) {
 	record := &User{}
 	err := r.db.Where("id = ?", id).First(record).Error
 
@@ -59,7 +59,7 @@ func (r *userRepositoryImpl) findOne(id uint) (*User, *Error) {
 	return record, nil
 }
 
-func (r *userRepositoryImpl) fineAll() (*[]User, *Error) {
+func (r *userRepositoryImpl) FineAll() (*[]User, Exception) {
 	// TODO: use db.tx
 
 	var records []User
