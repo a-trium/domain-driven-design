@@ -13,9 +13,9 @@ type Exception interface {
 	StatusCode() int
 	Timestamp() *time.Time
 
-	IsBadRequestError() bool
-	IsNotFoundError() bool
-	IsInternalServerError() bool
+	IsBadRequestException() bool
+	IsNotFoundException() bool
+	IsInternalServerException() bool
 }
 
 type appException struct {
@@ -36,11 +36,11 @@ func (a *appException) Timestamp() *time.Time {
 	return &a.timestamp
 }
 
-func (a *appException) IsBadRequestError() bool {
+func (a *appException) IsBadRequestException() bool {
 	return a.statusCode == CodeBadRequest
 }
 
-func NewBadRequestError(err error) Exception {
+func NewBadRequestException(err error) Exception {
 	return &appException{
 		cause:      err,
 		statusCode: CodeBadRequest,
@@ -48,11 +48,11 @@ func NewBadRequestError(err error) Exception {
 	}
 }
 
-func (a *appException) IsNotFoundError() bool {
+func (a *appException) IsNotFoundException() bool {
 	return a.statusCode == CodeNotFound
 }
 
-func NewNotFoundError(err error) Exception {
+func NewNotFoundException(err error) Exception {
 	return &appException{
 		cause:      err,
 		statusCode: CodeNotFound,
@@ -60,11 +60,11 @@ func NewNotFoundError(err error) Exception {
 	}
 }
 
-func (a *appException) IsInternalServerError() bool {
+func (a *appException) IsInternalServerException() bool {
 	return a.statusCode == CodeInternalServer
 }
 
-func NewInternalServerError(err error) Exception {
+func NewInternalServerException(err error) Exception {
 	return &appException{
 		cause:      err,
 		statusCode: CodeInternalServer,

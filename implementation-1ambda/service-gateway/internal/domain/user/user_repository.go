@@ -26,7 +26,7 @@ func (r *userRepositoryImpl) Create(record *User) Exception {
 
 	if err != nil {
 		wrap := errors.Wrap(err, "Failed to create User")
-		return NewInternalServerError(wrap)
+		return NewInternalServerException(wrap)
 	}
 
 	return nil
@@ -38,12 +38,12 @@ func (r *userRepositoryImpl) Delete(id uint) (bool, Exception) {
 
 	if result.Error != nil {
 		wrap := errors.Wrap(result.Error, "Failed to delete User")
-		return false, NewInternalServerError(wrap)
+		return false, NewInternalServerException(wrap)
 	}
 
 	if result.RowsAffected < 1 {
 		wrap := errors.Wrap(result.Error, "Failed to delete User")
-		return false, NewBadRequestError(wrap)
+		return false, NewNotFoundException(wrap)
 	}
 
 	return true, nil
@@ -57,10 +57,10 @@ func (r *userRepositoryImpl) FindOne(id uint) (*User, Exception) {
 		wrap := errors.Wrap(err, "Failed to find-one User")
 
 		if gorm.IsRecordNotFoundError(err) {
-			return nil, NewBadRequestError(wrap)
+			return nil, NewNotFoundException(wrap)
 		}
 
-		return nil, NewInternalServerError(wrap)
+		return nil, NewInternalServerException(wrap)
 	}
 
 	return record, nil
@@ -74,7 +74,7 @@ func (r *userRepositoryImpl) FineAll() (*[]User, Exception) {
 	err := r.db.Find(&records).Error
 	if err != nil {
 		wrap := errors.Wrap(err, "Failed to find-all User")
-		return nil, NewInternalServerError(wrap)
+		return nil, NewInternalServerException(wrap)
 	}
 
 	return &records, nil
