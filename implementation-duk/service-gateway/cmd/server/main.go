@@ -8,8 +8,8 @@ import (
 func main() {
 	r := gin.Default()
 
-	//db := config.GetDatabase()
-	config.GetDatabase()
+	env := config.GetEnvironment()
+	config.GetDatabase(env.DatabaseProperty)
 	//user := domain.User{Name: "Jinzhu", Age: 18, Birthday: time.Now()}
 	//db.Create(&user)
 
