@@ -15,6 +15,7 @@ type Environment struct {
 	Mode             string `default:"LOCAL"` // LOCAL TEST DEV PROD
 	ServiceName      string `default:"service-gateway"`
 	ServiceId        string `default:"0"`
+	Port			 string `default:"9000"`
 	DatabaseProperty DatabaseProperty
 
 	BuildDate string

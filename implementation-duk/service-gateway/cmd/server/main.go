@@ -1,24 +1,39 @@
 package main
 
 import (
-	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/config"
+	"fmt"
+	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/infra"
+	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/web/config"
+	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/web/controller"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	r := gin.Default()
+	router := gin.Default()
 
 	env := config.GetEnvironment()
-	config.GetDatabase(env.DatabaseProperty)
+	//_ := config.GetLogger(env)
+	gorm := config.GetDatabase(env.DatabaseProperty)
+
+	userRepository := repository.NewUserRepository(gorm)
+	userController := controller.NewUserController(userRepository)
+
 	//user := domain.User{Name: "Jinzhu", Age: 18, Birthday: time.Now()}
 	//db.Create(&user)
 
+	// TODO : middleware / router refactoring
+	router.Use(dummyMiddleware)
+	router.GET("/ping", controller.HealthCheck)
 
-	r.GET("/ping", func(context *gin.Context) {
-		context.JSON(200, gin.H{
-			"message" : "pong",
-		})
-	})
+	v1 := router.Group("/v1")
+	{
+		v1.GET("/user/:userId", userController.User)
+	}
 
-	r.Run()	// listen and serve on 0.0.0.0:8080
+	router.Run(":" + env.Port)
+}
+
+func dummyMiddleware(context *gin.Context) {
+	fmt.Println("Dummy Middleware start")
+	context.Next()
 }
