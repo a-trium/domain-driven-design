@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain"
+	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain/user"
 	"github.com/jinzhu/gorm"
 	_ "github.com/go-sql-driver/mysql"
 
@@ -37,7 +37,7 @@ func GetDatabase(property DatabaseProperty) *gorm.DB {
 	option := "ENGINE=InnoDB"
 
 	// Automigrate
-	db.Set("gorm:table_options", option).AutoMigrate(&domain.User{})
+	db.Set("gorm:table_options", option).AutoMigrate(&user.User{})
 
 
 	if !IsProdMode() {
