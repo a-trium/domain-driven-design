@@ -11,7 +11,7 @@ import (
 func main() {
 
 	// env
-	env := config.Env
+	env := config.GetEnvironment()
 	fmt.Println(" #-- env : ", env)
 
 	// zap - logger

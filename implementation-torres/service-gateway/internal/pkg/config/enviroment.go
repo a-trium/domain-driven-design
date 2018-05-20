@@ -47,18 +47,23 @@ func (e *Environment) IsLocalMode() bool {
    return e.Mode == "LOCAL"
 }
 
-var Env Environment
+
+var env Environment
 
 func init() {
-   err := envconfig.Process("", &Env)
+   err := envconfig.Process("", &env)
    if err != nil {
       panic("Failed to get specification")
    }
 
-   Env.BuildDate = BuildDate
-   Env.GitCommit = GitCommit
-   Env.GitBranch = GitBranch
-   Env.GitState = GitState
-   Env.GitState = GitState
-   Env.Version = Version
+   env.BuildDate = BuildDate
+   env.GitCommit = GitCommit
+   env.GitBranch = GitBranch
+   env.GitState = GitState
+   env.GitState = GitState
+   env.Version = Version
+}
+
+func GetEnvironment() *Environment {
+   return &env
 }
