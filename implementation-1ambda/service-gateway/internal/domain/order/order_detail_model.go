@@ -8,10 +8,10 @@ import (
 type OrderDetail struct {
 	gorm.Model
 
-	Index    uint `gorm:"column:index;"`
-	Price    uint `gorm:"column:price;"`
-	Quantity uint `gorm:"column:quantity;"`
-	Amount   uint `gorm:"column:amount;"`
+	Index    uint `gorm:"column:index; not null;"`
+	Price    uint `gorm:"column:price; not null;"`
+	Quantity uint `gorm:"column:quantity; not null;"`
+	Amount   uint `gorm:"column:amount; not null;"`
 
 	Order      Order           `gorm:"foreignkey:OrderRef"`
 	OrderRef   uint
