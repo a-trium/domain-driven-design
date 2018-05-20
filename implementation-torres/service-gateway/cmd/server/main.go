@@ -14,6 +14,10 @@ func main() {
 	env := config.GetEnvironment()
 	fmt.Println(" #-- env : ", env)
 
+	// Database
+	db :=config.GetDatabase()
+	userRepository := repository.NewUserRepository(db)
+
 	// zap - logger
 	fmt.Println(" #-- logger")
 	logger := config.GetLogger().With("service_name", env.ServiceName, "service_id", env.ServiceId, )

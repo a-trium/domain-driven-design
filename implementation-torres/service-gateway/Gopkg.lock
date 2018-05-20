@@ -24,6 +24,18 @@
   version = "v1.1.0"
 
 [[projects]]
+  name = "github.com/jinzhu/gorm"
+  packages = ["."]
+  revision = "6ed508ec6a4ecb3531899a69cbc746ccf65a4166"
+  version = "v1.9.1"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/jinzhu/inflection"
+  packages = ["."]
+  revision = "04140366298a54a039076d798123ffa108fff46c"
+
+[[projects]]
   name = "github.com/kelseyhightower/envconfig"
   packages = ["."]
   revision = "f611eb38b3875cc3bd991ca91c51d06446afa14c"
@@ -93,6 +105,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "0dce01a4bb38dc8fc02b7fbfa951812ff106cf2a678c151284e06ac0fccae022"
+  inputs-digest = "811e30fd8b718a2e3bd61eff4505c6556bf52df5fab1c09ac0aa079a33dda4c4"
   solver-name = "gps-cdcl"
   solver-version = 1

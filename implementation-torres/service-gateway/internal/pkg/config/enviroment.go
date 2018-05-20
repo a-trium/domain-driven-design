@@ -47,6 +47,10 @@ func (e *Environment) IsLocalMode() bool {
    return e.Mode == "LOCAL"
 }
 
+func IsProdMode() bool {
+   return env.Mode == "PROD"
+}
+
 
 var env Environment
 
