@@ -70,8 +70,9 @@ func (c *DatabaseContainer) Close() {
 	c.pool.Purge(c.resource)
 }
 
-func GetTestDatabase() *gorm.DB {
+func GetTestDatabase(debug bool) *gorm.DB {
 	config.Env.Mode = "TEST"
+	config.Env.Debug = debug
 
 	return config.GetDatabase()
 }

@@ -14,7 +14,7 @@ var _ = Describe("UserRepository", func() {
 	var repo user.Repository
 
 	BeforeEach(func() {
-		db = test.GetTestDatabase()
+		db = test.GetTestDatabase(false)
 		repo = user.NewRepository(db)
 	})
 
@@ -22,23 +22,23 @@ var _ = Describe("UserRepository", func() {
 	})
 
 	Describe("Create()", func() {
-		Context("When creating a new user", func() {
+		Context("When creating a new record", func() {
 			It("should return nil exception", func() {
 				u := &user.User{}
-				created, ex := repo.CreateUser(u)
+				record, ex := repo.AddUser(u)
 
 				Expect(ex).To(BeNil())
-				Expect(created.ID).Should(BeNumerically(">", 0))
+				Expect(record.ID).Should(BeNumerically(">", 0))
 			})
 		})
 	})
 
 	Describe("Delete()", func() {
-		Context("When trying to delete non-existing user", func() {
+		Context("When trying to delete non-existing record", func() {
 			It("should return not found exception", func() {
-				deleted, ex := repo.DeleteUser(0)
+				record, ex := repo.DeleteUser(0)
 
-				Expect(deleted).To(BeFalse())
+				Expect(record).To(BeFalse())
 				Expect(ex).NotTo(BeNil())
 				Expect(ex.IsNotFoundException()).To(BeTrue())
 			})
@@ -46,12 +46,12 @@ var _ = Describe("UserRepository", func() {
 	})
 
 	Describe("Find()", func() {
-		Context("When user dose not exsit", func() {
+		Context("When the record dose not exist", func() {
 			It("should return NotFoundException", func() {
-				invlaidUserId := uint(0)
+				invalidId := uint(0)
 
-				found, ex := repo.FindUserById(invlaidUserId)
-				Expect(found).To(BeNil())
+				record, ex := repo.FindUserById(invalidId)
+				Expect(record).To(BeNil())
 				Expect(ex).NotTo(BeNil())
 				Expect(ex.IsNotFoundException()).To(BeTrue())
 

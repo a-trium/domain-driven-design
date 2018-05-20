@@ -8,8 +8,8 @@ import (
 type Order struct {
 	gorm.Model
 
-	State  string `gorm:"column:state;"`
-	Amount uint   `gorm:"column:amount;"`
+	State  string `gorm:"column:state; not null;"`
+	Amount uint   `gorm:"column:amount; not null;"`
 
 	ShippingCountry  string `gorm:"column:shipping_country; not null;"`
 	ShippingCity     string `gorm:"column:shipping_city; not null;"`

@@ -108,13 +108,13 @@ clean:
 .PHONY: test
 test:
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Clean"
-	@ ginkgo -v -progress -race -cover -r
+	@ ginkgo -progress -race -cover -r
 	@ echo ""
 
 
 MOCKGEN			= mockgen
 MOCK_PREFIX		= mock
-MOCK_PKG_DIRS	:= "internal/domain/product" "internal/domain/user"
+MOCK_PKG_DIRS	:= "internal/domain/product" "internal/domain/user" "internal/domain/order"
 
 $(MOCK_PKG_DIRS):
 	@$(eval TARGET := $@)

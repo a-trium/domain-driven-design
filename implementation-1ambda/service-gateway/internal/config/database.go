@@ -51,7 +51,7 @@ func GetDatabase() *gorm.DB {
 
 	// set gorm options
 	db.SingularTable(true)
-	if (Env.IsLocalMode() && Env.DebugEnabled()) || Env.IsTestMode() {
+	if (Env.IsLocalMode() && Env.DebugEnabled()) || (Env.IsTestMode() && Env.DebugEnabled()) {
 		db = db.LogMode(true)
 		db = db.Debug()
 	}
