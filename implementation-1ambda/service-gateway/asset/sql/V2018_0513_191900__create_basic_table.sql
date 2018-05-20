@@ -1,4 +1,5 @@
 -- +migrate Up
+
 CREATE TABLE `User` (
   -- primary key
   `id`         INTEGER(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,

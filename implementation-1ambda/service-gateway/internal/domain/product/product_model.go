@@ -7,9 +7,9 @@ import (
 type Product struct {
 	gorm.Model
 
-	Name   string `gorm:"column:name;"`
-	Price  string `gorm:"column:price;"`
-	Detail string `gorm:"column:detail;"`
+	Name   string `gorm:"column:name; not null;"`
+	Price  string `gorm:"column:price; not null;"`
+	Detail string `gorm:"column:detail; not null;"`
 
 	Category    Category `gorm:"foreignkey:CategoryRef"`
 	CategoryRef uint
