@@ -54,6 +54,9 @@ prepare:
 	$(GOGET) github.com/alecthomas/gometalinter 	# for lint
 	$(GOGET) github.com/ahmetb/govvv				# for build wrapper
 
+	# for application
+	$(GOGET) github.com/rubenv/sql-migrate/...      # sql-migrate
+
 install:
 	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ')) - installing / updating dependencies"
 	# [install] go lint install & update

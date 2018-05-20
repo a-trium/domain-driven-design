@@ -8,8 +8,11 @@
 - [envconfig](https://github.com/kelseyhightower/envconfig) | Env configuration
 
 ```bash
-$ dep ensure -add github.com/gin-gonic/gin
-$ dep ensure -add github.com/uber-go/zap
+$ dep ensure -add github.com/gin-gonic/gin  # Gin
+$ dep ensure -add github.com/uber-go/zap    # Zap
+$ dep ensure --add github.com/jinzhu/gorm   # GORM
+$ dep ensure --add github.com/rubenv/sql-migrate/...  # sql-migrate
+$ go get -v github.com/rubenv/sql-migrate/...         # sql-migrate for CLI
 
 ```
 

@@ -48,26 +48,26 @@ func (e *Environment) IsLocalMode() bool {
 }
 
 func IsProdMode() bool {
-   return env.Mode == "PROD"
+   return Env.Mode == "PROD"
 }
 
 
-var env Environment
+var Env Environment
 
 func init() {
-   err := envconfig.Process("", &env)
+   err := envconfig.Process("", &Env)
    if err != nil {
       panic("Failed to get specification")
    }
 
-   env.BuildDate = BuildDate
-   env.GitCommit = GitCommit
-   env.GitBranch = GitBranch
-   env.GitState = GitState
-   env.GitState = GitState
-   env.Version = Version
+   Env.BuildDate = BuildDate
+   Env.GitCommit = GitCommit
+   Env.GitBranch = GitBranch
+   Env.GitState = GitState
+   Env.GitState = GitState
+   Env.Version = Version
 }
 
 func GetEnvironment() *Environment {
-   return &env
+   return &Env
 }
