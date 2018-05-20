@@ -31,27 +31,27 @@ VERSION 		= $(shell cat ./VERSION)
 
 APP				= server
 
-
-SWAGGER_SPEC 	= "../schema-swagger/gateway-rest.yaml"
-
 .PHONY: prepare
 prepare:
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Installing prerequisites"
 
-	@ echo "\t golang:dep \t\t(dependency)"
+	@ echo "\t golang:dep \t\t\t(dependency)"
 	@ $(GOGET) github.com/golang/dep/cmd/dep
 
-	@ echo "\t golang:go-swagger \t(build)"
+	@ echo "\t golang:go-swagger \t\t(build)"
 	@ $(GOGET) github.com/go-swagger/go-swagger/cmd/swagger
 
-	@ echo "\t golang:govvv \t\t(build)"
+	@ echo "\t golang:govvv \t\t\t(build)"
 	@ $(GOGET) github.com/ahmetb/govvv
 
-	@ echo "\t golang:ginkgo \t\t(testing)"
+	@ echo "\t golang:ginkgo \t\t\t(testing)"
 	@ $(GOGET) github.com/ahmetb/govvv
 
-	@ echo "\t golang:gomega \t\t(testing)"
+	@ echo "\t golang:gomega \t\t\t(testing)"
 	@ $(GOGET) github.com/ahmetb/govvv
+
+	@ echo "\t golang:mockgen \t\t(testing)"
+	@ $(GOGET) github.com/golang/mock/mockgen
 
 	@ echo ""
 
@@ -61,6 +61,7 @@ install:
 	@ $(GODEP) ensure
 	@ echo ""
 
+SWAGGER_SPEC 	= "../schema-swagger/gateway-rest.yaml"
 .PHONY: swagger-version
 swagger-version:
 	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Updating swagger spec version: $(VERSION)"
@@ -81,7 +82,6 @@ swagger-server: swagger-version
 		 --target=pkg/generated/swagger --model-package=swagmodel \
 		 --server-package=swagserver --api-package=swagapi
 	@ echo ""
-
 
 .PHONY: swagger
 swagger: swagger-version swagger-server
@@ -110,6 +110,26 @@ test:
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Clean"
 	@ ginkgo -v -progress -race -cover -r
 	@ echo ""
+
+
+MOCKGEN			= mockgen
+MOCK_PREFIX		= mock
+MOCK_PKG_DIRS	:= "internal/domain/product" "internal/domain/user"
+
+$(MOCK_PKG_DIRS):
+	@$(eval TARGET := $@)
+
+	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Cleaning mock files under $(TARGET)"
+	@rm -rf $(TARGET)/$(MOCK_PREFIX)*
+
+	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Generating mock files for $(TARGET)"
+	@PKG_DIR=$(TARGET) ../script/generate-gomock.sh
+	@echo ""
+
+.PHONY: mock-internal
+mock-internal: $(MOCK_PKG_DIRS)
+
+
 
 .PHONY: release
 release: prepare install clean swagger build

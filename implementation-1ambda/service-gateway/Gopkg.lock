@@ -146,6 +146,12 @@
   version = "v1.11.0"
 
 [[projects]]
+  name = "github.com/golang/mock"
+  packages = ["gomock"]
+  revision = "c34cdb4725f4c3844d095133c6e40e448b86589b"
+  version = "v1.1.1"
+
+[[projects]]
   name = "github.com/jessevdk/go-flags"
   packages = ["."]
   revision = "c6ca198ec95c841fdb89fc0de7496fed11ab854e"
@@ -444,6 +450,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "4d07f13d3b255dd909c5198b33e20e8b08d1f5397ed1f83bf297cad59d73927f"
+  inputs-digest = "bfeec20332ab58df316032c73a66d26228b06855f3103b63b9c1987ee8d23c32"
   solver-name = "gps-cdcl"
   solver-version = 1
