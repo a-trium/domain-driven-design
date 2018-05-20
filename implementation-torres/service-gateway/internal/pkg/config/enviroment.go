@@ -47,6 +47,11 @@ func (e *Environment) IsLocalMode() bool {
    return e.Mode == "LOCAL"
 }
 
+func IsProdMode() bool {
+   return Env.Mode == "PROD"
+}
+
+
 var Env Environment
 
 func init() {
@@ -61,4 +66,8 @@ func init() {
    Env.GitState = GitState
    Env.GitState = GitState
    Env.Version = Version
+}
+
+func GetEnvironment() *Environment {
+   return &Env
 }

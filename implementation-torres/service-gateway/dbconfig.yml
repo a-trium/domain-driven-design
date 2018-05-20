@@ -1,0 +1,9 @@
+development:
+    dialect: mysql
+    datasource: root@/application?parseTime=true
+    dir: migrations/
+
+production:
+    dialect: postgres
+    datasource: host=localhost port=3306 user=root password=root dbname=application sslmode=disable
+    dir: migrations/

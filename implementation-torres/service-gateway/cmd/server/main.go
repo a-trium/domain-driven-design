@@ -3,16 +3,26 @@ package main
 import (
 	"fmt"
 
-	"github.com/a-trium/domain-driven-design/implementation-torres/service-gateway/internal/pkg/config"
+	"github.com/a-trium/domain-driven-design/implementation-torres/service-gateway/internal/domain/user"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+
+	"github.com/a-trium/domain-driven-design/implementation-torres/service-gateway/internal/pkg/config"
+	_ "github.com/a-trium/domain-driven-design/implementation-torres/service-gateway/internal/domain/user"
 )
 
 func main() {
 
 	// env
-	env := config.Env
+	env := config.GetEnvironment()
 	fmt.Println(" #-- env : ", env)
+
+	// Database
+	db :=config.GetDatabase()
+	//var repo user.UserRepository
+	repo := user.NewUserRepository(db)
+	repo.FineAll()
+
 
 	// zap - logger
 	fmt.Println(" #-- logger")
