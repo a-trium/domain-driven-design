@@ -95,15 +95,21 @@ build:
 
 .PHONY: run
 run:
-	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Running app: $(APP)"
-	@$(BIN_DIR)/$(APP)
+	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Running app: $(APP)"
+	@ $(BIN_DIR)/$(APP)
 
 .PHONY: clean
 clean:
-	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Clean"
+	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Clean"
 	@rm -rf ./bin
 	@ echo ""
 
+
+.PHONY: test
+test:
+	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Clean"
+	@ ginkgo -v -progress -race -cover -r
+	@ echo ""
 
 .PHONY: release
 release: prepare install clean swagger build

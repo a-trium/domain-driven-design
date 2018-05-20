@@ -11,11 +11,11 @@ import (
 var _ = Describe("UserRepository", func() {
 
 	var db *gorm.DB
-	var repo user.UserRepository
+	var repo user.Repository
 
 	BeforeEach(func() {
 		db = test.GetTestDatabase()
-		repo = user.NewUserRepository(db)
+		repo = user.NewRepository(db)
 	})
 
 	AfterEach(func() {
@@ -25,10 +25,10 @@ var _ = Describe("UserRepository", func() {
 		Context("When creating a new user", func() {
 			It("should return nil exception", func() {
 				u := &user.User{}
-				ex := repo.Create(u)
+				created, ex := repo.CreateUser(u)
 
 				Expect(ex).To(BeNil())
-				Expect(u.ID).Should(BeNumerically(">", 0))
+				Expect(created.ID).Should(BeNumerically(">", 0))
 			})
 		})
 	})
@@ -36,11 +36,25 @@ var _ = Describe("UserRepository", func() {
 	Describe("Delete()", func() {
 		Context("When trying to delete non-existing user", func() {
 			It("should return not found exception", func() {
-				deleted, ex := repo.Delete(0)
+				deleted, ex := repo.DeleteUser(0)
 
 				Expect(deleted).To(BeFalse())
 				Expect(ex).NotTo(BeNil())
 				Expect(ex.IsNotFoundException()).To(BeTrue())
+			})
+		})
+	})
+
+	Describe("Find()", func() {
+		Context("When user dose not exsit", func() {
+			It("should return NotFoundException", func() {
+				invlaidUserId := uint(0)
+
+				found, ex := repo.FindUserById(invlaidUserId)
+				Expect(found).To(BeNil())
+				Expect(ex).NotTo(BeNil())
+				Expect(ex.IsNotFoundException()).To(BeTrue())
+
 			})
 		})
 	})

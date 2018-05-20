@@ -6,33 +6,33 @@ import (
 	"github.com/pkg/errors"
 )
 
-type UserRepository interface {
-	Create(user *User) (Exception)
-	Delete(id uint) (bool, Exception)
-	FindOne(id uint) (*User, Exception)
-	FineAll() (*[]User, Exception)
+type Repository interface {
+	CreateUser(user *User) (*User, Exception)
+	DeleteUser(id uint) (bool, Exception)
+	FindUserById(id uint) (*User, Exception)
+	FineAllUsers() (*[]User, Exception)
 }
 
-type userRepositoryImpl struct {
+type repositoryImpl struct {
 	db *gorm.DB
 }
 
-func NewUserRepository(db *gorm.DB) UserRepository {
-	return &userRepositoryImpl{db: db}
+func NewRepository(db *gorm.DB) Repository {
+	return &repositoryImpl{db: db}
 }
 
-func (r *userRepositoryImpl) Create(record *User) Exception {
+func (r *repositoryImpl) CreateUser(record *User) (*User, Exception) {
 	err := r.db.Create(record).Error
 
 	if err != nil {
 		wrap := errors.Wrap(err, "Failed to create User")
-		return NewInternalServerException(wrap)
+		return nil, NewInternalServerException(wrap)
 	}
 
-	return nil
+	return record, nil
 }
 
-func (r *userRepositoryImpl) Delete(id uint) (bool, Exception) {
+func (r *repositoryImpl) DeleteUser(id uint) (bool, Exception) {
 	record := &User{}
 	result := r.db.Where("id = ?", id).Delete(record)
 
@@ -49,7 +49,7 @@ func (r *userRepositoryImpl) Delete(id uint) (bool, Exception) {
 	return true, nil
 }
 
-func (r *userRepositoryImpl) FindOne(id uint) (*User, Exception) {
+func (r *repositoryImpl) FindUserById(id uint) (*User, Exception) {
 	record := &User{}
 	err := r.db.Where("id = ?", id).First(record).Error
 
@@ -66,7 +66,7 @@ func (r *userRepositoryImpl) FindOne(id uint) (*User, Exception) {
 	return record, nil
 }
 
-func (r *userRepositoryImpl) FineAll() (*[]User, Exception) {
+func (r *repositoryImpl) FineAllUsers() (*[]User, Exception) {
 	// TODO: use db.tx
 
 	var records []User
