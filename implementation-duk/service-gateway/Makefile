@@ -53,3 +53,20 @@ clean:
 	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Clean"
 	@rm -rf ./bin
 	@ echo ""
+
+
+MOCKGEN			= mockgen
+MOCK_PREFIX		= mock
+MOCK_PKG_DIRS	:= "internal/domain/user"
+
+$(MOCK_PKG_DIRS):
+	@$(eval TARGET := $@)
+	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Cleaning mock files under $(TARGET)"
+	@rm -rf $(TARGET)/$(MOCK_PREFIX)*
+
+	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Generating mock files for $(TARGET)"
+	@PKG_DIR=$(TARGET) ../script/generate-gomock.sh
+	@echo ""
+
+.PHONY: mock-internal
+mock-internal: $(MOCK_PKG_DIRS)
