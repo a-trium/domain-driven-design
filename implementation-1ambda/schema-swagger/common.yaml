@@ -1,4 +1,7 @@
 definitions:
+  Empty:
+    type: object
+
   Error:
     type: object
     properties:

@@ -34,60 +34,14 @@ func init() {
   },
   "basePath": "/api",
   "paths": {
-    "/example": {
-      "post": {
-        "tags": [
-          "example"
-        ],
-        "operationId": "SomeAction",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/ExampleRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ExampleResponse"
-            }
-          },
-          "default": {
-            "description": "error",
-            "schema": {
-              "$ref": "./common.yaml#/definitions/Error"
-            }
-          }
-        }
-      }
-    }
-  },
-  "definitions": {
-    "ExampleRequest": {
-      "type": "object",
-      "required": [
-        "someField"
-      ],
-      "properties": {
-        "someField": {
-          "type": "string"
-        }
-      }
+    "/auth/login": {
+      "$ref": "./gateway-auth.yaml#/api/login"
     },
-    "ExampleResponse": {
-      "type": "object",
-      "required": [
-        "someField"
-      ],
-      "properties": {
-        "someField": {
-          "type": "string"
-        }
-      }
+    "/auth/logout": {
+      "$ref": "./gateway-auth.yaml#/api/logout"
+    },
+    "/auth/register": {
+      "$ref": "./gateway-auth.yaml#/api/register"
     }
   }
 }`))
@@ -108,18 +62,18 @@ func init() {
   },
   "basePath": "/api",
   "paths": {
-    "/example": {
+    "/auth/login": {
       "post": {
         "tags": [
-          "example"
+          "auth"
         ],
-        "operationId": "SomeAction",
+        "operationId": "Login",
         "parameters": [
           {
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/ExampleRequest"
+              "$ref": "#/definitions/loginRequest"
             }
           }
         ],
@@ -127,7 +81,69 @@ func init() {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ExampleResponse"
+              "$ref": "#/definitions/empty"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "Logout",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/empty"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/empty"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "Register",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/registerRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/empty"
             }
           },
           "default": {
@@ -141,27 +157,8 @@ func init() {
     }
   },
   "definitions": {
-    "ExampleRequest": {
-      "type": "object",
-      "required": [
-        "someField"
-      ],
-      "properties": {
-        "someField": {
-          "type": "string"
-        }
-      }
-    },
-    "ExampleResponse": {
-      "type": "object",
-      "required": [
-        "someField"
-      ],
-      "properties": {
-        "someField": {
-          "type": "string"
-        }
-      }
+    "empty": {
+      "type": "object"
     },
     "error": {
       "type": "object",
@@ -184,6 +181,28 @@ func init() {
             "BadFilterRequest",
             "RecordDoesNotxist"
           ]
+        }
+      }
+    },
+    "loginRequest": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string"
+        },
+        "uid": {
+          "type": "string"
+        }
+      }
+    },
+    "registerRequest": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string"
+        },
+        "uid": {
+          "type": "string"
         }
       }
     }

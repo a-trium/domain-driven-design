@@ -19,7 +19,7 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/example"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/auth"
 )
 
 // NewGatewayAPI creates a new Gateway instance
@@ -39,8 +39,14 @@ func NewGatewayAPI(spec *loads.Document) *GatewayAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		ExampleSomeActionHandler: example.SomeActionHandlerFunc(func(params example.SomeActionParams) middleware.Responder {
-			return middleware.NotImplemented("operation ExampleSomeAction has not yet been implemented")
+		AuthLoginHandler: auth.LoginHandlerFunc(func(params auth.LoginParams) middleware.Responder {
+			return middleware.NotImplemented("operation AuthLogin has not yet been implemented")
+		}),
+		AuthLogoutHandler: auth.LogoutHandlerFunc(func(params auth.LogoutParams) middleware.Responder {
+			return middleware.NotImplemented("operation AuthLogout has not yet been implemented")
+		}),
+		AuthRegisterHandler: auth.RegisterHandlerFunc(func(params auth.RegisterParams) middleware.Responder {
+			return middleware.NotImplemented("operation AuthRegister has not yet been implemented")
 		}),
 	}
 }
@@ -73,8 +79,12 @@ type GatewayAPI struct {
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
 
-	// ExampleSomeActionHandler sets the operation handler for the some action operation
-	ExampleSomeActionHandler example.SomeActionHandler
+	// AuthLoginHandler sets the operation handler for the login operation
+	AuthLoginHandler auth.LoginHandler
+	// AuthLogoutHandler sets the operation handler for the logout operation
+	AuthLogoutHandler auth.LogoutHandler
+	// AuthRegisterHandler sets the operation handler for the register operation
+	AuthRegisterHandler auth.RegisterHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -138,8 +148,16 @@ func (o *GatewayAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
-	if o.ExampleSomeActionHandler == nil {
-		unregistered = append(unregistered, "example.SomeActionHandler")
+	if o.AuthLoginHandler == nil {
+		unregistered = append(unregistered, "auth.LoginHandler")
+	}
+
+	if o.AuthLogoutHandler == nil {
+		unregistered = append(unregistered, "auth.LogoutHandler")
+	}
+
+	if o.AuthRegisterHandler == nil {
+		unregistered = append(unregistered, "auth.RegisterHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -243,7 +261,17 @@ func (o *GatewayAPI) initHandlerCache() {
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["POST"]["/example"] = example.NewSomeAction(o.context, o.ExampleSomeActionHandler)
+	o.handlers["POST"]["/auth/login"] = auth.NewLogin(o.context, o.AuthLoginHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/auth/logout"] = auth.NewLogout(o.context, o.AuthLogoutHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/auth/register"] = auth.NewRegister(o.context, o.AuthRegisterHandler)
 
 }
 
