@@ -5,6 +5,7 @@ import (
 )
 
 const CodeBadRequest = 400
+const CodeUnauthorized = 401
 const CodeNotFound = 404
 const CodeInternalServer = 500
 
@@ -14,6 +15,7 @@ type Exception interface {
 	Timestamp() *time.Time
 
 	IsBadRequestException() bool
+	IsUnauthorizedException() bool
 	IsNotFoundException() bool
 	IsInternalServerException() bool
 }
@@ -68,6 +70,18 @@ func NewInternalServerException(err error) Exception {
 	return &appException{
 		cause:      err,
 		statusCode: CodeInternalServer,
+		timestamp:  time.Now(),
+	}
+}
+
+func (a *appException) IsUnauthorizedException() bool {
+	return a.statusCode == CodeUnauthorized
+}
+
+func NewUnauthorizedException(err error) Exception {
+	return &appException{
+		cause:      err,
+		statusCode: CodeUnauthorized,
 		timestamp:  time.Now(),
 	}
 }

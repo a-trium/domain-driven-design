@@ -8,16 +8,13 @@ import (
 	"github.com/pkg/errors"
 )
 
-type AuthCookie string
-
 type Repository interface {
 	DeleteUser(id uint) (bool, e.Exception)
 	FindUserById(id uint) (*User, e.Exception)
 	FineAllUsers() (*[]User, e.Exception)
 
 	Register(uid string, password string) (*AuthIdentity, e.Exception)
-	Login(uid string, password string) (AuthCookie, e.Exception)
-	Logout(uid string) (e.Exception)
+	Authenticate(uid string, password string) (*AuthClaim, e.Exception)
 }
 
 type repositoryImpl struct {
@@ -39,7 +36,7 @@ func (r *repositoryImpl) DeleteUser(id uint) (bool, e.Exception) {
 	}
 
 	if result.RowsAffected < 1 {
-		wrap := errors.Wrap(result.Error, "Failed to delete User")
+		wrap := errors.Wrap(result.Error, "Failed to fine User to be deleted")
 		return false, e.NewNotFoundException(wrap)
 	}
 
@@ -51,7 +48,7 @@ func (r *repositoryImpl) FindUserById(id uint) (*User, e.Exception) {
 	err := r.db.Where("id = ?", id).First(record).Error
 
 	if err != nil {
-		wrap := errors.Wrap(err, "Failed to find-one User")
+		wrap := errors.Wrap(err, "Failed to find User")
 
 		if gorm.IsRecordNotFoundError(err) {
 			return nil, e.NewNotFoundException(wrap)
@@ -70,7 +67,7 @@ func (r *repositoryImpl) FineAllUsers() (*[]User, e.Exception) {
 
 	err := r.db.Find(&records).Error
 	if err != nil {
-		wrap := errors.Wrap(err, "Failed to find-all User")
+		wrap := errors.Wrap(err, "Failed to find all User")
 		return nil, e.NewInternalServerException(wrap)
 	}
 
@@ -119,10 +116,30 @@ func (r *repositoryImpl) Register(uid string, password string) (*AuthIdentity, e
 	return authIdentity, nil
 }
 
-func (r *repositoryImpl) Login(uid string, password string) (AuthCookie, e.Exception) {
-	return AuthCookie(""), nil
-}
+func (r *repositoryImpl) Authenticate(uid string, password string) (*AuthClaim, e.Exception) {
+	if strings.TrimSpace(uid) == "" || strings.TrimSpace(password) == "" {
+		err := errors.New("Empty uid or password")
+		return nil, e.NewUnauthorizedException(err)
+	}
 
-func (r *repositoryImpl) Logout(uid string) (e.Exception) {
-	return nil
+	aid := AuthIdentity{UID: uid}
+	err := r.db.Where("uid = ?", uid).First(&aid).Error
+
+	if err != nil {
+		wrap := errors.Wrap(err, "Failed to find AuthIdentity with UID")
+
+		if gorm.IsRecordNotFoundError(err) {
+			return nil, e.NewUnauthorizedException(wrap)
+		}
+
+		return nil, e.NewInternalServerException(wrap)
+	}
+
+	if err := r.encryptor.Compare(aid.EncryptedPassword, password); err != nil {
+		wrap := errors.Wrap(err, "Incorrect password")
+		return nil, e.NewUnauthorizedException(wrap)
+	}
+
+	claim := aid.ToClaims()
+	return claim, nil
 }

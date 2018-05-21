@@ -36,8 +36,9 @@ CREATE TABLE `AuthIdentity` (
 
   -- columns
   `provider`           varchar(255)         NOT NULL,
-  `uid`                varchar(255)         NOT NULL,
+  `uid`                varchar(20)         NOT NULL,
   `encrypted_password` TEXT                 NOT NULL,
+  KEY `idx_AuthIdentity_uid` (`uid`),
 
   -- FK columns
   `user_id`            INTEGER(10) UNSIGNED NULL                   DEFAULT NULL,
