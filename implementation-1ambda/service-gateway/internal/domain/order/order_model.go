@@ -1,7 +1,6 @@
 package order
 
 import (
-	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/persistent"
 )
 
@@ -27,10 +26,9 @@ type Order struct {
 	RecipientPhone string `gorm:"column:recipient_phone; 	type:VARCHAR(50); 	NOT NULL;"`
 	RecipientEmail string `gorm:"column:recipient_email; 	type:VARCHAR(50); 	NOT NULL;"`
 
-	User   user.User `gorm:"foreignkey:UserID"`
 	UserID uint      `gorm:"column:user_id" sql:"type:UNSIGNED BIG INT REFERENCES User(id) ON DELETE RESTRICT ON UPDATE CASCADE"`
 
-	OrderDetails []Order `gorm:"foreignkey:ID"`
+	OrderDetails []Order `gorm:"foreignkey:OrderID"`
 }
 
 func (Order) TableName() string {

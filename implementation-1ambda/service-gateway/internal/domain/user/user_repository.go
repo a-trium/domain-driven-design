@@ -94,16 +94,33 @@ func (r *repositoryImpl) Register(uid string, password string) (*AuthIdentity, e
 		return nil, e.NewBadRequestException(err)
 	}
 
-	authIdentity := &AuthIdentity{
-		User: User{},
-	}
+	tx := r.db.Begin()
 
-	err := r.db.Save(authIdentity).Error
+	user := User{}
+	err := tx.Create(&user).Error
+
 	if err != nil {
-		wrap := errors.Wrap(err, "Failed to register")
+		tx.Rollback()
+		wrap := errors.Wrap(err, "Failed to create User")
 		return nil, e.NewInternalServerException(wrap)
 	}
 
+	authIdentity := &AuthIdentity{
+		Provider: ProviderPassword,
+		UID: uid,
+		EncryptedPassword: password,
+
+		User: user,
+	}
+
+	err = tx.Create(authIdentity).Error
+	if err != nil {
+		tx.Rollback()
+		wrap := errors.Wrap(err, "Failed to create AuthIdentity")
+		return nil, e.NewInternalServerException(wrap)
+	}
+
+	tx.Commit()
 	return authIdentity, nil
 }
 
