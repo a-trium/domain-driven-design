@@ -34,7 +34,7 @@ type LogoutParams struct {
 	/*
 	  In: body
 	*/
-	Body swagmodel.Empty
+	Body *swagmodel.Empty
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -53,8 +53,14 @@ func (o *LogoutParams) BindRequest(r *http.Request, route *middleware.MatchedRou
 			res = append(res, errors.NewParseError("body", "body", "", err))
 		} else {
 
-			// no validation on generic interface
-			o.Body = body
+			// validate body object
+			if err := body.Validate(route.Formats); err != nil {
+				res = append(res, err)
+			}
+
+			if len(res) == 0 {
+				o.Body = &body
+			}
 		}
 	}
 	if len(res) > 0 {

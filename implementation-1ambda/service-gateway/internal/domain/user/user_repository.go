@@ -1,8 +1,6 @@
 package user
 
 import (
-	"strings"
-
 	e "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/exception"
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
@@ -13,17 +11,18 @@ type Repository interface {
 	FindUserById(id uint) (*User, e.Exception)
 	FineAllUsers() (*[]User, e.Exception)
 
-	Register(uid string, password string) (*AuthIdentity, e.Exception)
-	Authenticate(uid string, password string) (*AuthClaim, e.Exception)
+	CreateAuthIdentity(uid string, password string) (*AuthIdentity, e.Exception)
+	FindAuthIdentityByUID(uid string) (*AuthIdentity, e.Exception)
 }
 
 type repositoryImpl struct {
-	db        *gorm.DB
-	encryptor Encryptor
+	db *gorm.DB
 }
 
-func NewRepository(db *gorm.DB, encryptor Encryptor) Repository {
-	return &repositoryImpl{db: db, encryptor: encryptor}
+func NewRepository(db *gorm.DB) Repository {
+	return &repositoryImpl{
+		db: db,
+	}
 }
 
 func (r *repositoryImpl) DeleteUser(id uint) (bool, e.Exception) {
@@ -74,23 +73,11 @@ func (r *repositoryImpl) FineAllUsers() (*[]User, e.Exception) {
 	return &records, nil
 }
 
-func (r *repositoryImpl) Register(uid string, password string) (*AuthIdentity, e.Exception) {
-	if strings.TrimSpace(uid) == "" || strings.TrimSpace(password) == "" {
-		err := errors.New("Empty uid or password")
-		return nil, e.NewBadRequestException(err)
-	}
-
-	digested, err := r.encryptor.Digest(password)
-	if err != nil {
-		wrap := errors.Wrap(err, "Failed to digest password")
-		return nil, e.NewInternalServerException(wrap)
-	}
-
+func (r *repositoryImpl) CreateAuthIdentity(uid string, encryptedPassword string) (*AuthIdentity, e.Exception) {
 	tx := r.db.Begin()
 
 	user := User{}
-	err = tx.Create(&user).Error
-
+	err := tx.Create(&user).Error
 	if err != nil {
 		tx.Rollback()
 		wrap := errors.Wrap(err, "Failed to create User")
@@ -100,7 +87,7 @@ func (r *repositoryImpl) Register(uid string, password string) (*AuthIdentity, e
 	authIdentity := &AuthIdentity{
 		Provider:          ProviderPassword,
 		UID:               uid,
-		EncryptedPassword: digested,
+		EncryptedPassword: encryptedPassword,
 
 		User: user,
 	}
@@ -116,13 +103,8 @@ func (r *repositoryImpl) Register(uid string, password string) (*AuthIdentity, e
 	return authIdentity, nil
 }
 
-func (r *repositoryImpl) Authenticate(uid string, password string) (*AuthClaim, e.Exception) {
-	if strings.TrimSpace(uid) == "" || strings.TrimSpace(password) == "" {
-		err := errors.New("Empty uid or password")
-		return nil, e.NewUnauthorizedException(err)
-	}
-
-	aid := AuthIdentity{UID: uid}
+func (r *repositoryImpl) FindAuthIdentityByUID(uid string) (*AuthIdentity, e.Exception) {
+	aid := AuthIdentity{}
 	err := r.db.Where("uid = ?", uid).First(&aid).Error
 
 	if err != nil {
@@ -135,11 +117,5 @@ func (r *repositoryImpl) Authenticate(uid string, password string) (*AuthClaim, 
 		return nil, e.NewInternalServerException(wrap)
 	}
 
-	if err := r.encryptor.Compare(aid.EncryptedPassword, password); err != nil {
-		wrap := errors.Wrap(err, "Incorrect password")
-		return nil, e.NewUnauthorizedException(wrap)
-	}
-
-	claim := aid.ToClaims()
-	return claim, nil
+	return &aid, nil
 }

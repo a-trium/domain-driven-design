@@ -158,7 +158,12 @@ func init() {
   },
   "definitions": {
     "empty": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
     },
     "error": {
       "type": "object",
@@ -176,10 +181,11 @@ func init() {
         "type": {
           "type": "string",
           "enum": [
-            "InvalidSession",
-            "InternalServer",
-            "BadFilterRequest",
-            "RecordDoesNotxist"
+            "BadRequest",
+            "Unauthorized",
+            "Forbidden",
+            "NotFound",
+            "InternalServer"
           ]
         }
       }

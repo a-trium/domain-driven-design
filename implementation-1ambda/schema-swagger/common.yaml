@@ -15,10 +15,11 @@ definitions:
       type:
         type: string
         enum:
-          - InvalidSession
+          - BadRequest
+          - Unauthorized
+          - Forbidden
+          - NotFound
           - InternalServer
-          - BadFilterRequest
-          - RecordDoesNotxist
 
   Pagination:
     type: object

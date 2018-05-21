@@ -29,7 +29,7 @@ type Error struct {
 	Timestamp string `json:"timestamp,omitempty"`
 
 	// type
-	// Enum: [InvalidSession InternalServer BadFilterRequest RecordDoesNotxist]
+	// Enum: [BadRequest Unauthorized Forbidden NotFound InternalServer]
 	Type string `json:"type,omitempty"`
 }
 
@@ -51,7 +51,7 @@ var errorTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
-	if err := json.Unmarshal([]byte(`["InvalidSession","InternalServer","BadFilterRequest","RecordDoesNotxist"]`), &res); err != nil {
+	if err := json.Unmarshal([]byte(`["BadRequest","Unauthorized","Forbidden","NotFound","InternalServer"]`), &res); err != nil {
 		panic(err)
 	}
 	for _, v := range res {
@@ -61,17 +61,20 @@ func init() {
 
 const (
 
-	// ErrorTypeInvalidSession captures enum value "InvalidSession"
-	ErrorTypeInvalidSession string = "InvalidSession"
+	// ErrorTypeBadRequest captures enum value "BadRequest"
+	ErrorTypeBadRequest string = "BadRequest"
+
+	// ErrorTypeUnauthorized captures enum value "Unauthorized"
+	ErrorTypeUnauthorized string = "Unauthorized"
+
+	// ErrorTypeForbidden captures enum value "Forbidden"
+	ErrorTypeForbidden string = "Forbidden"
+
+	// ErrorTypeNotFound captures enum value "NotFound"
+	ErrorTypeNotFound string = "NotFound"
 
 	// ErrorTypeInternalServer captures enum value "InternalServer"
 	ErrorTypeInternalServer string = "InternalServer"
-
-	// ErrorTypeBadFilterRequest captures enum value "BadFilterRequest"
-	ErrorTypeBadFilterRequest string = "BadFilterRequest"
-
-	// ErrorTypeRecordDoesNotxist captures enum value "RecordDoesNotxist"
-	ErrorTypeRecordDoesNotxist string = "RecordDoesNotxist"
 )
 
 // prop value enum
