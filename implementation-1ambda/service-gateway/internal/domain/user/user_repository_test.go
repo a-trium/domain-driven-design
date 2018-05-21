@@ -15,7 +15,8 @@ var _ = Describe("UserRepository", func() {
 
 	BeforeEach(func() {
 		db = test.GetTestDatabase(true)
-		repo = user.NewRepository(db)
+		encryptor := user.NewEncryptor(0)
+		repo = user.NewRepository(db, encryptor)
 	})
 
 	AfterEach(func() {
@@ -78,10 +79,14 @@ var _ = Describe("UserRepository", func() {
 
 		When("got valid uid and password", func() {
 			It("should create AuthIdentity and User", func() {
+				uid := "uid"
+				password := "ma password"
 				aid, ex := repo.Register("uid", "password")
 
 				Expect(ex).Should(BeNil())
 				Expect(aid.ID).Should(BeNumerically(">", 0))
+				Expect(aid.UID).Should(Equal(uid))
+				Expect(aid.EncryptedPassword).ShouldNot(Equal(password))
 
 			})
 		})

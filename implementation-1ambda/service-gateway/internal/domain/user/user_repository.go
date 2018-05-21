@@ -22,11 +22,12 @@ type Repository interface {
 }
 
 type repositoryImpl struct {
-	db *gorm.DB
+	db        *gorm.DB
+	encryptor Encryptor
 }
 
-func NewRepository(db *gorm.DB) Repository {
-	return &repositoryImpl{db: db}
+func NewRepository(db *gorm.DB, encryptor Encryptor) Repository {
+	return &repositoryImpl{db: db, encryptor: encryptor}
 }
 
 func (r *repositoryImpl) AddUser(record *User) (*User, e.Exception) {
@@ -94,10 +95,16 @@ func (r *repositoryImpl) Register(uid string, password string) (*AuthIdentity, e
 		return nil, e.NewBadRequestException(err)
 	}
 
+	digested, err := r.encryptor.Digest(password)
+	if err != nil {
+		wrap := errors.Wrap(err, "Failed to digest password")
+		return nil, e.NewInternalServerException(wrap)
+	}
+
 	tx := r.db.Begin()
 
 	user := User{}
-	err := tx.Create(&user).Error
+	err = tx.Create(&user).Error
 
 	if err != nil {
 		tx.Rollback()
@@ -106,9 +113,9 @@ func (r *repositoryImpl) Register(uid string, password string) (*AuthIdentity, e
 	}
 
 	authIdentity := &AuthIdentity{
-		Provider: ProviderPassword,
-		UID: uid,
-		EncryptedPassword: password,
+		Provider:          ProviderPassword,
+		UID:               uid,
+		EncryptedPassword: digested,
 
 		User: user,
 	}
