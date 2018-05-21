@@ -8,15 +8,17 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("UserHandler", func() {
+var _ = Describe("AuthHandler", func() {
 
 	var db *gorm.DB
 	var repo user.Repository
+	var handler user.AuthHandler
 
 	BeforeEach(func() {
 		db = test.GetTestDatabase(false)
 		encryptor := user.NewEncryptor(0)
-		repo = user.NewRepository(db, encryptor)
+		repo = user.NewRepository(db)
+		handler = user.NewAuthHandler(repo, encryptor)
 	})
 
 	AfterEach(func() {
