@@ -11,7 +11,6 @@ import (
 type AuthCookie string
 
 type Repository interface {
-	AddUser(user *User) (*User, e.Exception)
 	DeleteUser(id uint) (bool, e.Exception)
 	FindUserById(id uint) (*User, e.Exception)
 	FineAllUsers() (*[]User, e.Exception)
@@ -28,17 +27,6 @@ type repositoryImpl struct {
 
 func NewRepository(db *gorm.DB, encryptor Encryptor) Repository {
 	return &repositoryImpl{db: db, encryptor: encryptor}
-}
-
-func (r *repositoryImpl) AddUser(record *User) (*User, e.Exception) {
-	err := r.db.Create(record).Error
-
-	if err != nil {
-		wrap := errors.Wrap(err, "Failed to create User")
-		return nil, e.NewInternalServerException(wrap)
-	}
-
-	return record, nil
 }
 
 func (r *repositoryImpl) DeleteUser(id uint) (bool, e.Exception) {
