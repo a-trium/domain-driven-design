@@ -2,21 +2,21 @@ package order
 
 import (
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/product"
-	"github.com/jinzhu/gorm"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/persistent"
 )
 
 type OrderDetail struct {
-	gorm.Model
+	persistent.BaseModel
 
-	Index    uint `gorm:"column:index; not null;"`
-	Price    uint `gorm:"column:price; not null;"`
-	Quantity uint `gorm:"column:quantity; not null;"`
-	Amount   uint `gorm:"column:amount; not null;"`
+	Index    uint `gorm:"column:index; 		type:UNSIGNED BIG INT; 	NOT NULL;"`
+	Price    uint `gorm:"column:price; 		type:UNSIGNED BIG INT; 	NOT NULL;"`
+	Quantity uint `gorm:"column:quantity; 	type:UNSIGNED BIG INT; 	NOT NULL;"`
+	Amount   uint `gorm:"column:amount; 	type:UNSIGNED BIG INT; 	NOT NULL;"`
 
-	Order      Order           `gorm:"foreignkey:OrderRef"`
-	OrderRef   uint
-	Product    product.Product `gorm:"foreignkey:ProductRef"`
-	ProductRef uint
+	Order     Order           `gorm:"foreignkey:OrderID"`
+	OrderID   uint            `gorm:"column:order_id;" sql:"type:UNSIGNED BIG INT REFERENCES Order(id) ON DELETE RESTRICT ON UPDATE CASCADE;"`
+	Product   product.Product `gorm:"foreignkey:ProductID"`
+	ProductID uint            `gorm:"column:product_id;" sql:"type:UNSIGNED BIG INT REFERENCES Product(id) ON DELETE RESTRICT ON UPDATE CASCADE;"`
 }
 
 func (OrderDetail) TableName() string {

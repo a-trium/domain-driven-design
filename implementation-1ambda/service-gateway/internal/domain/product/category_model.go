@@ -1,14 +1,14 @@
 package product
 
 import (
-	"github.com/jinzhu/gorm"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/persistent"
 )
 
 type Category struct {
-	gorm.Model
+	persistent.BaseModel
 
-	Name        string `gorm:"column:name; not null; unique;"`
-	Description string `gorm:"column:description; not null;"`
+	Name        string `gorm:"column:name; type:VARCHAR(255); NOT NULL; UNIQUE;"`
+	Description string `gorm:"column:description; type:TEXT; NOT NULL;"`
 }
 
 func (Category) TableName() string {

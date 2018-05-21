@@ -73,6 +73,7 @@ func main() {
 
 	_, cancel := context.WithCancel(context.Background())
 
+
 	api.ServerShutdown = func() {
 		cancel()
 	}

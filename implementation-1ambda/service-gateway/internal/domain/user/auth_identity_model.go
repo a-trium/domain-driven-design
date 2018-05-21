@@ -1,0 +1,23 @@
+package user
+
+import (
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/persistent"
+)
+
+const ProviderPassword = "password"
+const ProvideGithub = "github"
+
+type AuthIdentity struct {
+	persistent.BaseModel
+
+	Provider          string `gorm:"column:provider; type:VARCHAR(255); NOT NULL;"`
+	UID               string `gorm:"column:uid; type:VARCHAR(255); NOT NULL;"`
+	EncryptedPassword string `gorm:"column:encrypted_password; type:TEXT; NOT NULL;"`
+
+	User   User `gorm:"foreignkey:UserID;"`
+	UserID uint `gorm:"column:user_id" sql:"type:UNSIGNED BIG INT REFERENCES User(id) ON DELETE RESTRICT ON UPDATE CASCADE"`
+}
+
+func (AuthIdentity) TableName() string {
+	return "AuthIdentity"
+}

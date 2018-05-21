@@ -61,6 +61,7 @@ func GetDatabase() *gorm.DB {
 		option := ""
 		db.Set("gorm:table_options", option).AutoMigrate(
 			&user.User{},
+			&user.AuthIdentity{},
 			&product.Category{},
 			&product.Image{},
 			&product.Product{},
@@ -68,7 +69,13 @@ func GetDatabase() *gorm.DB {
 			&order.OrderDetail{},
 		)
 
-		//db.Model(&product.Product{}).AddForeignKey("category_id", "Category(id)", "RESTRICT", "CASCADE")
+		// SQLite doesn't support `ADD CONSTRAINT`
+		// - https://github.com/jinzhu/gorm/blob/b2b568daa8e27966c39c942e5aefc74bcc8af88d/association_test.go#L846
+		// db.Model(&user.AuthIdentity{}).AddForeignKey("user_id", "User(id)", "RESTRICT", "CASCADE")
+
+		// Foreign key constraint is disabled by default in SQLite for backward compatibility
+		// - http://sqlite.org/foreignkeys.html
+		db.Exec("PRAGMA foreign_keys = ON;")
 
 	} else {
 		doMigration(db.DB(), dialect)

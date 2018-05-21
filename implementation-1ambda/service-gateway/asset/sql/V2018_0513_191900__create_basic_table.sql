@@ -11,16 +11,40 @@ CREATE TABLE `User` (
   KEY `idx_USER_deleted_at` (`deleted_at`),
 
   -- columns
-  `password`   TEXT                 NOT NULL,
-  `email`      VARCHAR(50)          NOT NULL,
-  `phone`      VARCHAR(50)          NOT NULL,
-  `name`       VARCHAR(50)          NOT NULL,
-  `birthday`   VARCHAR(20)          NOT NULL,
-  `address`    TEXT                 NOT NULL,
+  `email`      VARCHAR(50)          NULL     DEFAULT NULL,
+  `phone`      VARCHAR(50)          NULL     DEFAULT NULL,
+  `name`       VARCHAR(50)          NULL     DEFAULT NULL,
+  `birthday`   VARCHAR(20)          NULL     DEFAULT NULL,
+  `address`    TEXT                 NULL     DEFAULT NULL,
 
   CONSTRAINT `uniq_USER_email` UNIQUE (`email`)
 
   -- FK columns
+);
+
+-- model for `qor/auth`
+-- * https://godoc.org/github.com/qor/auth/auth_identity#AuthIdentity
+CREATE TABLE `AuthIdentity` (
+  -- primary key
+  `id`                 int(10) UNSIGNED     NOT NULL               AUTO_INCREMENT PRIMARY KEY,
+
+  -- primary key
+  `created_at`         timestamp            NULL                   DEFAULT NULL,
+  `updated_at`         timestamp            NULL                   DEFAULT NULL,
+  `deleted_at`         timestamp            NULL                   DEFAULT NULL,
+  KEY `idx_AuthIdentity_deleted_at` (`deleted_at`),
+
+  -- columns
+  `provider`           varchar(255)         NOT NULL,
+  `uid`                varchar(255)         NOT NULL,
+  `encrypted_password` TEXT                 NOT NULL,
+
+  -- FK columns
+  `user_id`            INTEGER(10) UNSIGNED NULL                   DEFAULT NULL,
+
+  FOREIGN KEY (`user_id`) REFERENCES `User` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE `Category` (
@@ -34,8 +58,8 @@ CREATE TABLE `Category` (
   KEY `idx_Category_deleted_at` (`deleted_at`),
 
   -- columns
-  `name`        VARCHAR(191)         NOT NULL,
-  `description` VARCHAR(191)         NOT NULL,
+  `name`        VARCHAR(255)         NOT NULL,
+  `description` TEXT                 NOT NULL,
 
   CONSTRAINT `uniq_Category_name` UNIQUE (`name`)
 
@@ -54,8 +78,8 @@ CREATE TABLE `Image` (
   KEY `idx_Image_deleted_at` (`deleted_at`),
 
   -- columns
-  `name`       VARCHAR(191)         NOT NULL,
-  `type`       VARCHAR(191)         NOT NULL,
+  `name`       VARCHAR(255)         NOT NULL,
+  `type`       VARCHAR(255)         NOT NULL,
   `path`       TEXT                 NOT NULL
 
   -- FK columns
@@ -72,9 +96,9 @@ CREATE TABLE `Product` (
   KEY `idx_Product_deleted_at` (`deleted_at`),
 
   -- columns
-  `name`        VARCHAR(191)         NOT NULL,
+  `name`        VARCHAR(255)         NOT NULL,
   `price`       INTEGER(10) UNSIGNED NOT NULL,
-  `detail`      TEXT                 NOT NULL,
+  `description` TEXT                 NOT NULL,
 
   -- FK columns
   `category_id` INTEGER(10) UNSIGNED NOT NULL,
