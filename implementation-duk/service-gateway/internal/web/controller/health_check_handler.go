@@ -9,5 +9,6 @@ type healthCheck struct {
 }
 
 func HealthCheck(c echo.Context) error {
-	return c.JSON(200, healthCheck{"pong"})
+	//return c.JSON(200, healthCheck{"pong"})
+	return c.String(200, "pong")
 }
