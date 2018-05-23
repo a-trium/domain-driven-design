@@ -48,10 +48,8 @@ func GetDatabase(env *Environment) *connection {
 		panic(err)
 	}
 
-	// migration
-	db.SingularTable(true)
 
-	// Automigrate
+	db.AutoMigrate(&user.User{})
 	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&user.User{})
 
 	//if !IsProdMode() {
