@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/config"
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/infra"
-	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/web/controller"
+	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/controller"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/dig"
 )
