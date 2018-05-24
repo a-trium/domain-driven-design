@@ -13,7 +13,9 @@ func main() {
 	route := gin.Default()
 
 	c := dig.New()
-	c.Provide(db)
+	c.Provide(config.GetEnvironment)
+	c.Provide(config.GetDatabase)
+	c.Provide(config.GetLogger)
 	c.Provide(repository.NewUserRepository)
 	c.Provide(controller.NewUserController)
 
@@ -27,8 +29,4 @@ func main() {
 	})
 
 	route.Run(":8080")
-}
-
-func db() *config.DBConnection {
-	return config.GetDatabase(config.GetEnvironment())
 }
