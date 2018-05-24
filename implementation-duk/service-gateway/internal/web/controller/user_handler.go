@@ -1,8 +1,9 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain/user"
-	"github.com/labstack/echo"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 )
@@ -15,17 +16,17 @@ func NewUserController(repository user.Repository) *userController {
 	return &userController{repository:repository}
 }
 
-func (ctrl *userController) GetUser(c echo.Context) error {
+func (ctrl *userController) GetUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	return c.JSON(http.StatusOK, ctrl.repository.FindOne(id))
+	c.JSON(http.StatusOK, ctrl.repository.FindOne(id))
 }
 
-func (ctrl *userController) AddUser(c echo.Context) error {
+func (ctrl *userController) AddUser(c *gin.Context) {
 	user := new(user.User)
 	if err := c.Bind(user); err != nil {
-		return err
+		fmt.Println(err.Error())
 	}
 	ctrl.repository.Save(user)
 
-	return c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, user)
 }

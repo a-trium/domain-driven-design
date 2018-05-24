@@ -1,14 +1,9 @@
 package controller
 
 import (
-	"github.com/labstack/echo"
+	"github.com/gin-gonic/gin"
 )
 
-type healthCheck struct {
-	Ping string `json:"ping" xml:"ping"`
-}
-
-func HealthCheck(c echo.Context) error {
-	//return c.JSON(200, healthCheck{"pong"})
-	return c.String(200, "pong")
+func HealthCheck(c *gin.Context) {
+	c.String(200, "pong")
 }
