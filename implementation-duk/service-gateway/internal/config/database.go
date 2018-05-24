@@ -16,18 +16,18 @@ type DatabaseProperty struct {
 	Database string `default:"application"`
 }
 
-type connection struct {
+type DBConnection struct {
 	db *gorm.DB
 }
 
-func (c *connection) GetDB() *gorm.DB {
+func (c *DBConnection) GetDB() *gorm.DB {
 	return c.db
 }
 
 const ASSET_DIR_PATH = "implementation-duk/service-gateway/asset/"
 const SQLITE_FILE_NAME = "gateway.db"
 
-func GetDatabase(env *Environment) *connection {
+func GetDatabase(env *Environment) *DBConnection {
 
 	var db *gorm.DB
 	var err error
@@ -57,5 +57,5 @@ func GetDatabase(env *Environment) *connection {
 	//	db = db.Debug()
 	//}
 
-	return &connection{db}
+	return &DBConnection{db}
 }

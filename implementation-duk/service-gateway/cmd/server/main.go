@@ -5,26 +5,30 @@ import (
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/infra"
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/web/controller"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/dig"
 )
 
 func main() {
 
-	gin := gin.Default()
+	route := gin.Default()
 
-	connection := config.GetDatabase(config.GetEnvironment())
+	c := dig.New()
+	c.Provide(db)
+	c.Provide(repository.NewUserRepository)
+	c.Provide(controller.NewUserController)
 
-	userRepository :=repository.NewUserRepository(connection.GetDB())
-	userController := controller.NewUserController(userRepository)
-	// Middleware
+	c.Invoke(func(ctrl *controller.UserController) {
+		groupV1 := route.Group("/v1")
+		groupV1.GET("/users/:id", ctrl.GetUser)
+		groupV1.POST("/users", ctrl.AddUser)
+	})
+	c.Invoke(func() {
+		route.GET("/ping", controller.HealthCheck)
+	})
 
-	// Routes
-	gin.GET("/ping", controller.HealthCheck)
-
-	groupV1 := gin.Group("/v1")
-	groupV1.GET("/users/:id", userController.GetUser)
-	groupV1.POST("/users", userController.AddUser)
-
-	// Start server
-	gin.Run(":8080")
+	route.Run(":8080")
 }
 
+func db() *config.DBConnection {
+	return config.GetDatabase(config.GetEnvironment())
+}

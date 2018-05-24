@@ -76,6 +76,15 @@
   version = "v1.3.2"
 
 [[projects]]
+  name = "go.uber.org/dig"
+  packages = [
+    ".",
+    "internal/digreflect"
+  ]
+  revision = "d100de9c8cc8358591507951141bc107713ba671"
+  version = "v1.3.0"
+
+[[projects]]
   name = "go.uber.org/multierr"
   packages = ["."]
   revision = "3c4937480c32f4c13a875a1829af76c98ca3d40a"
@@ -115,6 +124,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "919193887126c1c32794ff267d62124b645dd464ad626ecf16a50c54895b26ca"
+  inputs-digest = "e080cf5afc89b65d4dcbb1df582e82d5a5afc0e809be62fbd637b56531ca0fe2"
   solver-name = "gps-cdcl"
   solver-version = 1
