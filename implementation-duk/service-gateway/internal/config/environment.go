@@ -1,6 +1,8 @@
 package config
 
-import "github.com/kelseyhightower/envconfig"
+import (
+	"github.com/kelseyhightower/envconfig"
+)
 
 var (
 	// These fields are populated by govvv
@@ -15,7 +17,7 @@ type Environment struct {
 	Mode             string `default:"LOCAL"` // LOCAL TEST DEV PROD
 	ServiceName      string `default:"service-gateway"`
 	ServiceId        string `default:"0"`
-	Port			 string `default:"9000"`
+	Port             string `default:"9000"`
 	DatabaseProperty DatabaseProperty
 
 	BuildDate string
@@ -41,12 +43,12 @@ func init() {
 	env.Version = Version
 }
 
-//func (env *Environment) IsProdMode() bool {
-//	return env.Mode == "PROD"
-//}
-
-func IsProdMode() bool {
+func (env *Environment) IsProd() bool {
 	return env.Mode == "PROD"
+}
+
+func (env *Environment) IsDev() bool {
+	return env.Mode == "DEV"
 }
 
 func GetEnvironment() *Environment {

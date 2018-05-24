@@ -83,7 +83,7 @@ func GetDatabase() *gorm.DB {
 
 
 func getDbLogger() *zap.SugaredLogger {
-	logger := GetLogger().With("context", "database")
+	logger := GetLogger().With("context", "db")
 
 	return logger
 }

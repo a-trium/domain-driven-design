@@ -2,12 +2,6 @@
 
 
 [[projects]]
-  name = "github.com/davecgh/go-spew"
-  packages = ["spew"]
-  revision = "346938d642f2ec3594ed81d874461961cd0faa76"
-  version = "v1.1.0"
-
-[[projects]]
   branch = "master"
   name = "github.com/gin-contrib/sse"
   packages = ["."]
@@ -30,12 +24,6 @@
   version = "v1.3"
 
 [[projects]]
-  name = "github.com/golang/mock"
-  packages = ["gomock"]
-  revision = "c34cdb4725f4c3844d095133c6e40e448b86589b"
-  version = "v1.1.1"
-
-[[projects]]
   name = "github.com/golang/protobuf"
   packages = ["proto"]
   revision = "b4deda0973fb4c70b50d226b1af49f3da59f5265"
@@ -43,7 +31,11 @@
 
 [[projects]]
   name = "github.com/jinzhu/gorm"
-  packages = ["."]
+  packages = [
+    ".",
+    "dialects/mysql",
+    "dialects/sqlite"
+  ]
   revision = "6ed508ec6a4ecb3531899a69cbc746ccf65a4166"
   version = "v1.9.1"
 
@@ -66,71 +58,10 @@
   version = "v0.0.3"
 
 [[projects]]
-  name = "github.com/onsi/ginkgo"
-  packages = [
-    ".",
-    "config",
-    "internal/codelocation",
-    "internal/containernode",
-    "internal/failer",
-    "internal/leafnodes",
-    "internal/remote",
-    "internal/spec",
-    "internal/spec_iterator",
-    "internal/specrunner",
-    "internal/suite",
-    "internal/testingtproxy",
-    "internal/writer",
-    "reporters",
-    "reporters/stenographer",
-    "reporters/stenographer/support/go-colorable",
-    "reporters/stenographer/support/go-isatty",
-    "types"
-  ]
-  revision = "fa5fabab2a1bfbd924faf4c067d07ae414e2aedf"
-  version = "v1.5.0"
-
-[[projects]]
-  name = "github.com/onsi/gomega"
-  packages = [
-    ".",
-    "format",
-    "internal/assertion",
-    "internal/asyncassertion",
-    "internal/oraclematcher",
-    "internal/testingtsupport",
-    "matchers",
-    "matchers/support/goraph/bipartitegraph",
-    "matchers/support/goraph/edge",
-    "matchers/support/goraph/node",
-    "matchers/support/goraph/util",
-    "types"
-  ]
-  revision = "62bff4df71bdbc266561a0caee19f0594b17c240"
-  version = "v1.4.0"
-
-[[projects]]
-  name = "github.com/pmezard/go-difflib"
-  packages = ["difflib"]
-  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
-  version = "v1.0.0"
-
-[[projects]]
-  name = "github.com/stretchr/objx"
+  name = "github.com/mattn/go-sqlite3"
   packages = ["."]
-  revision = "facf9a85c22f48d2f52f2380e4efce1768749a89"
-  version = "v0.1"
-
-[[projects]]
-  name = "github.com/stretchr/testify"
-  packages = [
-    ".",
-    "assert",
-    "http",
-    "mock"
-  ]
-  revision = "12b6f73e6084dad08a7c6e575284b177ecafbc71"
-  version = "v1.2.1"
+  revision = "6c771bb9887719704b210e87e934f08be014bdb1"
+  version = "v1.6.0"
 
 [[projects]]
   name = "github.com/ugorji/go"
@@ -143,6 +74,15 @@
   packages = ["."]
   revision = "1ea20fb1cbb1cc08cbd0d913a96dead89aa18289"
   version = "v1.3.2"
+
+[[projects]]
+  name = "go.uber.org/dig"
+  packages = [
+    ".",
+    "internal/digreflect"
+  ]
+  revision = "d100de9c8cc8358591507951141bc107713ba671"
+  version = "v1.3.0"
 
 [[projects]]
   name = "go.uber.org/multierr"
@@ -165,44 +105,9 @@
 
 [[projects]]
   branch = "master"
-  name = "golang.org/x/net"
-  packages = [
-    "context",
-    "html",
-    "html/atom",
-    "html/charset"
-  ]
-  revision = "57065200b4b034a1c8ad54ff77069408c2218ae6"
-
-[[projects]]
-  branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "7c87d13f8e835d2fb3a70a2912c811ed0c1d241b"
-
-[[projects]]
-  name = "golang.org/x/text"
-  packages = [
-    "encoding",
-    "encoding/charmap",
-    "encoding/htmlindex",
-    "encoding/internal",
-    "encoding/internal/identifier",
-    "encoding/japanese",
-    "encoding/korean",
-    "encoding/simplifiedchinese",
-    "encoding/traditionalchinese",
-    "encoding/unicode",
-    "internal/gen",
-    "internal/tag",
-    "internal/utf8internal",
-    "language",
-    "runes",
-    "transform",
-    "unicode/cldr"
-  ]
-  revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
-  version = "v0.3.0"
+  revision = "88eb85aaee56831ad49eaf7aa80d73de9814cde2"
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v8"
@@ -219,6 +124,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "93f60a6ae9a893347bbae442fd031fed477c7958b1ff67925b99e72868d7e67f"
+  inputs-digest = "e080cf5afc89b65d4dcbb1df582e82d5a5afc0e809be62fbd637b56531ca0fe2"
   solver-name = "gps-cdcl"
   solver-version = 1
