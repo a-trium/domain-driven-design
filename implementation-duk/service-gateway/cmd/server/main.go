@@ -24,9 +24,13 @@ func main() {
 		groupV1.GET("/users/:id", ctrl.GetUser)
 		groupV1.POST("/users", ctrl.AddUser)
 	})
-	c.Invoke(func() {
-		route.GET("/ping", controller.HealthCheck)
-	})
+	c.Invoke(healthCheckHandler(route))
 
 	route.Run(":8080")
+}
+
+func healthCheckHandler(route *gin.Engine) func() {
+	return func() {
+		route.GET("/ping", controller.HealthCheck)
+	}
 }
