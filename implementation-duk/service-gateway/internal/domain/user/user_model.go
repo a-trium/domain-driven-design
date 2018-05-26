@@ -10,7 +10,7 @@ type User struct {
 	Birthday time.Time
 	Age      int
 	Name     string `gorm:"size:255"` // Default size for string is 255, reset it with this tag
-	Num      int    `gorm:"AUTO_INCREMENT"`
+	Num      int
 }
 
 type Repository interface {
