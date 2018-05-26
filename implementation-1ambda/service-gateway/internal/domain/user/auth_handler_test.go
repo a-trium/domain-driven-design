@@ -27,13 +27,13 @@ var _ = Describe("AuthHandler", func() {
 	Describe("Register()", func() {
 		When("got empty uid or empty", func() {
 			It("should return BadRequestException", func() {
-				u1, ex1 := repo.Register("  ", "password")
+				u1, ex1 := handler.Register("  ", "password")
 
 				Expect(u1).Should(BeNil())
 				Expect(ex1).ShouldNot(BeNil())
 				Expect(ex1.IsBadRequestException()).Should(BeTrue())
 
-				u2, ex2 := repo.Register("uid", "  ")
+				u2, ex2 := handler.Register("uid", "  ")
 
 				Expect(u2).Should(BeNil())
 				Expect(ex2).ShouldNot(BeNil())
@@ -42,29 +42,28 @@ var _ = Describe("AuthHandler", func() {
 		})
 
 		When("got valid uid and password", func() {
-			It("should create AuthIdentity and User", func() {
+			It("should create AuthClaim and User", func() {
 				uid := "uid"
 				password := "ma password"
-				aid, ex := repo.Register("uid", "password")
+				claim, ex := handler.Register(uid, password)
 
 				Expect(ex).Should(BeNil())
-				Expect(aid.ID).Should(BeNumerically(">", 0))
-				Expect(aid.UID).Should(Equal(uid))
-				Expect(aid.EncryptedPassword).ShouldNot(Equal(password))
+				Expect(claim.UserID).Should(BeNumerically(">", 0))
+				Expect(claim.UID).Should(Equal(uid))
 			})
 		})
 	})
 
-	Describe("Authenticate()", func() {
+	Describe("Login()", func() {
 		When("got empty uid or password", func() {
 			It("should return UnauthorizedException", func() {
-				c1, ex1 := repo.Authenticate("  ", "password")
+				c1, ex1 := handler.Login("  ", "password")
 
 				Expect(c1).Should(BeNil())
 				Expect(ex1).ShouldNot(BeNil())
 				Expect(ex1.IsUnauthorizedException()).Should(BeTrue())
 
-				c2, ex2 := repo.Authenticate("uid", "  ")
+				c2, ex2 := handler.Login("uid", "  ")
 
 				Expect(c2).Should(BeNil())
 				Expect(ex2).ShouldNot(BeNil())
@@ -75,7 +74,7 @@ var _ = Describe("AuthHandler", func() {
 
 		When("AuthIdentity does not exist", func() {
 			It("should return UnauthorizedException", func() {
-				claim, ex := repo.Authenticate("uid", "password")
+				claim, ex := handler.Login("uid", "password")
 
 				Expect(claim).Should(BeNil())
 				Expect(ex).ShouldNot(BeNil())
@@ -88,13 +87,13 @@ var _ = Describe("AuthHandler", func() {
 				// given
 				uid := "user"
 				password := "secret"
-				aid, ex1 := repo.Register(uid, password)
+				aid, ex1 := handler.Register(uid, password)
 
 				Expect(aid).ShouldNot(BeNil())
 				Expect(ex1).Should(BeNil())
 
 				// when
-				claim, ex2 := repo.Authenticate(uid, password + "1")
+				claim, ex2 := handler.Login(uid, password+"1")
 
 				// then
 				Expect(claim).Should(BeNil())
@@ -108,13 +107,13 @@ var _ = Describe("AuthHandler", func() {
 				// given
 				uid := "user"
 				password := "secret"
-				aid, ex1 := repo.Register(uid, password)
+				aid, ex1 := handler.Register(uid, password)
 
 				Expect(aid).ShouldNot(BeNil())
 				Expect(ex1).Should(BeNil())
 
 				// when
-				claim, ex2 := repo.Authenticate(uid, password)
+				claim, ex2 := handler.Login(uid, password)
 
 				// then
 				Expect(claim).ShouldNot(BeNil())
