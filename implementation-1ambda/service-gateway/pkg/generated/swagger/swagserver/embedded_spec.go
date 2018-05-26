@@ -143,7 +143,7 @@ func init() {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/empty"
+              "$ref": "#/definitions/registerResponse"
             }
           },
           "default": {
@@ -199,10 +199,24 @@ func init() {
     "registerRequest": {
       "type": "object",
       "properties": {
+        "email": {
+          "type": "string"
+        },
         "password": {
           "type": "string"
         },
         "uid": {
+          "type": "string"
+        }
+      }
+    },
+    "registerResponse": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string"
+        },
+        "userID": {
           "type": "string"
         }
       }

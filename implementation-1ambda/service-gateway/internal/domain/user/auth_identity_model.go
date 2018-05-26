@@ -11,7 +11,7 @@ type AuthIdentity struct {
 	persistent.BaseModel
 
 	Provider          string `gorm:"column:provider; type:VARCHAR(255); NOT NULL;"`
-	UID               string `gorm:"column:uid; type:VARCHAR(20); INDEX; NOT NULL;"`
+	UID               string `gorm:"column:uid; type:VARCHAR(20); UNIQUE; INDEX; NOT NULL;"`
 	EncryptedPassword string `gorm:"column:encrypted_password; type:TEXT; NOT NULL;"`
 
 	User   User `gorm:"foreignkey:UserID;"`

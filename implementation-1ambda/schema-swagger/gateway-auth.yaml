@@ -14,7 +14,7 @@ api:
         200:
           description: OK
           schema:
-            $ref: "./common.yaml#/definitions/Empty"
+            $ref: "./gateway-auth.yaml#/definitions/RegisterResponse"
         default:
           description: error
           schema:
@@ -73,5 +73,15 @@ definitions:
     properties:
       uid:
         type: string
+      email:
+        type: string
       password:
+        type: string
+
+  RegisterResponse:
+    type: object
+    properties:
+      uid:
+        type: string
+      userID:
         type: string

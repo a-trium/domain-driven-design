@@ -24,9 +24,11 @@ func main() {
 		"git_branch", env.GitBranch,
 		"git_state", env.GitState,
 		"version", env.Version,
+		"host", env.Host,
+		"port", env.RestPort,
 	)
 
-	swaggerSpec, err := loads.Analyzed(swagserver.SwaggerJSON, "")
+	swaggerSpec, err := loads.Analyzed(swagserver.FlatSwaggerJSON, "")
 	if err != nil {
 		logger.Fatalw("Failed to configure REST server", "error", err)
 	}
@@ -43,6 +45,7 @@ func main() {
 		}
 	}
 
+	server.Host = env.Host
 	server.Port = env.RestPort
 	if _, err := parser.Parse(); err != nil {
 		code := 1
@@ -66,16 +69,16 @@ func main() {
 	userRepo := user.NewRepository(db)
 	encryptor := user.NewEncryptor(0)
 	authHandler := user.NewAuthHandler(userRepo, encryptor)
-	user.RegisterAuthHandler(api, authHandler)
 
-	handler := api.Serve(nil)
+	authHandler.Configure(api)
 
 	logger.Info("Configure REST API middleware")
+
+	handler := api.Serve(nil)
 	handler = cors.AllowAll().Handler(handler)
 	server.SetHandler(handler)
 
 	_, cancel := context.WithCancel(context.Background())
-
 
 	api.ServerShutdown = func() {
 		cancel()

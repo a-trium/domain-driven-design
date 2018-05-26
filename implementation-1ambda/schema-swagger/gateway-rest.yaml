@@ -21,3 +21,4 @@ paths:
   /auth/logout:
     $ref: "./gateway-auth.yaml#/api/logout"
 
+

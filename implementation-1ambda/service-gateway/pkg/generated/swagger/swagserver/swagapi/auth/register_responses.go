@@ -25,7 +25,7 @@ type RegisterOK struct {
 	/*
 	  In: Body
 	*/
-	Payload swagmodel.Empty `json:"body,omitempty"`
+	Payload *swagmodel.RegisterResponse `json:"body,omitempty"`
 }
 
 // NewRegisterOK creates RegisterOK with default headers values
@@ -35,13 +35,13 @@ func NewRegisterOK() *RegisterOK {
 }
 
 // WithPayload adds the payload to the register o k response
-func (o *RegisterOK) WithPayload(payload swagmodel.Empty) *RegisterOK {
+func (o *RegisterOK) WithPayload(payload *swagmodel.RegisterResponse) *RegisterOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the register o k response
-func (o *RegisterOK) SetPayload(payload swagmodel.Empty) {
+func (o *RegisterOK) SetPayload(payload *swagmodel.RegisterResponse) {
 	o.Payload = payload
 }
 
@@ -49,11 +49,12 @@ func (o *RegisterOK) SetPayload(payload swagmodel.Empty) {
 func (o *RegisterOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	rw.WriteHeader(200)
-	payload := o.Payload
-	if err := producer.Produce(rw, payload); err != nil {
-		panic(err) // let the recovery middleware deal with this
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
 	}
-
 }
 
 /*RegisterDefault error
