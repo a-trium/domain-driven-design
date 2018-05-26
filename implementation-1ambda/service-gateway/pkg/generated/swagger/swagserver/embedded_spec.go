@@ -87,7 +87,7 @@ func init() {
           "default": {
             "description": "error",
             "schema": {
-              "$ref": "#/definitions/error"
+              "$ref": "#/definitions/exception"
             }
           }
         }
@@ -118,7 +118,7 @@ func init() {
           "default": {
             "description": "error",
             "schema": {
-              "$ref": "#/definitions/error"
+              "$ref": "#/definitions/exception"
             }
           }
         }
@@ -149,7 +149,7 @@ func init() {
           "default": {
             "description": "error",
             "schema": {
-              "$ref": "#/definitions/error"
+              "$ref": "#/definitions/exception"
             }
           }
         }
@@ -158,14 +158,9 @@ func init() {
   },
   "definitions": {
     "empty": {
-      "type": "object",
-      "properties": {
-        "value": {
-          "type": "string"
-        }
-      }
+      "type": "object"
     },
-    "error": {
+    "exception": {
       "type": "object",
       "properties": {
         "code": {

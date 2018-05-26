@@ -25,7 +25,7 @@ type LogoutOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *swagmodel.Empty `json:"body,omitempty"`
+	Payload swagmodel.Empty `json:"body,omitempty"`
 }
 
 // NewLogoutOK creates LogoutOK with default headers values
@@ -35,13 +35,13 @@ func NewLogoutOK() *LogoutOK {
 }
 
 // WithPayload adds the payload to the logout o k response
-func (o *LogoutOK) WithPayload(payload *swagmodel.Empty) *LogoutOK {
+func (o *LogoutOK) WithPayload(payload swagmodel.Empty) *LogoutOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the logout o k response
-func (o *LogoutOK) SetPayload(payload *swagmodel.Empty) {
+func (o *LogoutOK) SetPayload(payload swagmodel.Empty) {
 	o.Payload = payload
 }
 
@@ -49,12 +49,11 @@ func (o *LogoutOK) SetPayload(payload *swagmodel.Empty) {
 func (o *LogoutOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	rw.WriteHeader(200)
-	if o.Payload != nil {
-		payload := o.Payload
-		if err := producer.Produce(rw, payload); err != nil {
-			panic(err) // let the recovery middleware deal with this
-		}
+	payload := o.Payload
+	if err := producer.Produce(rw, payload); err != nil {
+		panic(err) // let the recovery middleware deal with this
 	}
+
 }
 
 /*LogoutDefault error
@@ -67,7 +66,7 @@ type LogoutDefault struct {
 	/*
 	  In: Body
 	*/
-	Payload *swagmodel.Error `json:"body,omitempty"`
+	Payload *swagmodel.Exception `json:"body,omitempty"`
 }
 
 // NewLogoutDefault creates LogoutDefault with default headers values
@@ -93,13 +92,13 @@ func (o *LogoutDefault) SetStatusCode(code int) {
 }
 
 // WithPayload adds the payload to the logout default response
-func (o *LogoutDefault) WithPayload(payload *swagmodel.Error) *LogoutDefault {
+func (o *LogoutDefault) WithPayload(payload *swagmodel.Exception) *LogoutDefault {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the logout default response
-func (o *LogoutDefault) SetPayload(payload *swagmodel.Error) {
+func (o *LogoutDefault) SetPayload(payload *swagmodel.Exception) {
 	o.Payload = payload
 }
 

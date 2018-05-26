@@ -25,7 +25,7 @@ type LoginOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *swagmodel.Empty `json:"body,omitempty"`
+	Payload swagmodel.Empty `json:"body,omitempty"`
 }
 
 // NewLoginOK creates LoginOK with default headers values
@@ -35,13 +35,13 @@ func NewLoginOK() *LoginOK {
 }
 
 // WithPayload adds the payload to the login o k response
-func (o *LoginOK) WithPayload(payload *swagmodel.Empty) *LoginOK {
+func (o *LoginOK) WithPayload(payload swagmodel.Empty) *LoginOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the login o k response
-func (o *LoginOK) SetPayload(payload *swagmodel.Empty) {
+func (o *LoginOK) SetPayload(payload swagmodel.Empty) {
 	o.Payload = payload
 }
 
@@ -49,12 +49,11 @@ func (o *LoginOK) SetPayload(payload *swagmodel.Empty) {
 func (o *LoginOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	rw.WriteHeader(200)
-	if o.Payload != nil {
-		payload := o.Payload
-		if err := producer.Produce(rw, payload); err != nil {
-			panic(err) // let the recovery middleware deal with this
-		}
+	payload := o.Payload
+	if err := producer.Produce(rw, payload); err != nil {
+		panic(err) // let the recovery middleware deal with this
 	}
+
 }
 
 /*LoginDefault error
@@ -67,7 +66,7 @@ type LoginDefault struct {
 	/*
 	  In: Body
 	*/
-	Payload *swagmodel.Error `json:"body,omitempty"`
+	Payload *swagmodel.Exception `json:"body,omitempty"`
 }
 
 // NewLoginDefault creates LoginDefault with default headers values
@@ -93,13 +92,13 @@ func (o *LoginDefault) SetStatusCode(code int) {
 }
 
 // WithPayload adds the payload to the login default response
-func (o *LoginDefault) WithPayload(payload *swagmodel.Error) *LoginDefault {
+func (o *LoginDefault) WithPayload(payload *swagmodel.Exception) *LoginDefault {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the login default response
-func (o *LoginDefault) SetPayload(payload *swagmodel.Error) {
+func (o *LoginDefault) SetPayload(payload *swagmodel.Exception) {
 	o.Payload = payload
 }
 

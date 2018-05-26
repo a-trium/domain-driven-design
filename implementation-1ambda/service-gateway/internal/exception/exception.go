@@ -16,7 +16,7 @@ type Exception interface {
 	Cause() error
 	StatusCode() int
 	Timestamp() *time.Time
-	ToSwaggerError() *dto.Error
+	ToSwaggerError() *dto.Exception
 
 	IsBadRequestException() bool
 	IsUnauthorizedException() bool
@@ -43,27 +43,27 @@ func (a *appException) Timestamp() *time.Time {
 	return &a.timestamp
 }
 
-func (a *appException) ToSwaggerError() *dto.Error {
+func (a *appException) ToSwaggerError() *dto.Exception {
 	errorType := ""
 
 	switch status := a.statusCode; status {
 	case CodeBadRequest:
-		errorType = dto.ErrorTypeBadRequest
+		errorType = dto.ExceptionTypeBadRequest
 
 	case CodeForbidden:
-		errorType = dto.ErrorTypeForbidden
+		errorType = dto.ExceptionTypeForbidden
 
 	case CodeUnauthorized:
-		errorType = dto.ErrorTypeUnauthorized
+		errorType = dto.ExceptionTypeUnauthorized
 
 	case CodeNotFound:
-		errorType = dto.ErrorTypeNotFound
+		errorType = dto.ExceptionTypeNotFound
 
 	default:
-		errorType = dto.ErrorTypeInternalServer
+		errorType = dto.ExceptionTypeInternalServer
 	}
 
-	return &dto.Error{
+	return &dto.Exception{
 		Code:      int64(a.statusCode),
 		Message:   a.cause.Error(),
 		Timestamp: a.timestamp.UTC().String(),

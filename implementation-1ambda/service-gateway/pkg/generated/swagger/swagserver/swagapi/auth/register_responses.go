@@ -25,7 +25,7 @@ type RegisterOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *swagmodel.Empty `json:"body,omitempty"`
+	Payload swagmodel.Empty `json:"body,omitempty"`
 }
 
 // NewRegisterOK creates RegisterOK with default headers values
@@ -35,13 +35,13 @@ func NewRegisterOK() *RegisterOK {
 }
 
 // WithPayload adds the payload to the register o k response
-func (o *RegisterOK) WithPayload(payload *swagmodel.Empty) *RegisterOK {
+func (o *RegisterOK) WithPayload(payload swagmodel.Empty) *RegisterOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the register o k response
-func (o *RegisterOK) SetPayload(payload *swagmodel.Empty) {
+func (o *RegisterOK) SetPayload(payload swagmodel.Empty) {
 	o.Payload = payload
 }
 
@@ -49,12 +49,11 @@ func (o *RegisterOK) SetPayload(payload *swagmodel.Empty) {
 func (o *RegisterOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	rw.WriteHeader(200)
-	if o.Payload != nil {
-		payload := o.Payload
-		if err := producer.Produce(rw, payload); err != nil {
-			panic(err) // let the recovery middleware deal with this
-		}
+	payload := o.Payload
+	if err := producer.Produce(rw, payload); err != nil {
+		panic(err) // let the recovery middleware deal with this
 	}
+
 }
 
 /*RegisterDefault error
@@ -67,7 +66,7 @@ type RegisterDefault struct {
 	/*
 	  In: Body
 	*/
-	Payload *swagmodel.Error `json:"body,omitempty"`
+	Payload *swagmodel.Exception `json:"body,omitempty"`
 }
 
 // NewRegisterDefault creates RegisterDefault with default headers values
@@ -93,13 +92,13 @@ func (o *RegisterDefault) SetStatusCode(code int) {
 }
 
 // WithPayload adds the payload to the register default response
-func (o *RegisterDefault) WithPayload(payload *swagmodel.Error) *RegisterDefault {
+func (o *RegisterDefault) WithPayload(payload *swagmodel.Exception) *RegisterDefault {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the register default response
-func (o *RegisterDefault) SetPayload(payload *swagmodel.Error) {
+func (o *RegisterDefault) SetPayload(payload *swagmodel.Exception) {
 	o.Payload = payload
 }
 

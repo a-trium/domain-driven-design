@@ -18,7 +18,7 @@ api:
         default:
           description: error
           schema:
-            $ref: "./common.yaml#/definitions/Error"
+            $ref: "./common.yaml#/definitions/Exception"
   login:
     post:
       tags:
@@ -37,7 +37,7 @@ api:
         default:
           description: error
           schema:
-            $ref: "./common.yaml#/definitions/Error"
+            $ref: "./common.yaml#/definitions/Exception"
 
   logout:
     post:
@@ -57,7 +57,7 @@ api:
         default:
           description: error
           schema:
-            $ref: "./common.yaml#/definitions/Error"
+            $ref: "./common.yaml#/definitions/Exception"
 
 definitions:
   LoginRequest:

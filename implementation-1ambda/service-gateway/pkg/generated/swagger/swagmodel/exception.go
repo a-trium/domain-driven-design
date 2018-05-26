@@ -15,9 +15,9 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// Error error
-// swagger:model error
-type Error struct {
+// Exception exception
+// swagger:model exception
+type Exception struct {
 
 	// code
 	Code int64 `json:"code,omitempty"`
@@ -33,8 +33,8 @@ type Error struct {
 	Type string `json:"type,omitempty"`
 }
 
-// Validate validates this error
-func (m *Error) Validate(formats strfmt.Registry) error {
+// Validate validates this exception
+func (m *Exception) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateType(formats); err != nil {
@@ -47,7 +47,7 @@ func (m *Error) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-var errorTypeTypePropEnum []interface{}
+var exceptionTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
@@ -55,37 +55,37 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		errorTypeTypePropEnum = append(errorTypeTypePropEnum, v)
+		exceptionTypeTypePropEnum = append(exceptionTypeTypePropEnum, v)
 	}
 }
 
 const (
 
-	// ErrorTypeBadRequest captures enum value "BadRequest"
-	ErrorTypeBadRequest string = "BadRequest"
+	// ExceptionTypeBadRequest captures enum value "BadRequest"
+	ExceptionTypeBadRequest string = "BadRequest"
 
-	// ErrorTypeUnauthorized captures enum value "Unauthorized"
-	ErrorTypeUnauthorized string = "Unauthorized"
+	// ExceptionTypeUnauthorized captures enum value "Unauthorized"
+	ExceptionTypeUnauthorized string = "Unauthorized"
 
-	// ErrorTypeForbidden captures enum value "Forbidden"
-	ErrorTypeForbidden string = "Forbidden"
+	// ExceptionTypeForbidden captures enum value "Forbidden"
+	ExceptionTypeForbidden string = "Forbidden"
 
-	// ErrorTypeNotFound captures enum value "NotFound"
-	ErrorTypeNotFound string = "NotFound"
+	// ExceptionTypeNotFound captures enum value "NotFound"
+	ExceptionTypeNotFound string = "NotFound"
 
-	// ErrorTypeInternalServer captures enum value "InternalServer"
-	ErrorTypeInternalServer string = "InternalServer"
+	// ExceptionTypeInternalServer captures enum value "InternalServer"
+	ExceptionTypeInternalServer string = "InternalServer"
 )
 
 // prop value enum
-func (m *Error) validateTypeEnum(path, location string, value string) error {
-	if err := validate.Enum(path, location, value, errorTypeTypePropEnum); err != nil {
+func (m *Exception) validateTypeEnum(path, location string, value string) error {
+	if err := validate.Enum(path, location, value, exceptionTypeTypePropEnum); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *Error) validateType(formats strfmt.Registry) error {
+func (m *Exception) validateType(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Type) { // not required
 		return nil
@@ -100,7 +100,7 @@ func (m *Error) validateType(formats strfmt.Registry) error {
 }
 
 // MarshalBinary interface implementation
-func (m *Error) MarshalBinary() ([]byte, error) {
+func (m *Exception) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -108,8 +108,8 @@ func (m *Error) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *Error) UnmarshalBinary(b []byte) error {
-	var res Error
+func (m *Exception) UnmarshalBinary(b []byte) error {
+	var res Exception
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
