@@ -1,5 +1,8 @@
 definitions:
-  Error:
+  Empty:
+    type: object
+
+  Exception:
     type: object
     properties:
       timestamp:
@@ -12,10 +15,11 @@ definitions:
       type:
         type: string
         enum:
-          - InvalidSession
+          - BadRequest
+          - Unauthorized
+          - Forbidden
+          - NotFound
           - InternalServer
-          - BadFilterRequest
-          - RecordDoesNotxist
 
   Pagination:
     type: object

@@ -5,13 +5,13 @@ import (
 	"os"
 
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/config"
-	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/rest"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi"
 	"github.com/go-openapi/loads"
 	"github.com/go-openapi/runtime"
 	"github.com/jessevdk/go-flags"
 	"github.com/rs/cors"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
 )
 
 func main() {
@@ -62,8 +62,11 @@ func main() {
 
 	// configure REST server handlers, middlewares
 	logger.Info("Configure REST API handlers")
-	restCtrl := rest.NewController(db, logger)
-	restCtrl.Configure(api)
+
+	userRepo := user.NewRepository(db)
+	encryptor := user.NewEncryptor(0)
+	authHandler := user.NewAuthHandler(userRepo, encryptor)
+	user.RegisterAuthHandler(api, authHandler)
 
 	handler := api.Serve(nil)
 
@@ -72,6 +75,7 @@ func main() {
 	server.SetHandler(handler)
 
 	_, cancel := context.WithCancel(context.Background())
+
 
 	api.ServerShutdown = func() {
 		cancel()

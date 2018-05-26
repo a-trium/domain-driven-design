@@ -21,20 +21,8 @@ var _ = Describe("UserRepository", func() {
 	AfterEach(func() {
 	})
 
-	Describe("Create()", func() {
-		Context("When creating a new record", func() {
-			It("should return nil exception", func() {
-				u := &user.User{}
-				record, ex := repo.AddUser(u)
-
-				Expect(ex).To(BeNil())
-				Expect(record.ID).Should(BeNumerically(">", 0))
-			})
-		})
-	})
-
 	Describe("Delete()", func() {
-		Context("When trying to delete non-existing record", func() {
+		When("trying to delete non-existing record", func() {
 			It("should return not found exception", func() {
 				record, ex := repo.DeleteUser(0)
 
@@ -46,7 +34,7 @@ var _ = Describe("UserRepository", func() {
 	})
 
 	Describe("Find()", func() {
-		Context("When the record dose not exist", func() {
+		When("the record dose not exist", func() {
 			It("should return NotFoundException", func() {
 				invalidId := uint(0)
 
@@ -55,6 +43,36 @@ var _ = Describe("UserRepository", func() {
 				Expect(ex).NotTo(BeNil())
 				Expect(ex.IsNotFoundException()).To(BeTrue())
 
+			})
+		})
+	})
+
+	Describe("CreateAuthIdentity()", func() {
+		When("got non-existing uid", func() {
+			It("should create User and AuthIdentity", func() {
+				// TODO
+
+			})
+		})
+
+		When("got existing uid", func() {
+			It("should throw exception", func() {
+				// TODO
+			})
+		})
+	})
+
+	Describe("FindAuthIdentityByUID()", func() {
+		When("got non-existing uid", func() {
+			It("should create User and AuthIdentity", func() {
+				// TODO
+
+			})
+		})
+
+		When("got non-existing uid", func() {
+			It("should throw UnauthorizedException", func() {
+				// TODO
 			})
 		})
 	})

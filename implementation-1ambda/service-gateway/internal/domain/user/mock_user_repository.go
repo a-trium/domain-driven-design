@@ -33,19 +33,6 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 	return m.recorder
 }
 
-// AddUser mocks base method
-func (m *MockRepository) AddUser(user *User) (*User, exception.Exception) {
-	ret := m.ctrl.Call(m, "AddUser", user)
-	ret0, _ := ret[0].(*User)
-	ret1, _ := ret[1].(exception.Exception)
-	return ret0, ret1
-}
-
-// AddUser indicates an expected call of AddUser
-func (mr *MockRepositoryMockRecorder) AddUser(user interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUser", reflect.TypeOf((*MockRepository)(nil).AddUser), user)
-}
-
 // DeleteUser mocks base method
 func (m *MockRepository) DeleteUser(id uint) (bool, exception.Exception) {
 	ret := m.ctrl.Call(m, "DeleteUser", id)
@@ -83,4 +70,30 @@ func (m *MockRepository) FineAllUsers() (*[]User, exception.Exception) {
 // FineAllUsers indicates an expected call of FineAllUsers
 func (mr *MockRepositoryMockRecorder) FineAllUsers() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FineAllUsers", reflect.TypeOf((*MockRepository)(nil).FineAllUsers))
+}
+
+// CreateAuthIdentity mocks base method
+func (m *MockRepository) CreateAuthIdentity(uid, password string) (*AuthIdentity, exception.Exception) {
+	ret := m.ctrl.Call(m, "CreateAuthIdentity", uid, password)
+	ret0, _ := ret[0].(*AuthIdentity)
+	ret1, _ := ret[1].(exception.Exception)
+	return ret0, ret1
+}
+
+// CreateAuthIdentity indicates an expected call of CreateAuthIdentity
+func (mr *MockRepositoryMockRecorder) CreateAuthIdentity(uid, password interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateAuthIdentity", reflect.TypeOf((*MockRepository)(nil).CreateAuthIdentity), uid, password)
+}
+
+// FindAuthIdentityByUID mocks base method
+func (m *MockRepository) FindAuthIdentityByUID(uid string) (*AuthIdentity, exception.Exception) {
+	ret := m.ctrl.Call(m, "FindAuthIdentityByUID", uid)
+	ret0, _ := ret[0].(*AuthIdentity)
+	ret1, _ := ret[1].(exception.Exception)
+	return ret0, ret1
+}
+
+// FindAuthIdentityByUID indicates an expected call of FindAuthIdentityByUID
+func (mr *MockRepositoryMockRecorder) FindAuthIdentityByUID(uid interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindAuthIdentityByUID", reflect.TypeOf((*MockRepository)(nil).FindAuthIdentityByUID), uid)
 }

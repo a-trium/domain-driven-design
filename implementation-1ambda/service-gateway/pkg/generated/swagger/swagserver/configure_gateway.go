@@ -12,7 +12,7 @@ import (
 	graceful "github.com/tylerb/graceful"
 
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi"
-	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/example"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/auth"
 )
 
 //go:generate swagger generate server --target ../pkg/generated/swagger --name  --spec ../../schema-swagger/gateway-rest.yaml --api-package swagapi --model-package swagmodel --server-package swagserver --exclude-main
@@ -35,8 +35,14 @@ func configureAPI(api *swagapi.GatewayAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	api.ExampleSomeActionHandler = example.SomeActionHandlerFunc(func(params example.SomeActionParams) middleware.Responder {
-		return middleware.NotImplemented("operation example.SomeAction has not yet been implemented")
+	api.AuthLoginHandler = auth.LoginHandlerFunc(func(params auth.LoginParams) middleware.Responder {
+		return middleware.NotImplemented("operation auth.Login has not yet been implemented")
+	})
+	api.AuthLogoutHandler = auth.LogoutHandlerFunc(func(params auth.LogoutParams) middleware.Responder {
+		return middleware.NotImplemented("operation auth.Logout has not yet been implemented")
+	})
+	api.AuthRegisterHandler = auth.RegisterHandlerFunc(func(params auth.RegisterParams) middleware.Responder {
+		return middleware.NotImplemented("operation auth.Register has not yet been implemented")
 	})
 
 	api.ServerShutdown = func() {}

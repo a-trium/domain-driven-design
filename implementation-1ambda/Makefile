@@ -6,7 +6,7 @@ PIP 		= pip
 
 .PHONY: prepare
 prepare:
-	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Installing tools"
+	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Installing prerequisites"
 	@ $(PIP) install -U mycli
 
 .PHONY: compose

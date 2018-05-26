@@ -12,41 +12,12 @@ produces:
 basePath: /api
 
 paths:
-  /example:
-    post:
-      tags:
-        - example
-      operationId: SomeAction
-      parameters:
-        - name: body
-          in: body
-          schema:
-            $ref: "#/definitions/ExampleRequest"
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: "#/definitions/ExampleResponse"
-        default:
-          description: error
-          schema:
-            $ref: "./common.yaml#/definitions/Error"
+  /auth/register:
+    $ref: "./gateway-auth.yaml#/api/register"
 
-definitions:
-  ExampleRequest:
-    type: object
-    required:
-      - someField
-    properties:
-      someField:
-        type: string
+  /auth/login:
+    $ref: "./gateway-auth.yaml#/api/login"
 
-  ExampleResponse:
-    type: object
-    required:
-      - someField
-    properties:
-      someField:
-        type: string
-
+  /auth/logout:
+    $ref: "./gateway-auth.yaml#/api/logout"
 

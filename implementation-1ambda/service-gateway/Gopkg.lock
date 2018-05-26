@@ -68,7 +68,7 @@
   branch = "master"
   name = "github.com/go-openapi/analysis"
   packages = ["."]
-  revision = "863ac7f90e00e88e507095639a8457bbbf3c2ec9"
+  revision = "5957818e100395077187fb7ef3b8a28227af06c6"
 
 [[projects]]
   branch = "master"
@@ -137,7 +137,7 @@
   name = "github.com/go-sql-driver/mysql"
   packages = ["."]
   revision = "a0583e0143b1624142adab07e0e97fe106d99561"
-  version = "v1.3.0"
+  version = "v1.3"
 
 [[projects]]
   name = "github.com/gobuffalo/packr"
@@ -381,7 +381,7 @@
     "html/charset",
     "idna"
   ]
-  revision = "2491c5de3490fced2f6cff376127c667efeed857"
+  revision = "57065200b4b034a1c8ad54ff77069408c2218ae6"
 
 [[projects]]
   branch = "master"
@@ -450,6 +450,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "bfeec20332ab58df316032c73a66d26228b06855f3103b63b9c1987ee8d23c32"
+  inputs-digest = "049bdd944c9ba497b6f11862cecc5ec8211a562c04887c2d1772506c8a820803"
   solver-name = "gps-cdcl"
   solver-version = 1

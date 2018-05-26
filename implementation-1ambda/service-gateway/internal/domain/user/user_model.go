@@ -1,23 +1,19 @@
 package user
 
 import (
-	"github.com/jinzhu/gorm"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/persistent"
 )
 
 type User struct {
-	gorm.Model
+	persistent.BaseModel
 
-	Password string `gorm:"column:password; not null;"`
-	Email    string `gorm:"column:email; not null;"`
-	Phone    string `gorm:"column:phone; not null;"`
-	Name     string `gorm:"column:name; not null;"`
-	Birthday string `gorm:"column:birthday; not null;'"`
-	Address  string `gorm:"column:address; not null;"`
+	Email    string `gorm:"column:email; type:VARCHAR(50); UNIQUE; INDEX;"`
+	Phone    string `gorm:"column:phone; type:VARCHAR(50);"`
+	Name     string `gorm:"column:name; type:VARCHAR(50);"`
+	Birthday string `gorm:"column:birthday; type:VARCHAR(20);"`
+	Address  string `gorm:"column:address; type:TEXT;"`
 }
 
 func (User) TableName() string {
 	return "User"
 }
-
-
-

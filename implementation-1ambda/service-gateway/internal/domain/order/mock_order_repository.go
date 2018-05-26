@@ -58,3 +58,29 @@ func (m *MockRepository) FindOrderById(id uint) (*Order, exception.Exception) {
 func (mr *MockRepositoryMockRecorder) FindOrderById(id interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrderById", reflect.TypeOf((*MockRepository)(nil).FindOrderById), id)
 }
+
+// AddOrderDetail mocks base method
+func (m *MockRepository) AddOrderDetail(order *OrderDetail) (*OrderDetail, exception.Exception) {
+	ret := m.ctrl.Call(m, "AddOrderDetail", order)
+	ret0, _ := ret[0].(*OrderDetail)
+	ret1, _ := ret[1].(exception.Exception)
+	return ret0, ret1
+}
+
+// AddOrderDetail indicates an expected call of AddOrderDetail
+func (mr *MockRepositoryMockRecorder) AddOrderDetail(order interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddOrderDetail", reflect.TypeOf((*MockRepository)(nil).AddOrderDetail), order)
+}
+
+// FindOrderDetailById mocks base method
+func (m *MockRepository) FindOrderDetailById(id uint) (*OrderDetail, exception.Exception) {
+	ret := m.ctrl.Call(m, "FindOrderDetailById", id)
+	ret0, _ := ret[0].(*OrderDetail)
+	ret1, _ := ret[1].(exception.Exception)
+	return ret0, ret1
+}
+
+// FindOrderDetailById indicates an expected call of FindOrderDetailById
+func (mr *MockRepositoryMockRecorder) FindOrderDetailById(id interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrderDetailById", reflect.TypeOf((*MockRepository)(nil).FindOrderDetailById), id)
+}
