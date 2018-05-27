@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="login">
         Login
     </div>
     
@@ -16,7 +16,3 @@
     export default class Login extends Vue {
     }
 </script>
-
-<style scoped>
-
-</style>
