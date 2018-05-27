@@ -17,17 +17,18 @@
                 <el-button @click="resetForm('ruleForm')">Reset</el-button>
             </el-form-item>
         </el-form>
-
     </div>
-
 </template>
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator'
+    import { AuthAPI } from "../common/api"
+    import { Exception, RegisterRequest } from "../generated/swagger"
 
     @Component({ components: {}, })
     export default class Register extends Vue {
         $refs: any
+        $notify: any
 
         private ruleForm = {
             uid: '',
@@ -52,12 +53,32 @@
 
         submitForm(formName: string) {
             this.$refs[ formName ].validate((valid: any) => {
-                if (valid) {
-                    alert('submit!')
-                } else {
-                    console.log('error submit!!')
-                    return false
+                if (!valid) {
+                    return
                 }
+
+                const request: RegisterRequest = {
+                    uid: this.ruleForm.uid,
+                    password: this.ruleForm.password,
+                    email: this.ruleForm.email,
+                }
+
+                AuthAPI.register(request, { credentials: 'include' })
+                    .then((response) => {
+                        this.$notify({
+                            title: 'Success',
+                            message: `Created ${response.uid}`,
+                            type: 'success',
+                        })
+                    })
+                    .catch((response) => {
+                        response.json().then((parsed: Exception) => {
+                            this.$notify.error({
+                                title: `Error (${parsed.type})`,
+                                message: parsed.message,
+                            })
+                        })
+                    })
             })
         }
 

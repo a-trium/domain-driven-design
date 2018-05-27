@@ -173,7 +173,33 @@ export interface RegisterRequest {
      * @type {string}
      * @memberof RegisterRequest
      */
+    email?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterRequest
+     */
     password?: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface RegisterResponse
+ */
+export interface RegisterResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterResponse
+     */
+    uid?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterResponse
+     */
+    userID?: string;
 }
 
 
@@ -315,7 +341,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        register(body?: RegisterRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Empty> {
+        register(body?: RegisterRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<RegisterResponse> {
             const localVarFetchArgs = AuthApiFetchParamCreator(configuration).register(body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
