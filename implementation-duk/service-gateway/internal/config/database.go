@@ -49,8 +49,8 @@ func GetDatabase(env *Environment) *DBConnection {
 	}
 
 
-	db.AutoMigrate(&user.User{})
-	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&user.User{})
+	db.AutoMigrate(&user.Customer{})
+	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&user.Customer{})
 
 	//if !IsProdMode() {
 	//	db = db.LogMode(true)
