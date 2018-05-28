@@ -11,3 +11,7 @@ type Seller struct {
 	Contact
 	Name     string `gorm:"type:varchar(20); not null"`
 }
+
+func (Seller) TableName() string {
+	return "seller"
+}

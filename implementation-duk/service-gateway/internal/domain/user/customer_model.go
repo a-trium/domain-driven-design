@@ -14,6 +14,10 @@ type Customer struct {
 	Birthday time.Time
 }
 
+func (Customer) TableName() string {
+	return "customer"
+}
+
 type Repository interface {
 	FindOne(id int) *Customer
 	Save(customer *Customer)

@@ -8,6 +8,9 @@ type Category struct {
 	Name        string `gorm:"type:varchar(20); not null; unique"`
 	Description string
 
-	//SubCategory   Category
-	//SubCategoryId Category
+	ParentCategoryId uint `gorm:"type:varchar(20);"`
+}
+
+func (Category) TableName() string {
+	return "category"
 }

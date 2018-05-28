@@ -11,10 +11,10 @@ type Product struct {
 	Name  string `gorm:"type:varchar(50); not null;"`
 	Price uint   `gorm:"not null;"`
 
-	Category   Category `gorm:"foreignkey:CategoryID;"`
+	Category   *Category `gorm:"foreignkey:CategoryID;"`
 	CategoryId uint     `gorm:"column:category_id;" sql:"type:UNSIGNED BIG INT REFERENCES Category(id) ON DELETE RESTRICT ON UPDATE CASCADE;"`
 
-	Seller   user.Seller `gorm:"foreignkey:SellerId;"`
+	Seller   *user.Seller `gorm:"foreignkey:SellerId;"`
 	SellerId uint        `gorm:"column:seller_id;" sql:"type:UNSIGNED BIG INT REFERENCES Seller(id) ON DELETE RESTRICT ON UPDATE CASCADE;"`
 
 	ImageUrl string
@@ -24,10 +24,15 @@ type Product struct {
 	//Options []Option
 }
 
+func (Product) TableName() string {
+	return "product"
+}
+
+
 type Option struct {
 	domain.BaseModel
 
-	Product   Product `gorm:"foreignkey:ProductID;"`
+	Product   *Product `gorm:"foreignkey:ProductID;"`
 	ProductId uint    `gorm:"column:product_id;" sql:"type:UNSIGNED BIG INT REFERENCES Product(id) ON DELETE RESTRICT ON UPDATE CASCADE"`
 
 	Stock uint
@@ -40,6 +45,6 @@ func (o *Option) getPrice() uint {
 	return o.Price + o.Product.Price
 }
 
-//func (Option) TableName() string {
-//	return "product_option"
-//}
+func (Option) TableName() string {
+	return "product_option"
+}

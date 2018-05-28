@@ -8,4 +8,8 @@ type BaseCoupon struct {
 	Value uint
 }
 
+func (BaseCoupon) TableName() string {
+	return "coupon"
+}
+
 // TODO 전체쿠폰(ex:장바구니, 특정가격...etc) 상품쿠폰(ex:카테고리, 셀러...etc)
