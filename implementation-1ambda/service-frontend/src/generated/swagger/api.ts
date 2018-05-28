@@ -81,6 +81,20 @@ export class RequiredError extends Error {
 /**
  * 
  * @export
+ * @interface AuthResponse
+ */
+export interface AuthResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthResponse
+     */
+    uid?: string;
+}
+
+/**
+ * 
+ * @export
  * @interface Empty
  */
 export interface Empty {
@@ -182,26 +196,6 @@ export interface RegisterRequest {
     password?: string;
 }
 
-/**
- * 
- * @export
- * @interface RegisterResponse
- */
-export interface RegisterResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RegisterResponse
-     */
-    uid?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RegisterResponse
-     */
-    userID?: string;
-}
-
 
 /**
  * AuthApi - fetch parameter creator
@@ -290,6 +284,28 @@ export const AuthApiFetchParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        whoami(options: any = {}): FetchArgs {
+            const localVarPath = `/auth/whoami`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -305,7 +321,7 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        login(body?: LoginRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<Empty> {
+        login(body?: LoginRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<AuthResponse> {
             const localVarFetchArgs = AuthApiFetchParamCreator(configuration).login(body, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -341,8 +357,25 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        register(body?: RegisterRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<RegisterResponse> {
+        register(body?: RegisterRequest, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<AuthResponse> {
             const localVarFetchArgs = AuthApiFetchParamCreator(configuration).register(body, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        whoami(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<AuthResponse> {
+            const localVarFetchArgs = AuthApiFetchParamCreator(configuration).whoami(options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -389,6 +422,14 @@ export const AuthApiFactory = function (configuration?: Configuration, fetch?: F
         register(body?: RegisterRequest, options?: any) {
             return AuthApiFp(configuration).register(body, options)(fetch, basePath);
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        whoami(options?: any) {
+            return AuthApiFp(configuration).whoami(options)(fetch, basePath);
+        },
     };
 };
 
@@ -430,6 +471,16 @@ export class AuthApi extends BaseAPI {
      */
     public register(body?: RegisterRequest, options?: any) {
         return AuthApiFp(this.configuration).register(body, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthApi
+     */
+    public whoami(options?: any) {
+        return AuthApiFp(this.configuration).whoami(options)(this.fetch, this.basePath);
     }
 
 }

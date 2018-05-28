@@ -42,6 +42,9 @@ func init() {
     },
     "/auth/register": {
       "$ref": "./gateway-auth.yaml#/api/register"
+    },
+    "/auth/whoami": {
+      "$ref": "./gateway-auth.yaml#/api/whoami"
     }
   }
 }`))
@@ -154,6 +157,28 @@ func init() {
           }
         }
       }
+    },
+    "/auth/whoami": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "Whoami",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/authResponse"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/exception"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -161,9 +186,6 @@ func init() {
       "type": "object",
       "properties": {
         "uid": {
-          "type": "string"
-        },
-        "userID": {
           "type": "string"
         }
       }

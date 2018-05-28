@@ -12,6 +12,9 @@ produces:
 basePath: /api
 
 paths:
+  /auth/whoami:
+    $ref: "./gateway-auth.yaml#/api/whoami"
+    
   /auth/register:
     $ref: "./gateway-auth.yaml#/api/register"
 
@@ -20,5 +23,4 @@ paths:
 
   /auth/logout:
     $ref: "./gateway-auth.yaml#/api/logout"
-
 

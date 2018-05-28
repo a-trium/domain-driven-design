@@ -17,9 +17,6 @@ type AuthResponse struct {
 
 	// uid
 	UID string `json:"uid,omitempty"`
-
-	// user ID
-	UserID string `json:"userID,omitempty"`
 }
 
 // Validate validates this auth response
