@@ -12,7 +12,8 @@ import (
 	"github.com/jessevdk/go-flags"
 	"github.com/rs/cors"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
-)
+	"github.com/gorilla/sessions"
+	)
 
 func main() {
 	env := config.Env
@@ -60,6 +61,10 @@ func main() {
 	api.JSONProducer = runtime.JSONProducer()
 	api.Logger = logger.Infof
 
+	// configure session storage
+	sessionSecret := "something-very-secret"
+	sessionStore := sessions.NewCookieStore([]byte(sessionSecret))
+
 	// configure database
 	db := config.GetDatabase()
 
@@ -68,7 +73,7 @@ func main() {
 
 	userRepo := user.NewRepository(db)
 	encryptor := user.NewEncryptor(0)
-	authHandler := user.NewAuthHandler(userRepo, encryptor)
+	authHandler := user.NewAuthHandler(userRepo, encryptor, sessionStore)
 
 	authHandler.Configure(api)
 

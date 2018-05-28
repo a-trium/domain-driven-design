@@ -25,7 +25,7 @@ type RegisterOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *swagmodel.RegisterResponse `json:"body,omitempty"`
+	Payload *swagmodel.AuthResponse `json:"body,omitempty"`
 }
 
 // NewRegisterOK creates RegisterOK with default headers values
@@ -35,13 +35,13 @@ func NewRegisterOK() *RegisterOK {
 }
 
 // WithPayload adds the payload to the register o k response
-func (o *RegisterOK) WithPayload(payload *swagmodel.RegisterResponse) *RegisterOK {
+func (o *RegisterOK) WithPayload(payload *swagmodel.AuthResponse) *RegisterOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the register o k response
-func (o *RegisterOK) SetPayload(payload *swagmodel.RegisterResponse) {
+func (o *RegisterOK) SetPayload(payload *swagmodel.AuthResponse) {
 	o.Payload = payload
 }
 

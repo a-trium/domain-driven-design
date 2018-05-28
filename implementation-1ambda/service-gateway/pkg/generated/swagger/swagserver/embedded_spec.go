@@ -81,7 +81,7 @@ func init() {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/empty"
+              "$ref": "#/definitions/authResponse"
             }
           },
           "default": {
@@ -143,7 +143,7 @@ func init() {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/registerResponse"
+              "$ref": "#/definitions/authResponse"
             }
           },
           "default": {
@@ -157,6 +157,17 @@ func init() {
     }
   },
   "definitions": {
+    "authResponse": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string"
+        },
+        "userID": {
+          "type": "string"
+        }
+      }
+    },
     "empty": {
       "type": "object"
     },
@@ -206,17 +217,6 @@ func init() {
           "type": "string"
         },
         "uid": {
-          "type": "string"
-        }
-      }
-    },
-    "registerResponse": {
-      "type": "object",
-      "properties": {
-        "uid": {
-          "type": "string"
-        },
-        "userID": {
           "type": "string"
         }
       }

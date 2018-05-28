@@ -10,6 +10,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	dto "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagmodel"
 	"strconv"
+	"github.com/gorilla/sessions"
 )
 
 type AuthHandler interface {
@@ -22,12 +23,14 @@ type AuthHandler interface {
 type authHandlerImpl struct {
 	userRepository Repository
 	encryptor      Encryptor
+	sessionStore   *sessions.CookieStore
 }
 
-func NewAuthHandler(repo Repository, encryptor Encryptor) AuthHandler {
+func NewAuthHandler(repo Repository, encryptor Encryptor, sessionStore *sessions.CookieStore) AuthHandler {
 	return &authHandlerImpl{
 		userRepository: repo,
 		encryptor:      encryptor,
+		sessionStore:   sessionStore,
 	}
 }
 
@@ -49,7 +52,7 @@ func (c *authHandlerImpl) Configure(registry *swagapi.GatewayAPI) () {
 				return auth.NewRegisterDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
 			}
 
-			response := dto.RegisterResponse{
+			response := dto.AuthResponse{
 				UID:    claim.UID,
 				UserID: strconv.FormatUint(uint64(claim.UserID), 10),
 			}
@@ -67,12 +70,18 @@ func (c *authHandlerImpl) Configure(registry *swagapi.GatewayAPI) () {
 			uid := params.Body.UID
 			password := params.Body.Password
 
-			_, ex := c.Login(uid, password)
+			claim, ex := c.Login(uid, password)
 			if ex != nil {
 				return auth.NewLoginDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
 			}
 
-			return auth.NewLoginOK().WithPayload(nil)
+			response := &dto.AuthResponse{
+				UID:    claim.UID,
+				UserID: strconv.FormatUint(uint64(claim.UserID), 10),
+			}
+
+			responder := auth.NewLoginOK().WithPayload(response)
+			return NewLoginSessionResponder(responder, params.HTTPRequest, c.sessionStore, uid)
 		})
 
 	registry.AuthLogoutHandler = auth.LogoutHandlerFunc(

@@ -11,9 +11,9 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// RegisterResponse register response
-// swagger:model registerResponse
-type RegisterResponse struct {
+// AuthResponse auth response
+// swagger:model authResponse
+type AuthResponse struct {
 
 	// uid
 	UID string `json:"uid,omitempty"`
@@ -22,13 +22,13 @@ type RegisterResponse struct {
 	UserID string `json:"userID,omitempty"`
 }
 
-// Validate validates this register response
-func (m *RegisterResponse) Validate(formats strfmt.Registry) error {
+// Validate validates this auth response
+func (m *AuthResponse) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *RegisterResponse) MarshalBinary() ([]byte, error) {
+func (m *AuthResponse) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -36,8 +36,8 @@ func (m *RegisterResponse) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *RegisterResponse) UnmarshalBinary(b []byte) error {
-	var res RegisterResponse
+func (m *AuthResponse) UnmarshalBinary(b []byte) error {
+	var res AuthResponse
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
