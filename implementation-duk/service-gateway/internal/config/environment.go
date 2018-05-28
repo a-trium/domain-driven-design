@@ -14,6 +14,7 @@ var (
 )
 
 type Environment struct {
+	Debug            bool   `default:"true"`
 	Mode             string `default:"LOCAL"` // LOCAL TEST DEV PROD
 	ServiceName      string `default:"service-gateway"`
 	ServiceId        string `default:"0"`
@@ -49,6 +50,18 @@ func (env *Environment) IsProd() bool {
 
 func (env *Environment) IsDev() bool {
 	return env.Mode == "DEV"
+}
+
+func (env *Environment) IsLocal() bool {
+	return env.Mode == "Local"
+}
+
+func (env *Environment) IsTest() bool {
+	return env.Mode == "Test"
+}
+
+func (e *Environment) isDebugging() bool {
+	return e.Debug
 }
 
 func GetEnvironment() *Environment {
