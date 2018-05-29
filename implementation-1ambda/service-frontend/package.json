@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "element-ui": "^2.3.7",
+    "portable-fetch": "^3.0.0",
     "register-service-worker": "^1.0.0",
     "vue": "^2.5.16",
     "vue-class-component": "^6.0.0",

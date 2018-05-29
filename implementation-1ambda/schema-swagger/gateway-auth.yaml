@@ -14,7 +14,7 @@ api:
         200:
           description: OK
           schema:
-            $ref: "./common.yaml#/definitions/Empty"
+            $ref: "./gateway-auth.yaml#/definitions/AuthResponse"
         default:
           description: error
           schema:
@@ -33,7 +33,7 @@ api:
         200:
           description: OK
           schema:
-            $ref: "./common.yaml#/definitions/Empty"
+            $ref: "./gateway-auth.yaml#/definitions/AuthResponse"
         default:
           description: error
           schema:
@@ -59,6 +59,21 @@ api:
           schema:
             $ref: "./common.yaml#/definitions/Exception"
 
+  whoami:
+    get:
+      tags:
+        - auth
+      operationId: Whoami
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "./gateway-auth.yaml#/definitions/AuthResponse"
+        default:
+          description: error
+          schema:
+            $ref: "./common.yaml#/definitions/Exception"
+
 definitions:
   LoginRequest:
     type: object
@@ -73,5 +88,13 @@ definitions:
     properties:
       uid:
         type: string
+      email:
+        type: string
       password:
+        type: string
+
+  AuthResponse:
+    type: object
+    properties:
+      uid:
         type: string

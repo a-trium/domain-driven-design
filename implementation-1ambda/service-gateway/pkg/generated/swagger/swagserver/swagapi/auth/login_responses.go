@@ -25,7 +25,7 @@ type LoginOK struct {
 	/*
 	  In: Body
 	*/
-	Payload swagmodel.Empty `json:"body,omitempty"`
+	Payload *swagmodel.AuthResponse `json:"body,omitempty"`
 }
 
 // NewLoginOK creates LoginOK with default headers values
@@ -35,13 +35,13 @@ func NewLoginOK() *LoginOK {
 }
 
 // WithPayload adds the payload to the login o k response
-func (o *LoginOK) WithPayload(payload swagmodel.Empty) *LoginOK {
+func (o *LoginOK) WithPayload(payload *swagmodel.AuthResponse) *LoginOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the login o k response
-func (o *LoginOK) SetPayload(payload swagmodel.Empty) {
+func (o *LoginOK) SetPayload(payload *swagmodel.AuthResponse) {
 	o.Payload = payload
 }
 
@@ -49,11 +49,12 @@ func (o *LoginOK) SetPayload(payload swagmodel.Empty) {
 func (o *LoginOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	rw.WriteHeader(200)
-	payload := o.Payload
-	if err := producer.Produce(rw, payload); err != nil {
-		panic(err) // let the recovery middleware deal with this
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
 	}
-
 }
 
 /*LoginDefault error

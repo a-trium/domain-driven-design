@@ -15,6 +15,9 @@ import (
 // swagger:model registerRequest
 type RegisterRequest struct {
 
+	// email
+	Email string `json:"email,omitempty"`
+
 	// password
 	Password string `json:"password,omitempty"`
 

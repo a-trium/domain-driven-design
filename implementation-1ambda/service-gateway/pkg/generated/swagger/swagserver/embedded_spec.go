@@ -42,6 +42,9 @@ func init() {
     },
     "/auth/register": {
       "$ref": "./gateway-auth.yaml#/api/register"
+    },
+    "/auth/whoami": {
+      "$ref": "./gateway-auth.yaml#/api/whoami"
     }
   }
 }`))
@@ -81,7 +84,7 @@ func init() {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/empty"
+              "$ref": "#/definitions/authResponse"
             }
           },
           "default": {
@@ -143,7 +146,29 @@ func init() {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/empty"
+              "$ref": "#/definitions/authResponse"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/exception"
+            }
+          }
+        }
+      }
+    },
+    "/auth/whoami": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "Whoami",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/authResponse"
             }
           },
           "default": {
@@ -157,6 +182,14 @@ func init() {
     }
   },
   "definitions": {
+    "authResponse": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string"
+        }
+      }
+    },
     "empty": {
       "type": "object"
     },
@@ -199,6 +232,9 @@ func init() {
     "registerRequest": {
       "type": "object",
       "properties": {
+        "email": {
+          "type": "string"
+        },
         "password": {
           "type": "string"
         },

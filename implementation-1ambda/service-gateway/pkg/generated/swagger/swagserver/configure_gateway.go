@@ -44,6 +44,9 @@ func configureAPI(api *swagapi.GatewayAPI) http.Handler {
 	api.AuthRegisterHandler = auth.RegisterHandlerFunc(func(params auth.RegisterParams) middleware.Responder {
 		return middleware.NotImplemented("operation auth.Register has not yet been implemented")
 	})
+	api.AuthWhoamiHandler = auth.WhoamiHandlerFunc(func(params auth.WhoamiParams) middleware.Responder {
+		return middleware.NotImplemented("operation auth.Whoami has not yet been implemented")
+	})
 
 	api.ServerShutdown = func() {}
 

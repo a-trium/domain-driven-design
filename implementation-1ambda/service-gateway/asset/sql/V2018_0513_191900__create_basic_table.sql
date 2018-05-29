@@ -11,7 +11,7 @@ CREATE TABLE `User` (
   KEY `idx_USER_deleted_at` (`deleted_at`),
 
   -- columns
-  `email`      VARCHAR(50)          NULL     DEFAULT NULL,
+  `email`      VARCHAR(50)          NOT NULL,
   `phone`      VARCHAR(50)          NULL     DEFAULT NULL,
   `name`       VARCHAR(50)          NULL     DEFAULT NULL,
   `birthday`   VARCHAR(20)          NULL     DEFAULT NULL,
@@ -36,9 +36,9 @@ CREATE TABLE `AuthIdentity` (
 
   -- columns
   `provider`           varchar(255)         NOT NULL,
-  `uid`                varchar(20)         NOT NULL,
+  `uid`                varchar(20)          NOT NULL,
   `encrypted_password` TEXT                 NOT NULL,
-  KEY `idx_AuthIdentity_uid` (`uid`),
+  CONSTRAINT `uniq_AuthIdentity_uid` UNIQUE (`uid`),
 
   -- FK columns
   `user_id`            INTEGER(10) UNSIGNED NULL                   DEFAULT NULL,
