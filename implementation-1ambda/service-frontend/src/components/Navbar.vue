@@ -8,7 +8,10 @@
         <template v-for='item in routes'>
             <el-menu-item :index="item.path" :route='item'
                           v-if="shouldDisplay(item.meta.requiresAuth, authenticated, item.meta.common)">
-                {{item.displayName}}
+                <template v-if="item.name == 'home'">
+                    <img src="../assets/gopher-front.svg" height="30" width="30">
+                </template>
+                <span>{{item.displayName}}</span>
             </el-menu-item>
         </template>
         <el-submenu :index="'nav-dropdown'" v-if="authenticated" style="float: right;">
@@ -24,7 +27,7 @@
         </el-submenu>
         <el-menu-item index="github" v-else style="float: right;">
             <a href="https://github.com/1ambda" target="_blank"style="display: block; text-decoration: none;">
-                <i class="el-icon-location-outline"></i>
+                <img src="../assets/github.svg" class="github-icon" height="24" width="24" style="margin-bottom: 2px; margin-right: 5px;">
                 <span>Github</span>
             </a>
         </el-menu-item>
@@ -102,3 +105,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .github-icon {
+        fill: white;
+    }
+</style>
