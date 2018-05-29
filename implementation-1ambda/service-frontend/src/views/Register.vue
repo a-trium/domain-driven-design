@@ -1,25 +1,27 @@
 <template>
-    <div>
-        <div style="margin: 20px;"></div>
-        <el-form :label-position="'right'" :rules="rules" label-width="100px" :model="ruleForm" ref="ruleForm">
-            <el-form-item label="ID" prop="uid">
-                <el-input v-model="ruleForm.uid"></el-input>
-            </el-form-item>
+    <el-row type="flex" justify="center">
+        <el-col :xs="16" :sm="12" :md="8" :lg="6">
+            <div style="margin: 20px;"></div>
+            <el-form :label-position="'right'" :rules="rules" label-width="100px" :model="ruleForm" ref="ruleForm">
+                <el-form-item label="ID" prop="uid">
+                    <el-input v-model="ruleForm.uid"></el-input>
+                </el-form-item>
 
-            <el-form-item label="Email" prop="email">
-                <el-input v-model="ruleForm.email"></el-input>
-            </el-form-item>
+                <el-form-item label="Email" prop="email">
+                    <el-input v-model="ruleForm.email"></el-input>
+                </el-form-item>
 
-            <el-form-item label="Password">
-                <el-input type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
-            </el-form-item>
+                <el-form-item label="Password">
+                    <el-input type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
+                </el-form-item>
 
-            <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">Create</el-button>
-                <el-button @click="resetForm('ruleForm')">Reset</el-button>
-            </el-form-item>
-        </el-form>
-    </div>
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('ruleForm')">Create</el-button>
+                    <el-button @click="resetForm('ruleForm')">Reset</el-button>
+                </el-form-item>
+            </el-form>
+        </el-col>
+    </el-row>
 </template>
 
 <script lang="ts">

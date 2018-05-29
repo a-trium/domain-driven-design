@@ -1,7 +1,6 @@
 <template>
-    <el-row type="flex" class="row-bg" justify="center">
+    <el-row type="flex" justify="center">
         <el-col :xs="16" :sm="12" :md="8" :lg="6">
-            <div class="grid-content"></div>
             <div style="margin: 40px;"></div>
             <el-form :label-position="'right'" :rules="rules" label-width="100px" :model="ruleForm" ref="ruleForm">
                 <el-form-item label="ID" prop="uid">
