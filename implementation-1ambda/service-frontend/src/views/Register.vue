@@ -5,9 +5,11 @@
             <el-form-item label="ID" prop="uid">
                 <el-input v-model="ruleForm.uid"></el-input>
             </el-form-item>
+
             <el-form-item label="Email" prop="email">
                 <el-input v-model="ruleForm.email"></el-input>
             </el-form-item>
+
             <el-form-item label="Password">
                 <el-input type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
             </el-form-item>
@@ -22,13 +24,14 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator'
-    import { AuthAPI } from "../common/api"
+    import { AuthAPI } from "@/common/auth.service.ts"
     import { Exception, RegisterRequest } from "../generated/swagger"
 
     @Component({ components: {}, })
     export default class Register extends Vue {
         $refs: any
         $notify: any
+        $router: any
 
         private ruleForm = {
             uid: '',
@@ -54,6 +57,11 @@
         submitForm(formName: string) {
             this.$refs[ formName ].validate((valid: any) => {
                 if (!valid) {
+                    this.$notify({
+                        title: `Validation Failed`,
+                        message: "Please insert required values",
+                        type: 'warning',
+                    })
                     return
                 }
 
@@ -70,6 +78,8 @@
                             message: `Created ${response.uid}`,
                             type: 'success',
                         })
+
+                        this.$router.push('/login')
                     })
                     .catch((response) => {
                         response.json().then((parsed: Exception) => {

@@ -14,24 +14,28 @@ export default [
         name: 'home',
         displayName: '7 Street',
         component: Home,
+        meta: { requiresAuth: true, common: true, },
     },
     {
         path: '/register',
         name: 'register',
         displayName: 'Register',
         component: Register,
+        meta: { requiresAuth: false, common: false, },
     },
     {
         path: '/login',
         name: 'login',
         displayName: 'Login',
         component: Login,
+        meta: { requiresAuth: false, common: false, },
     },
     {
         path: '/about',
         name: 'about',
         displayName: 'About',
         component: About,
+        meta: { requiresAuth: true, common: false, },
     },
 ]
 

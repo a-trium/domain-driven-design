@@ -1,33 +1,49 @@
 <template>
-    <div>
-        <div style="margin: 20px;"></div>
-        <el-form :label-position="'right'" :rules="rules" label-width="100px" :model="ruleForm" ref="ruleForm">
-            <el-form-item label="ID" prop="uid">
-                <el-input v-model="ruleForm.uid"></el-input>
-            </el-form-item>
-            <el-form-item label="Password">
-                <el-input type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
-            </el-form-item>
+    <el-row type="flex" class="row-bg" justify="center">
+        <el-col :xs="16" :sm="12" :md="8" :lg="6">
+            <div class="grid-content"></div>
+            <div style="margin: 40px;"></div>
+            <el-form :label-position="'right'" :rules="rules" label-width="100px" :model="ruleForm" ref="ruleForm">
+                <el-form-item label="ID" prop="uid">
+                    <el-input v-model="ruleForm.uid"></el-input>
+                </el-form-item>
+                <el-form-item label="Password">
+                    <el-input type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
+                </el-form-item>
 
-            <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">Login</el-button>
-            </el-form-item>
-        </el-form>
-    </div>
-
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('ruleForm')">Login</el-button>
+                </el-form-item>
+            </el-form>
+        </el-col>
+    </el-row>
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { Exception, LoginRequest } from "../generated/swagger"
-    import { AuthAPI } from "../common/api"
+    import { Component, Vue, } from 'vue-property-decorator'
+    import { mapActions, mapGetters, mapState } from 'vuex'
+    import { Exception, LoginRequest } from "@/generated/swagger"
+    import { AuthAPI } from "@/common/auth.service.ts"
 
     @Component({
         components: {},
+        computed: {
+            ...mapState([ 'uid', ]),
+            ...mapGetters([ 'authenticated', ])
+        },
     })
     export default class Login extends Vue {
         $refs: any
         $notify: any
+        $router: any
+        $store: any
+
+        mounted() {
+            if (this.$store.state.uid != '') {
+                this.$router.push('/')
+                return
+            }
+        }
 
         private ruleForm = {
             uid: '',
@@ -46,6 +62,10 @@
         submitForm(formName: string) {
             this.$refs[ formName ].validate((valid: any) => {
                 if (!valid) {
+                    this.$notify.warn({
+                        title: `Validation Failed`,
+                        message: "Please insert required values",
+                    })
                     return
                 }
 
@@ -56,7 +76,12 @@
 
                 AuthAPI.login(request, { credentials: 'include' })
                     .then((response) => {
-                        console.log(response)
+                        if (!response.uid) {
+                            return
+                        }
+
+                        this.$store.state.uid = response.uid
+                        this.$router.push('/')
                     })
                     .catch((response) => {
                         response.json().then((parsed: Exception) => {

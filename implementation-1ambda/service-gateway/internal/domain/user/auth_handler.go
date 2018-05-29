@@ -96,7 +96,8 @@ func (c *authHandlerImpl) Configure(registry *swagapi.GatewayAPI) () {
 			session, _ := c.sessionStore.Get(params.HTTPRequest, SessionCookieName)
 			CleanLoginSessionCookie(session)
 
-			return auth.NewLogoutOK()
+			responder := auth.NewLogoutOK()
+			return NewLogoutSessionResponder(responder, params.HTTPRequest, session)
 		})
 
 	registry.AuthWhoamiHandler = auth.WhoamiHandlerFunc(
@@ -193,6 +194,24 @@ func (responder *LoginSessionResponder) WriteResponse(w http.ResponseWriter, p r
 	r := responder.request
 	responder.session.Save(r, w)
 	responder.LoginOK.WriteResponse(w, p)
+}
+
+type LogoutSessionResponder struct {
+	auth.LogoutOK
+	request *http.Request
+	session *sessions.Session
+}
+
+func NewLogoutSessionResponder(responder *auth.LogoutOK, r *http.Request, session *sessions.Session) *LogoutSessionResponder {
+	return &LogoutSessionResponder{
+		*responder, r, session,
+	}
+}
+
+func (responder *LogoutSessionResponder) WriteResponse(w http.ResponseWriter, p runtime.Producer) {
+	r := responder.request
+	responder.session.Save(r, w)
+	responder.LogoutOK.WriteResponse(w, p)
 }
 
 func ConfigureSessionMiddleware(sessionStore sessions.Store, h http.Handler) http.Handler {
