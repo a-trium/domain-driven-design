@@ -7,22 +7,22 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type UserRepository struct {
+type CustomerRepository struct {
 	db *gorm.DB
 }
 
-func NewUserRepository(connect *config.DBConnection) user.Repository {
-	return &UserRepository{connect.GetDB()}
+func NewCustomerRepository(connect *config.DBConnection) user.Repository {
+	return &CustomerRepository{connect.GetDB()}
 }
 
-func (r *UserRepository) FindOne(id int) *user.User {
+func (r *CustomerRepository) FindOne(id int) *user.Customer {
 	// TODO : error handling
-	user := &user.User{}
-	r.db.Where("id = ?", id).First(user)
-	return user
+	customer := &user.Customer{}
+	r.db.Where("id = ?", id).First(customer)
+	return customer
 }
 
-func (r *UserRepository) Save(user *user.User) {
+func (r *CustomerRepository) Save(user *user.Customer) {
 	err := r.db.Create(user).Error
 	if err == nil {
 		fmt.Println(err.Error())

@@ -16,13 +16,13 @@ func main() {
 	c.Provide(config.GetEnvironment)
 	c.Provide(config.GetDatabase)
 	c.Provide(config.GetLogger)
-	c.Provide(repository.NewUserRepository)
-	c.Provide(controller.NewUserController)
+	c.Provide(repository.NewCustomerRepository)
+	c.Provide(controller.NewCustomerController)
 
-	c.Invoke(func(ctrl *controller.UserController) {
+	c.Invoke(func(ctrl *controller.CustomerController) {
 		groupV1 := route.Group("/v1")
-		groupV1.GET("/users/:id", ctrl.GetUser)
-		groupV1.POST("/users", ctrl.AddUser)
+		groupV1.GET("/users/:id", ctrl.GetCustomer)
+		groupV1.POST("/users", ctrl.AddCustomer)
 	})
 	c.Invoke(healthCheckHandler(route))
 
