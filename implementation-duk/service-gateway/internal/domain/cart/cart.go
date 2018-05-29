@@ -9,13 +9,11 @@ import (
 type Cart struct {
 	domain.BaseModel
 
-	Customer *user.Customer `gorm:"foreignkey:CustomerId;"`
-	CustomerId uint `gorm:"column:customer_Id;"`
-
-	Option *product.Option `gorm:"foreignkey:OptionId;"`
-	OptionId uint `gorm:"column:option_id;" sql:"type:UNSIGNED BIG INT REFERENCES Option(id) ON DELETE RESTRICT ON UPDATE CASCADE;"`
-
-	Quantity uint
+	Customer   *user.Customer  `gorm:"foreignkey:CustomerId;"`
+	CustomerId uint            `gorm:"column:customer_Id;"`
+	Option     *product.Option `gorm:"foreignkey:OptionId;"`
+	OptionId   uint            `gorm:"column:option_id;" sql:"type:int REFERENCES Option(id) ON DELETE RESTRICT ON UPDATE CASCADE;"`
+	Quantity   uint            `gorm:"column:quantity; type:unsigned big int; not null;"`
 }
 
 func (Cart) TableName() string {
