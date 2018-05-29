@@ -35,75 +35,75 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { Component, Vue } from 'vue-property-decorator'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 
-    import Router from '@/router.ts'
-    import { AuthAPI } from '@/common/auth.service.ts'
-    import { Exception } from '@/generated/swagger'
+import Router from '@/router.ts'
+import { AuthAPI } from '@/common/auth.service.ts'
+import { Exception } from '@/generated/swagger'
 
-    @Component({
-        components: {},
-        computed: {
-            ...mapState([ 'uid', 'flashMessage', ]),
-            ...mapGetters([ 'authenticated', ]),
-        },
-        watch: {
-            flashMessage(newMessage, oldMessage) {
-                if (!newMessage) {
-                    return
-                }
-
-                this.$notify.error({
-                    title: `Error`,
-                    message: newMessage,
-                })
-
-                this.$store.commit('cleanFlashMessage')
-            }
-        },
-    })
-    export default class Navbar extends Vue {
-        routes = Router
-        $notify: any
-        $route: any
-        $router: any
-        $store: any
-
-        shouldDisplay(requiresAuth: boolean, authenticated: boolean, common: boolean) {
-            if (common) {
-                return true
-            } else if (requiresAuth && authenticated) {
-                return true
-            } else if (!requiresAuth && !authenticated) {
-                return true
+@Component({
+    components: {},
+    computed: {
+        ...mapState([ 'uid', 'flashMessage' ]),
+        ...mapGetters([ 'authenticated' ]),
+    },
+    watch: {
+        flashMessage(newMessage, oldMessage) {
+            if (!newMessage) {
+                return
             }
 
-            return false
+            this.$notify.error({
+                title: `Error`,
+                message: newMessage,
+            })
+
+            this.$store.commit('cleanFlashMessage')
+        },
+    },
+})
+export default class Navbar extends Vue {
+    public routes = Router
+    public $notify: any
+    public $route: any
+    public $router: any
+    public $store: any
+
+    public shouldDisplay(requiresAuth: boolean, authenticated: boolean, common: boolean) {
+        if (common) {
+            return true
+        } else if (requiresAuth && authenticated) {
+            return true
+        } else if (!requiresAuth && !authenticated) {
+            return true
         }
 
-        logout() {
-            AuthAPI.logout({}, { credentials: 'include', })
-                .then((response) => {
-                    this.$notify({
-                        title: 'Success',
-                        message: 'Logged out',
-                        type: 'success',
-                    })
-
-                    this.$store.commit('logout')
-                    this.$router.push('/login')
-                })
-                .catch((response) => {
-                    response.json().then((parsed: Exception) => {
-                        this.$notify.error({
-                            title: `Error (${parsed.type})`,
-                            message: parsed.message,
-                        })
-                    })
-                })
-        }
+        return false
     }
+
+    public logout() {
+        AuthAPI.logout({}, { credentials: 'include' })
+            .then((response) => {
+                this.$notify({
+                    title: 'Success',
+                    message: 'Logged out',
+                    type: 'success',
+                })
+
+                this.$store.commit('logout')
+                this.$router.push('/login')
+            })
+            .catch((response) => {
+                response.json().then((parsed: Exception) => {
+                    this.$notify.error({
+                        title: `Error (${parsed.type})`,
+                        message: parsed.message,
+                    })
+                })
+            })
+    }
+}
 </script>
 
 <style scoped>

@@ -13,13 +13,13 @@ export default new Vuex.Store({
     },
     getters: {
         authenticated: (state: any) => {
-            return state.uid != ''
+            return state.uid !== ''
         },
         uid: (state: any) => {
             return state.uid
         },
     },
-    mutations: mutations,
-    actions: actions,
+    mutations,
+    actions,
 })
 

@@ -19,78 +19,78 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue, } from 'vue-property-decorator'
-    import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
-    import { Exception, LoginRequest } from "@/generated/swagger"
-    import { AuthAPI } from "@/common/auth.service.ts"
+import { Component, Vue } from 'vue-property-decorator'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { Exception, LoginRequest } from '@/generated/swagger'
+import { AuthAPI } from '@/common/auth.service.ts'
 
-    @Component({
-        components: {},
-        computed: {
-            ...mapState([ 'uid', ]),
-            ...mapGetters([ 'authenticated', ])
-        },
-    })
-    export default class Login extends Vue {
-        $refs: any
-        $notify: any
-        $router: any
-        $store: any
+@Component({
+    components: {},
+    computed: {
+        ...mapState([ 'uid' ]),
+        ...mapGetters([ 'authenticated' ]),
+    },
+})
+export default class Login extends Vue {
+    public $refs: any
+    public $notify: any
+    public $router: any
+    public $store: any
 
-        mounted() {
-            if (this.$store.state.uid != '') {
-                this.$router.push('/')
-                return
-            }
-        }
+    public ruleForm = {
+        uid: '',
+        password: '',
+    }
 
-        private ruleForm = {
-            uid: '',
-            password: '',
-        }
+    public rules = {
+        uid: [
+            { required: true, message: 'Please input id', trigger: 'blur' },
+            { min: 4, max: 30, message: 'Length should be 4 to 30', trigger: 'blur' },
+            { pattern: /^([a-zA-Z0-9]+)$/, message: 'Please use alpha numeric only', trigger: 'blur' } ],
+        password: [
+            { required: true, message: 'Please input password', trigger: 'blur' } ],
+    }
 
-        private rules = {
-            uid: [
-                { required: true, message: 'Please input id', trigger: 'blur' },
-                { min: 4, max: 30, message: 'Length should be 4 to 30', trigger: 'blur' },
-                { pattern: /^([a-zA-Z0-9]+)$/, message: 'Please use alpha numeric only', trigger: 'blur' }, ],
-            password: [
-                { required: true, message: 'Please input password', trigger: 'blur' }, ]
-        }
-
-        submitForm(formName: string) {
-            this.$refs[ formName ].validate((valid: any) => {
-                if (!valid) {
-                    this.$notify.warn({
-                        title: `Validation Failed`,
-                        message: "Please insert required values",
-                    })
-                    return
-                }
-
-                const request: LoginRequest = {
-                    uid: this.ruleForm.uid,
-                    password: this.ruleForm.password,
-                }
-
-                AuthAPI.login(request, { credentials: 'include' })
-                    .then((response) => {
-                        if (!response.uid) {
-                            return
-                        }
-
-                        this.$store.commit('login', response.uid)
-                        this.$router.push('/')
-                    })
-                    .catch((response) => {
-                        response.json().then((parsed: Exception) => {
-                            this.$notify.error({
-                                title: `Error (${parsed.type})`,
-                                message: parsed.message,
-                            })
-                        })
-                    })
-            })
+    public mounted() {
+        if (this.$store.state.uid !== '') {
+            this.$router.push('/')
+            return
         }
     }
+
+    public submitForm(formName: string) {
+        this.$refs[ formName ].validate((valid: any) => {
+            if (!valid) {
+                this.$notify.warn({
+                    title: `Validation Failed`,
+                    message: 'Please insert required values',
+                })
+                return
+            }
+
+            const request: LoginRequest = {
+                uid: this.ruleForm.uid,
+                password: this.ruleForm.password,
+            }
+
+            AuthAPI.login(request, { credentials: 'include' })
+                .then((response) => {
+                    if (!response.uid) {
+                        return
+                    }
+
+                    this.$store.commit('login', response.uid)
+                    this.$router.push('/')
+                })
+                .catch((response) => {
+                    response.json().then((parsed: Exception) => {
+                        this.$notify.error({
+                            title: `Error (${parsed.type})`,
+                            message: parsed.message,
+                        })
+                    })
+                })
+        })
+    }
+}
 </script>

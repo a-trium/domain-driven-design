@@ -5,16 +5,16 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 import App from '@/App.vue'
-import routes from "@/router.ts"
+import routes from '@/router.ts'
 import store from '@/store'
 import '@/registerServiceWorker'
-import { AuthAPI } from "@/common/auth.service.ts"
-import { Exception } from "@/generated/swagger"
+import { AuthAPI } from '@/common/auth.service.ts'
+import { Exception } from '@/generated/swagger'
 
 Vue.use(ElementUI)
 
 const router = new Router({
-    routes: routes,
+    routes,
 })
 
 AuthAPI.whoami({ credentials: 'include' })
@@ -29,7 +29,7 @@ AuthAPI.whoami({ credentials: 'include' })
             // check user is authenticated
             const uid = store.state.uid
             if (!uid) {
-                if (to.name == 'login') {
+                if (to.name === 'login') {
                     return next('login')
                 }
 
@@ -42,7 +42,7 @@ AuthAPI.whoami({ credentials: 'include' })
             next()
         })
 
-        if (!response.uid || response.uid.trim() == '') {
+        if (!response.uid || response.uid.trim() === '') {
             store.commit('logout')
             router.push('/login')
             return
@@ -53,7 +53,6 @@ AuthAPI.whoami({ credentials: 'include' })
     .catch((response) => {
         response.json().then((parsed: Exception) => {
             router.push('/login')
-            console.log(parsed)
         })
     })
 

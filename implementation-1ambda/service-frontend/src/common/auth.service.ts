@@ -1,6 +1,6 @@
-import { AuthApi } from "@/generated/swagger"
+import { AuthApi } from '@/generated/swagger'
 
-const endpoint = process.env.VUE_APP_GATEWAY_ENDPOINT;
+const endpoint = process.env.VUE_APP_GATEWAY_ENDPOINT
 
 const authApi = new AuthApi(undefined, endpoint)
 
