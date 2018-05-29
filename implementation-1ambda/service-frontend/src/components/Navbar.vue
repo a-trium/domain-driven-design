@@ -12,17 +12,28 @@
             </el-menu-item>
         </template>
         <el-submenu :index="'nav-dropdown'" v-if="authenticated" style="float: right;">
-            <template slot="title"><i class="el-icon-menu"></i>{{uid}}</template>
-            <el-menu-item index="'nav-dropdown-setting'"><i class="el-icon-setting"></i> Settings</el-menu-item>
-            <el-menu-item index="'nav-dropdown-logout'" v-on:click="logout"><i class="el-icon-circle-close"></i> Logout
+            <template slot="title"><i class="el-icon-menu"></i><span>{{uid}}</span></template>
+            <el-menu-item index="'nav-dropdown-setting'">
+                <i class="el-icon-setting"></i>
+                <span>Settings</span>
+            </el-menu-item>
+            <el-menu-item index="'nav-dropdown-logout'" v-on:click="logout">
+                <i class="el-icon-circle-close"></i>
+                <span>Logout</span>
             </el-menu-item>
         </el-submenu>
+        <el-menu-item index="github" v-else style="float: right;">
+            <a href="https://github.com/1ambda" target="_blank"style="display: block; text-decoration: none;">
+                <i class="el-icon-location-outline"></i>
+                <span>Github</span>
+            </a>
+        </el-menu-item>
     </el-menu>
 </template>
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator'
-    import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
+    import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 
     import Router from '@/router.ts'
     import { AuthAPI } from '@/common/auth.service.ts'
