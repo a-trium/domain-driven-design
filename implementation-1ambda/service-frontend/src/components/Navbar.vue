@@ -34,9 +34,6 @@
             ...mapState([ 'uid', 'flashMessage', ]),
             ...mapGetters([ 'authenticated', ]),
         },
-        methods: {
-            ...mapMutations(['cleanupFlashMessage'], )
-        },
         watch: {
             flashMessage(newMessage, oldMessage) {
                 if (!newMessage) {
@@ -48,7 +45,7 @@
                     message: newMessage,
                 })
 
-                this.$store.commit('cleanupFlashMessage')
+                this.$store.commit('cleanFlashMessage')
             }
         },
     })
@@ -80,8 +77,7 @@
                         type: 'success',
                     })
 
-                    this.$store.state.uid = ''
-
+                    this.$store.commit('logout')
                     this.$router.push('/login')
                 })
                 .catch((response) => {

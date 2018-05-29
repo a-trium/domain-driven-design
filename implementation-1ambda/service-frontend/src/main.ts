@@ -34,7 +34,8 @@ AuthAPI.whoami({ credentials: 'include' })
                 }
 
                 // if not, redirect to the login page with flash message
-                store.state.flashMessage = `Please Login (&nbsp; ${to.path} &nbsp;)`
+
+                store.commit('setFlashMessage', `Please Login for '${to.path}'`)
                 return next('login')
             }
 
@@ -42,18 +43,16 @@ AuthAPI.whoami({ credentials: 'include' })
         })
 
         if (!response.uid || response.uid.trim() == '') {
-            store.state.uid = ''
-
+            store.commit('logout')
             router.push('/login')
             return
         }
 
-        store.state.uid = response.uid
+        store.commit('login', response.uid)
     })
     .catch((response) => {
         response.json().then((parsed: Exception) => {
             router.push('/login')
-
             console.log(parsed)
         })
     })

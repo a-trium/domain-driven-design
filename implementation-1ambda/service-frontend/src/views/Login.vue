@@ -21,7 +21,7 @@
 
 <script lang="ts">
     import { Component, Vue, } from 'vue-property-decorator'
-    import { mapActions, mapGetters, mapState } from 'vuex'
+    import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
     import { Exception, LoginRequest } from "@/generated/swagger"
     import { AuthAPI } from "@/common/auth.service.ts"
 
@@ -80,7 +80,7 @@
                             return
                         }
 
-                        this.$store.state.uid = response.uid
+                        this.$store.commit('login', response.uid)
                         this.$router.push('/')
                     })
                     .catch((response) => {
