@@ -1,7 +1,9 @@
 package config
 
 import (
+	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/config/db"
 	"github.com/kelseyhightower/envconfig"
+	"strings"
 )
 
 var (
@@ -19,7 +21,7 @@ type Environment struct {
 	ServiceName      string `default:"service-gateway"`
 	ServiceId        string `default:"0"`
 	Port             string `default:"9000"`
-	DatabaseProperty DatabaseProperty
+	DatabaseProperty db.DatabaseProperty
 
 	BuildDate string
 	GitCommit string
@@ -45,22 +47,22 @@ func init() {
 }
 
 func (env *Environment) IsProd() bool {
-	return env.Mode == "PROD"
+	return strings.EqualFold(env.Mode, "PROD")
 }
 
 func (env *Environment) IsDev() bool {
-	return env.Mode == "DEV"
+	return strings.EqualFold(env.Mode, "DEV")
 }
 
 func (env *Environment) IsLocal() bool {
-	return env.Mode == "Local"
+	return strings.EqualFold(env.Mode, "LOCAL")
 }
 
 func (env *Environment) IsTest() bool {
-	return env.Mode == "Test"
+	return strings.EqualFold(env.Mode, "TEST")
 }
 
-func (e *Environment) isDebugging() bool {
+func (e *Environment) IsDebugging() bool {
 	return e.Debug
 }
 
