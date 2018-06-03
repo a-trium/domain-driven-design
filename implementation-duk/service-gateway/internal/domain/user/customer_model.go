@@ -10,7 +10,7 @@ type Customer struct {
 	Password
 	Address
 	Contact
-	Name     string    `gorm:"column:name; type:varchar(20); not null"`
+	Name     string    `gorm:"column:name; type:varchar(20); not null;"`
 	Birthday time.Time `gorm:"column:birthday;"`
 }
 

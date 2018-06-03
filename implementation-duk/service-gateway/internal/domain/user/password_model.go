@@ -1,7 +1,7 @@
 package user
 
 type Password struct {
-	password string `gorm:"column:password; type:varchar(255); not null"`
+	password string `gorm:"column:password; type:varchar(255); not null;"`
 }
 
 func (pw *Password) getPassword() string {

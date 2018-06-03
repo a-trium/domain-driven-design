@@ -67,7 +67,7 @@ func GetDatabase(env *Environment, log *Logger) *DBConnection {
 		db.Set("gorm:table_options", "").AutoMigrate(
 			&user.Customer{},
 			&user.Seller{},
-			&product.Category{},
+			&product.Tag{},
 			&product.Product{},
 			&product.Option{},
 			&order.Order{},

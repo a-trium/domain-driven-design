@@ -9,7 +9,7 @@ type Seller struct {
 	Password
 	Address
 	Contact
-	Name string `gorm:"column:name; type:varchar(20); not null"`
+	Name string `gorm:"column:name; type:varchar(20); not null;"`
 }
 
 func (Seller) TableName() string {

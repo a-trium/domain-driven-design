@@ -7,8 +7,8 @@ import (
 type Cart struct {
 	domain.BaseModel
 
-	CustomerId uint `gorm:"column:customer_id;"`
-	OptionId   uint `gorm:"column:option_id;"`
+	CustomerId uint `gorm:"column:customer_id; type:unsigned big int; index;"`
+	OptionId   uint `gorm:"column:option_id; type:unsigned big int;"`
 	Quantity   uint `gorm:"column:quantity; type:unsigned big int; not null;"`
 }
 
