@@ -50,7 +50,7 @@
   branch = "master"
   name = "github.com/containerd/continuity"
   packages = ["pathdriver"]
-  revision = "c6cef34830231743494fe2969284df7b82cc0ad0"
+  revision = "d3c23511c1bf5851696cba83143d9cbcd666869b"
 
 [[projects]]
   name = "github.com/docker/go-connections"
@@ -137,7 +137,7 @@
   name = "github.com/go-sql-driver/mysql"
   packages = ["."]
   revision = "a0583e0143b1624142adab07e0e97fe106d99561"
-  version = "v1.3"
+  version = "v1.3.0"
 
 [[projects]]
   name = "github.com/gobuffalo/packr"
@@ -205,13 +205,13 @@
     "jlexer",
     "jwriter"
   ]
-  revision = "8b799c424f57fa123fc63a99d6383bc6e4c02578"
+  revision = "9825584555aa620c53c265d4a09ace0df1346fd9"
 
 [[projects]]
   name = "github.com/mattn/go-sqlite3"
   packages = ["."]
-  revision = "6c771bb9887719704b210e87e934f08be014bdb1"
-  version = "v1.6.0"
+  revision = "323a32be5a2421b8c7087225079c6c900ec397cd"
+  version = "v1.7.0"
 
 [[projects]]
   branch = "master"
@@ -316,8 +316,8 @@
     "docker/types/strslice",
     "docker/types/versions"
   ]
-  revision = "2e92e7784b6fb199fd168aa46269a2f1b34f299e"
-  version = "v3.3.0"
+  revision = "9bca068bf5e4af2484b9c2e8cfeb3d098d5327d7"
+  version = "v3.3.1"
 
 [[projects]]
   name = "github.com/pkg/errors"
@@ -328,8 +328,8 @@
 [[projects]]
   name = "github.com/rs/cors"
   packages = ["."]
-  revision = "feef513b9575b32f84bafa580aad89b011259019"
-  version = "v1.3.0"
+  revision = "ca016a06a5753f8ba03029c0aa5e54afb1bf713f"
+  version = "v1.4.0"
 
 [[projects]]
   branch = "master"
@@ -391,7 +391,7 @@
     "blowfish",
     "ssh/terminal"
   ]
-  revision = "1a580b3eff7814fc9b40602fd35256c63b50f491"
+  revision = "df8d4716b3472e4a531c33cedbe537dae921a1a9"
 
 [[projects]]
   branch = "master"
@@ -403,7 +403,7 @@
     "html/charset",
     "idna"
   ]
-  revision = "57065200b4b034a1c8ad54ff77069408c2218ae6"
+  revision = "1e491301e022f8f977054da4c2d852decd59571f"
 
 [[projects]]
   branch = "master"
@@ -412,7 +412,7 @@
     "unix",
     "windows"
   ]
-  revision = "7c87d13f8e835d2fb3a70a2912c811ed0c1d241b"
+  revision = "c11f84a56e43e20a78cee75a7c034031ecf57d1f"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -472,6 +472,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "0e98c52299f52578945d34478d5ddd685e7bfacb470c51033ce7fe8e66c0d4b4"
+  inputs-digest = "ff2f1dcf509981a0fc3a2155a60338151432859cd08060d368041a8f2c4a8833"
   solver-name = "gps-cdcl"
   solver-version = 1
