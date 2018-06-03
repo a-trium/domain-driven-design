@@ -15,7 +15,7 @@ type Product struct {
 	CategoryID uint     `gorm:"column:category_id;" sql:"type:UNSIGNED BIG INT REFERENCES Category(id) ON DELETE RESTRICT ON UPDATE CASCADE;"`
 
 	Image   Image `gorm:"foreignkey:ImageID;"`
-	ImageID uint  `gorm:"column:image_id;" sql:"type:UNSIGNED BIG INT REFERENCES Image(id) ON DELETE RESTRICT ON UPDATE CASCADE"`
+	ImageID uint  `gorm:"column:image_id;" sql:"type:UNSIGNED BIG INT NULL REFERENCES Image(id) ON DELETE SET NULL ON UPDATE CASCADE"`
 }
 
 func (Product) TableName() string {

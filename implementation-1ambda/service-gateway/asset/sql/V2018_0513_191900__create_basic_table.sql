@@ -112,7 +112,7 @@ CREATE TABLE `Product` (
 
   -- FK columns
   `category_id` INTEGER(10) UNSIGNED NOT NULL,
-  `image_id`    INTEGER(10) UNSIGNED NOT NULL,
+  `image_id`    INTEGER(10) UNSIGNED NULL,
 
   CONSTRAINT `fk_Product_category_id`
   FOREIGN KEY (`category_id`) REFERENCES `Category` (`id`)
@@ -120,7 +120,7 @@ CREATE TABLE `Product` (
     ON UPDATE CASCADE,
   CONSTRAINT `fk_Product_image_id`
   FOREIGN KEY (`image_id`) REFERENCES `Image` (`id`)
-    ON DELETE RESTRICT
+    ON DELETE SET NULL
     ON UPDATE CASCADE
 );
 
