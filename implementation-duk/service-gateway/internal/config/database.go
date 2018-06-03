@@ -30,7 +30,7 @@ func (c *DBConnection) GetDB() *gorm.DB {
 }
 
 const ASSET_DIR_PATH = "implementation-duk/service-gateway/asset/"
-const SQLITE_FILE_NAME = "gateway.db"
+const SQLITE_FILE_NAME = "local.db"
 const SQLITE3 = "sqlite3"
 
 func GetDatabase(env *Environment, log *Logger) *DBConnection {
