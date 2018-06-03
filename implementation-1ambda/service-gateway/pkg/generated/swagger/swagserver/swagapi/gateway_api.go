@@ -48,6 +48,9 @@ func NewGatewayAPI(spec *loads.Document) *GatewayAPI {
 		AuthRegisterHandler: auth.RegisterHandlerFunc(func(params auth.RegisterParams) middleware.Responder {
 			return middleware.NotImplemented("operation AuthRegister has not yet been implemented")
 		}),
+		AuthWhoamiHandler: auth.WhoamiHandlerFunc(func(params auth.WhoamiParams) middleware.Responder {
+			return middleware.NotImplemented("operation AuthWhoami has not yet been implemented")
+		}),
 	}
 }
 
@@ -85,6 +88,8 @@ type GatewayAPI struct {
 	AuthLogoutHandler auth.LogoutHandler
 	// AuthRegisterHandler sets the operation handler for the register operation
 	AuthRegisterHandler auth.RegisterHandler
+	// AuthWhoamiHandler sets the operation handler for the whoami operation
+	AuthWhoamiHandler auth.WhoamiHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -158,6 +163,10 @@ func (o *GatewayAPI) Validate() error {
 
 	if o.AuthRegisterHandler == nil {
 		unregistered = append(unregistered, "auth.RegisterHandler")
+	}
+
+	if o.AuthWhoamiHandler == nil {
+		unregistered = append(unregistered, "auth.WhoamiHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -272,6 +281,11 @@ func (o *GatewayAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/auth/register"] = auth.NewRegister(o.context, o.AuthRegisterHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/auth/whoami"] = auth.NewWhoami(o.context, o.AuthWhoamiHandler)
 
 }
 

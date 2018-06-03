@@ -12,7 +12,8 @@ import (
 	"github.com/jessevdk/go-flags"
 	"github.com/rs/cors"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
-)
+	"github.com/gorilla/sessions"
+	)
 
 func main() {
 	env := config.Env
@@ -24,9 +25,11 @@ func main() {
 		"git_branch", env.GitBranch,
 		"git_state", env.GitState,
 		"version", env.Version,
+		"host", env.Host,
+		"port", env.RestPort,
 	)
 
-	swaggerSpec, err := loads.Analyzed(swagserver.SwaggerJSON, "")
+	swaggerSpec, err := loads.Analyzed(swagserver.FlatSwaggerJSON, "")
 	if err != nil {
 		logger.Fatalw("Failed to configure REST server", "error", err)
 	}
@@ -43,6 +46,7 @@ func main() {
 		}
 	}
 
+	server.Host = env.Host
 	server.Port = env.RestPort
 	if _, err := parser.Parse(); err != nil {
 		code := 1
@@ -57,6 +61,10 @@ func main() {
 	api.JSONProducer = runtime.JSONProducer()
 	api.Logger = logger.Infof
 
+	// configure session storage
+	sessionSecret := "something-very-secret"
+	sessionStore := sessions.NewCookieStore([]byte(sessionSecret))
+
 	// configure database
 	db := config.GetDatabase()
 
@@ -65,17 +73,17 @@ func main() {
 
 	userRepo := user.NewRepository(db)
 	encryptor := user.NewEncryptor(0)
-	authHandler := user.NewAuthHandler(userRepo, encryptor)
-	user.RegisterAuthHandler(api, authHandler)
+	authHandler := user.NewAuthHandler(userRepo, encryptor, sessionStore)
 
-	handler := api.Serve(nil)
+	authHandler.Configure(api)
 
 	logger.Info("Configure REST API middleware")
+
+	handler := api.Serve(nil)
 	handler = cors.AllowAll().Handler(handler)
 	server.SetHandler(handler)
 
 	_, cancel := context.WithCancel(context.Background())
-
 
 	api.ServerShutdown = func() {
 		cancel()

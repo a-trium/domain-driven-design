@@ -17,6 +17,7 @@ type Environment struct {
 	Debug bool   `default:"true"`
 	Mode  string `default:"LOCAL"` // `LOCAL`, `TEST`, `DEV`, `PROD`
 
+	Host          string `default:"localhost"`
 	RestPort      int    `default:"30001"`
 	CorsAllowUrl  string `default:"localhost:8080"`
 	ServiceName   string `default:"service-gateway"`

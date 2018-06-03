@@ -11,7 +11,7 @@ type Repository interface {
 	FindUserById(id uint) (*User, e.Exception)
 	FineAllUsers() (*[]User, e.Exception)
 
-	CreateAuthIdentity(uid string, password string) (*AuthIdentity, e.Exception)
+	CreateAuthIdentity(uid string, email string, password string) (*AuthIdentity, e.Exception)
 	FindAuthIdentityByUID(uid string) (*AuthIdentity, e.Exception)
 }
 
@@ -73,10 +73,10 @@ func (r *repositoryImpl) FineAllUsers() (*[]User, e.Exception) {
 	return &records, nil
 }
 
-func (r *repositoryImpl) CreateAuthIdentity(uid string, encryptedPassword string) (*AuthIdentity, e.Exception) {
+func (r *repositoryImpl) CreateAuthIdentity(uid string, email string, encryptedPassword string) (*AuthIdentity, e.Exception) {
 	tx := r.db.Begin()
 
-	user := User{}
+	user := User{Email: email}
 	err := tx.Create(&user).Error
 	if err != nil {
 		tx.Rollback()

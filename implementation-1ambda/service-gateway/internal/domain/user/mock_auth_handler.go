@@ -6,7 +6,7 @@ package user
 
 import (
 	exception "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/exception"
-	auth "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/auth"
+	swagapi "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -34,39 +34,50 @@ func (m *MockAuthHandler) EXPECT() *MockAuthHandlerMockRecorder {
 	return m.recorder
 }
 
+// Configure mocks base method
+func (m *MockAuthHandler) Configure(handlerRegistry *swagapi.GatewayAPI) {
+	m.ctrl.Call(m, "Configure", handlerRegistry)
+}
+
+// Configure indicates an expected call of Configure
+func (mr *MockAuthHandlerMockRecorder) Configure(handlerRegistry interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Configure", reflect.TypeOf((*MockAuthHandler)(nil).Configure), handlerRegistry)
+}
+
 // Register mocks base method
-func (m *MockAuthHandler) Register(params auth.RegisterParams) exception.Exception {
-	ret := m.ctrl.Call(m, "Register", params)
-	ret0, _ := ret[0].(exception.Exception)
-	return ret0
+func (m *MockAuthHandler) Register(uid, email, password string) (*AuthClaim, exception.Exception) {
+	ret := m.ctrl.Call(m, "Register", uid, email, password)
+	ret0, _ := ret[0].(*AuthClaim)
+	ret1, _ := ret[1].(exception.Exception)
+	return ret0, ret1
 }
 
 // Register indicates an expected call of Register
-func (mr *MockAuthHandlerMockRecorder) Register(params interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockAuthHandler)(nil).Register), params)
+func (mr *MockAuthHandlerMockRecorder) Register(uid, email, password interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockAuthHandler)(nil).Register), uid, email, password)
 }
 
 // Login mocks base method
-func (m *MockAuthHandler) Login(params auth.LoginParams) (*AuthClaim, exception.Exception) {
-	ret := m.ctrl.Call(m, "Login", params)
+func (m *MockAuthHandler) Login(uid, password string) (*AuthClaim, exception.Exception) {
+	ret := m.ctrl.Call(m, "Login", uid, password)
 	ret0, _ := ret[0].(*AuthClaim)
 	ret1, _ := ret[1].(exception.Exception)
 	return ret0, ret1
 }
 
 // Login indicates an expected call of Login
-func (mr *MockAuthHandlerMockRecorder) Login(params interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockAuthHandler)(nil).Login), params)
+func (mr *MockAuthHandlerMockRecorder) Login(uid, password interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockAuthHandler)(nil).Login), uid, password)
 }
 
 // Logout mocks base method
-func (m *MockAuthHandler) Logout(params auth.LogoutParams) exception.Exception {
-	ret := m.ctrl.Call(m, "Logout", params)
+func (m *MockAuthHandler) Logout() exception.Exception {
+	ret := m.ctrl.Call(m, "Logout")
 	ret0, _ := ret[0].(exception.Exception)
 	return ret0
 }
 
 // Logout indicates an expected call of Logout
-func (mr *MockAuthHandlerMockRecorder) Logout(params interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Logout", reflect.TypeOf((*MockAuthHandler)(nil).Logout), params)
+func (mr *MockAuthHandlerMockRecorder) Logout() *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Logout", reflect.TypeOf((*MockAuthHandler)(nil).Logout))
 }

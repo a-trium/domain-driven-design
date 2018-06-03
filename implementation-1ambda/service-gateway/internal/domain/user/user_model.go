@@ -7,7 +7,7 @@ import (
 type User struct {
 	persistent.BaseModel
 
-	Email    string `gorm:"column:email; type:VARCHAR(50); UNIQUE; INDEX;"`
+	Email    string `gorm:"column:email; type:VARCHAR(50); NOT NULL; UNIQUE; INDEX;"`
 	Phone    string `gorm:"column:phone; type:VARCHAR(50);"`
 	Name     string `gorm:"column:name; type:VARCHAR(50);"`
 	Birthday string `gorm:"column:birthday; type:VARCHAR(20);"`

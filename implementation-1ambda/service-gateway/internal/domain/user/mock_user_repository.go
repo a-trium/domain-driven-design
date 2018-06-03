@@ -73,16 +73,16 @@ func (mr *MockRepositoryMockRecorder) FineAllUsers() *gomock.Call {
 }
 
 // CreateAuthIdentity mocks base method
-func (m *MockRepository) CreateAuthIdentity(uid, password string) (*AuthIdentity, exception.Exception) {
-	ret := m.ctrl.Call(m, "CreateAuthIdentity", uid, password)
+func (m *MockRepository) CreateAuthIdentity(uid, email, password string) (*AuthIdentity, exception.Exception) {
+	ret := m.ctrl.Call(m, "CreateAuthIdentity", uid, email, password)
 	ret0, _ := ret[0].(*AuthIdentity)
 	ret1, _ := ret[1].(exception.Exception)
 	return ret0, ret1
 }
 
 // CreateAuthIdentity indicates an expected call of CreateAuthIdentity
-func (mr *MockRepositoryMockRecorder) CreateAuthIdentity(uid, password interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateAuthIdentity", reflect.TypeOf((*MockRepository)(nil).CreateAuthIdentity), uid, password)
+func (mr *MockRepositoryMockRecorder) CreateAuthIdentity(uid, email, password interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateAuthIdentity", reflect.TypeOf((*MockRepository)(nil).CreateAuthIdentity), uid, email, password)
 }
 
 // FindAuthIdentityByUID mocks base method
