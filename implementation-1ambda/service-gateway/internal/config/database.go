@@ -52,8 +52,8 @@ func GetDatabase() *gorm.DB {
 	// set gorm options
 	db.SingularTable(true)
 	if (Env.IsLocalMode() && Env.DebugEnabled()) || (Env.IsTestMode() && Env.DebugEnabled()) {
-		db = db.LogMode(true)
-		db = db.Debug()
+		db.LogMode(true)
+		db.Debug()
 	}
 
 	// migration
@@ -78,7 +78,7 @@ func GetDatabase() *gorm.DB {
 		db.Exec("PRAGMA foreign_keys = ON;")
 
 	} else {
-		doMigration(db.DB(), dialect)
+		Migrate(db.DB(), dialect)
 	}
 
 	return db
@@ -90,47 +90,57 @@ func getDbLogger() *zap.SugaredLogger {
 	return logger
 }
 
-func doMigration(db *sql.DB, dialect string) {
+func Migrate(db *sql.DB, dialect string) {
 	logger := getDbLogger()
 
-	migrations := &migrate.PackrMigrationSource{
+	migrationSrc := &migrate.PackrMigrationSource{
 		Box: packr.NewBox(SqlSchemaDir),
 	}
 
-	findedMigrations, err := migrations.FindMigrations()
+	migrations, err := migrationSrc.FindMigrations()
 	if err != nil {
 		logger.Fatalw("Failed to find sql migrations")
 	}
 
-	for _, migr := range findedMigrations {
-		m := []*migrate.Migration{migr}
-		n, err := migrate.Exec(
+	appliedMigrationCount, err := migrate.Exec(
+		db,
+		dialect,
+		migrate.MemoryMigrationSource{Migrations: migrations},
+		migrate.Up,
+	)
+
+	if err != nil {
+		failedMigr := migrations[appliedMigrationCount]
+
+		logger.Warnw("Found sql migration error. Doing rollback...", "down", failedMigr.Down)
+		_, downErr := migrate.Exec(
 			db,
 			dialect,
-			migrate.MemoryMigrationSource{Migrations: m,},
-			migrate.Up,
+			migrate.MemoryMigrationSource{Migrations: []*migrate.Migration{failedMigr}},
+			migrate.Down,
 		)
 
-		if err != nil {
-			logger.Warnw("Found sql migration error. Doing rollback...", "down", migr.Down)
-			_, downErr := migrate.Exec(
-				db,
-				dialect,
-				migrate.MemoryMigrationSource{Migrations: []*migrate.Migration{migr}},
-				migrate.Down,
-			)
-
-			if downErr != nil {
-				logger.Errorw("Failed to do rollback sql migration", "error", downErr)
-			}
-
-			logger.Fatalw("Failed to do sql migration", "error", err)
+		if downErr != nil {
+			logger.Errorw("Failed to do rollback sql migration", "error", downErr)
 		}
 
-		if n != 0 {
-			logger.Infow("Finished migration", "file", migr.Id)
-		} else {
-			logger.Infow("Skip migration", "file", migr.Id)
-		}
+		logger.Fatalw("Failed to do sql migration", "error", err)
 	}
+
+	totalMigrationCount := len(migrations)
+	if appliedMigrationCount != totalMigrationCount {
+		logger.Infow("Some migrations are skipped", "total", totalMigrationCount, "applied", appliedMigrationCount)
+	}
+
+	for i := 0; i < totalMigrationCount; i++ {
+		skipped := true
+
+		if totalMigrationCount-appliedMigrationCount <= i {
+			skipped = false
+		}
+
+		logger.Infow("Migration File", "filename", migrations[i].Id, "skip", skipped)
+	}
+
+	logger.Infow("Finished migration")
 }

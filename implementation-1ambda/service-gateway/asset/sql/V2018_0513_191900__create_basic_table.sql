@@ -50,25 +50,25 @@ CREATE TABLE `AuthIdentity` (
 
 CREATE TABLE `Category` (
   -- primary key
-  `id`           INTEGER(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id`                 INTEGER(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 
   -- timestamp
-  `created_at`   TIMESTAMP            NULL     DEFAULT NULL,
-  `updated_at`   TIMESTAMP            NULL     DEFAULT NULL,
-  `deleted_at`   TIMESTAMP            NULL     DEFAULT NULL,
+  `created_at`         TIMESTAMP            NULL     DEFAULT NULL,
+  `updated_at`         TIMESTAMP            NULL     DEFAULT NULL,
+  `deleted_at`         TIMESTAMP            NULL     DEFAULT NULL,
   INDEX `idx_Category_deleted_at` (`deleted_at`),
 
   -- columns
-  `name`         VARCHAR(255)         NOT NULL,
-  `path`         VARCHAR(255)         NOT NULL,
-  `display_name` VARCHAR(255)         NOT NULL,
-  `description`  TEXT                 NOT NULL,
+  `name`               VARCHAR(255)         NOT NULL,
+  `path`               VARCHAR(255)         NOT NULL,
+  `display_name`       VARCHAR(255)         NOT NULL,
+  `description`        TEXT                 NOT NULL,
 
   INDEX `idx_Category_path` (`path`),
   CONSTRAINT `uniq_Category_path` UNIQUE (`path`),
 
   -- FK columns
-  `parent_category_id`  INTEGER(10) UNSIGNED NULL,
+  `parent_category_id` INTEGER(10) UNSIGNED NULL,
   INDEX `idx_Category_parent_category_id` (`parent_category_id`),
   CONSTRAINT `fk_Product_parent_category_id`
   FOREIGN KEY (`parent_category_id`) REFERENCES `Category` (`id`)
@@ -194,10 +194,11 @@ CREATE TABLE OrderDetail (
 );
 
 -- +migrate Down
-DROP TABLE `User`;
-DROP TABLE `Category`;
-DROP TABLE `Image`;
-DROP TABLE `Product`;
-DROP TABLE `Order`;
-DROP TABLE `OrderDetail`;
+DROP TABLE IF EXISTS `User`;
+DROP TABLE IF EXISTS `Category`;
+DROP TABLE IF EXISTS `Image`;
+DROP TABLE IF EXISTS `Product`;
+DROP TABLE IF EXISTS `Order`;
+DROP TABLE IF EXISTS `OrderDetail`;
+
 
