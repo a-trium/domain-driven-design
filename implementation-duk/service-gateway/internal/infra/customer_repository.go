@@ -2,7 +2,7 @@ package repository
 
 import (
 	"fmt"
-	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/config"
+	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/config/db"
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain/user"
 	"github.com/jinzhu/gorm"
 )
@@ -11,8 +11,8 @@ type CustomerRepository struct {
 	db *gorm.DB
 }
 
-func NewCustomerRepository(connect *config.DBConnection) user.Repository {
-	return &CustomerRepository{connect.GetDB()}
+func NewCustomerRepository(datasource db.DataSource) user.Repository {
+	return &CustomerRepository{datasource.GetConnection()}
 }
 
 func (r *CustomerRepository) FindOne(id int) *user.Customer {
