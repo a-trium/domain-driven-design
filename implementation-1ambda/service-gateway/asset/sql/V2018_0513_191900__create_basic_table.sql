@@ -109,6 +109,7 @@ CREATE TABLE `Product` (
   `name`        VARCHAR(255)         NOT NULL,
   `price`       INTEGER(10) UNSIGNED NOT NULL,
   `description` TEXT                 NOT NULL,
+  `on_sale`     VARCHAR(4)           NOT NULL,
 
   -- FK columns
   `category_id` INTEGER(10) UNSIGNED NOT NULL,
@@ -138,6 +139,7 @@ CREATE TABLE `ProductOption` (
   `name`        VARCHAR(255)         NOT NULL,
   `price`       INTEGER(10) UNSIGNED NOT NULL,
   `description` TEXT                 NOT NULL,
+  `on_sale`     VARCHAR(4)           NOT NULL,
 
   -- FK columns
   `product_id`  INTEGER(10) UNSIGNED NOT NULL,
@@ -193,23 +195,23 @@ CREATE TABLE `Order` (
 
 CREATE TABLE OrderDetail (
   -- primary key
-  `id`         INTEGER(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id`                INTEGER(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 
   -- timestamp
-  `created_at` TIMESTAMP            NULL     DEFAULT NULL,
-  `updated_at` TIMESTAMP            NULL     DEFAULT NULL,
-  `deleted_at` TIMESTAMP            NULL     DEFAULT NULL,
+  `created_at`        TIMESTAMP            NULL     DEFAULT NULL,
+  `updated_at`        TIMESTAMP            NULL     DEFAULT NULL,
+  `deleted_at`        TIMESTAMP            NULL     DEFAULT NULL,
   INDEX `idx_OrderDetail_deleted_at` (`deleted_at`),
 
   -- columns
-  `index`      INTEGER(10) UNSIGNED NOT NULL,
-  `price`      INTEGER(10) UNSIGNED NOT NULL,
-  `quantity`   INTEGER(10) UNSIGNED NOT NULL,
-  `amount`     INTEGER(10) UNSIGNED NOT NULL,
+  `index`             INTEGER(10) UNSIGNED NOT NULL,
+  `price`             INTEGER(10) UNSIGNED NOT NULL,
+  `quantity`          INTEGER(10) UNSIGNED NOT NULL,
+  `amount`            INTEGER(10) UNSIGNED NOT NULL,
 
   -- FK columns
-  `order_id`   INTEGER(10) UNSIGNED NOT NULL,
-  `product_id` INTEGER(10) UNSIGNED NOT NULL,
+  `order_id`          INTEGER(10) UNSIGNED NOT NULL,
+  `product_id`        INTEGER(10) UNSIGNED NOT NULL,
   `product_option_id` INTEGER(10) UNSIGNED NOT NULL,
 
   CONSTRAINT `fk_OrderDetail_order_id`
