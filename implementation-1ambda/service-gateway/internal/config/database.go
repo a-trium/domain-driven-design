@@ -127,7 +127,7 @@ func (d *MySQLDatabase) Migrate() {
 
 	migrations, err := migrationSrc.FindMigrations()
 	if err != nil {
-		logger.Fatalw("Failed to find sql migrations")
+		logger.Fatalw("Failed to find sql migrations", "error", err)
 	}
 
 	appliedMigrationCount, err := migrate.Exec(
