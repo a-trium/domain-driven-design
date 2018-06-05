@@ -4,7 +4,7 @@ import "github.com/a-trium/domain-driven-design/implementation-duk/service-gatew
 
 type BaseCoupon struct {
 	domain.BaseModel
-	Name  string `gorm:"column:name; type:varchar(20); not null"`
+	Name  string `gorm:"column:name; type:varchar(20); not null; index;"`
 	Value uint   `gorm:"column:value; type:unsigned big int; not null;"`
 }
 
