@@ -124,6 +124,35 @@ CREATE TABLE `Product` (
     ON UPDATE CASCADE
 );
 
+CREATE TABLE `ProductOption` (
+  -- primary key
+  `id`          INTEGER(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+
+  -- timestamp
+  `created_at`  TIMESTAMP            NULL     DEFAULT NULL,
+  `updated_at`  TIMESTAMP            NULL     DEFAULT NULL,
+  `deleted_at`  TIMESTAMP            NULL     DEFAULT NULL,
+  INDEX `idx_ProductOption_deleted_at` (`deleted_at`),
+
+  -- columns
+  `name`        VARCHAR(255)         NOT NULL,
+  `price`       INTEGER(10) UNSIGNED NOT NULL,
+  `description` TEXT                 NOT NULL,
+
+  -- FK columns
+  `product_id`  INTEGER(10) UNSIGNED NOT NULL,
+  `image_id`    INTEGER(10) UNSIGNED NULL,
+
+  CONSTRAINT `fk_ProductOption_product_id`
+  FOREIGN KEY (`product_id`) REFERENCES `Product` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_ProductOption_image_id`
+  FOREIGN KEY (`image_id`) REFERENCES `Image` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE
+);
+
 CREATE TABLE `Order` (
   -- primary key
   `id`                INTEGER(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -181,6 +210,7 @@ CREATE TABLE OrderDetail (
   -- FK columns
   `order_id`   INTEGER(10) UNSIGNED NOT NULL,
   `product_id` INTEGER(10) UNSIGNED NOT NULL,
+  `product_option_id` INTEGER(10) UNSIGNED NOT NULL,
 
   CONSTRAINT `fk_OrderDetail_order_id`
   FOREIGN KEY (`order_id`) REFERENCES `Order` (`id`)
@@ -189,6 +219,12 @@ CREATE TABLE OrderDetail (
 
   CONSTRAINT `fk_OrderDetail_product_id`
   FOREIGN KEY (`product_id`) REFERENCES `Product` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+
+
+  CONSTRAINT `fk_OrderDetail_product_option_id`
+  FOREIGN KEY (`product_option_id`) REFERENCES `ProductOption` (`id`)
     ON DELETE RESTRICT
     ON UPDATE CASCADE
 );

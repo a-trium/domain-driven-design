@@ -12,7 +12,8 @@ type OrderDetail struct {
 	Quantity uint `gorm:"column:quantity; 	type:UNSIGNED BIG INT; 	NOT NULL;"`
 	Amount   uint `gorm:"column:amount; 	type:UNSIGNED BIG INT; 	NOT NULL;"`
 
-	ProductID uint            `gorm:"column:product_id;" sql:"type:UNSIGNED BIG INT REFERENCES Product(id) ON DELETE RESTRICT ON UPDATE CASCADE;"`
+	ProductID       uint `gorm:"column:product_id;" sql:"type:UNSIGNED BIG INT REFERENCES Product(id) ON DELETE RESTRICT ON UPDATE CASCADE;"`
+	ProductOptionID uint `gorm:"column:product_option_id;" sql:"type:UNSIGNED BIG INT REFERENCES ProductOption(id) ON DELETE RESTRICT ON UPDATE CASCADE;"`
 }
 
 func (OrderDetail) TableName() string {
