@@ -12,14 +12,14 @@ type Product struct {
 	Price    uint   `gorm:"column:price; type:unsigned big int; not null;"`
 	SellerId uint   `gorm:"column:seller_id; type:unsigned big int;"`
 	ImageUrl string `gorm:"column:image_url; type:varchar(255);"`
-	sale     string `gorm:"column:on_sale; type:varchar(2);"`
+	Sale     string `gorm:"column:on_sale; type:varchar(2);"`
 
 	Options []Option
 	Tags    []ProductTag
 }
 
 func (p Product) OnSale() bool {
-	return strings.EqualFold(p.sale, "Y")
+	return strings.EqualFold(p.Sale, "Y")
 }
 
 func (Product) TableName() string {

@@ -52,7 +52,7 @@ insert into product_tag(`id`, `product_id`, `tag_id`) values (9, 3, 6);
 -- cart
 insert into cart(`id`, `customer_id`, `option_id`, `quantity`) values (1, 2, 3, 10);
 insert into cart(`id`, `customer_id`, `option_id`, `quantity`) values (2, 3, 3, 1);
-insert into cart(`id`, `customer_id`, `option_id`, `quantity`) values (2, 3, 4, 100);
+insert into cart(`id`, `customer_id`, `option_id`, `quantity`) values (3, 3, 4, 100);
 
 -- order
 insert into `order`(`id`, `customer_id`) values (1, 1);
