@@ -1,14 +1,19 @@
 package discount
 
-import "github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain"
+import (
+	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain"
+	"time"
+)
 
-type BaseCoupon struct {
+type Coupon struct {
 	domain.BaseModel
-	Name  string `gorm:"column:name; type:varchar(20); not null; index;"`
-	Value uint   `gorm:"column:value; type:unsigned big int; not null;"`
+	Name      string    `gorm:"column:name; type:varchar(20); not null; index;"`
+	ExpiredAt time.Time `sql:"index"`
+	// Type
+	// meta
 }
 
-func (BaseCoupon) TableName() string {
+func (Coupon) TableName() string {
 	return "coupon"
 }
 

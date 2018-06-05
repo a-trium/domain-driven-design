@@ -2,6 +2,7 @@ package product
 
 import (
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain"
+	"strings"
 )
 
 type Product struct {
@@ -11,10 +12,14 @@ type Product struct {
 	Price    uint   `gorm:"column:price; type:unsigned big int; not null;"`
 	SellerId uint   `gorm:"column:seller_id; type:unsigned big int;"`
 	ImageUrl string `gorm:"column:image_url; type:varchar(255);"`
-	OnSale   bool   `gorm:"column:on_sale;"`
+	sale     string `gorm:"column:on_sale; type:varchar(2);"`
 
 	Options []Option
-	Tags    []Tag
+	Tags    []ProductTag
+}
+
+func (p Product) OnSale() bool {
+	return strings.EqualFold(p.sale, "Y")
 }
 
 func (Product) TableName() string {
@@ -31,7 +36,7 @@ type Option struct {
 	Price     uint     `gorm:"column:price; type:unsigned big int; not null;"`
 }
 
-func (o *Option) getPrice() uint {
+func (o Option) getPrice() uint {
 	return o.Price + o.Product.Price
 }
 
