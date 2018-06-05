@@ -8,7 +8,7 @@ CREATE TABLE `User` (
   `created_at` TIMESTAMP            NULL     DEFAULT NULL,
   `updated_at` TIMESTAMP            NULL     DEFAULT NULL,
   `deleted_at` TIMESTAMP            NULL     DEFAULT NULL,
-  KEY `idx_USER_deleted_at` (`deleted_at`),
+  INDEX `idx_USER_deleted_at` (`deleted_at`),
 
   -- columns
   `email`      VARCHAR(50)          NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE `AuthIdentity` (
   `created_at`         timestamp            NULL                   DEFAULT NULL,
   `updated_at`         timestamp            NULL                   DEFAULT NULL,
   `deleted_at`         timestamp            NULL                   DEFAULT NULL,
-  KEY `idx_AuthIdentity_deleted_at` (`deleted_at`),
+  INDEX `idx_AuthIdentity_deleted_at` (`deleted_at`),
 
   -- columns
   `provider`           varchar(255)         NOT NULL,
@@ -50,21 +50,30 @@ CREATE TABLE `AuthIdentity` (
 
 CREATE TABLE `Category` (
   -- primary key
-  `id`          INTEGER(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id`                 INTEGER(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 
   -- timestamp
-  `created_at`  TIMESTAMP            NULL     DEFAULT NULL,
-  `updated_at`  TIMESTAMP            NULL     DEFAULT NULL,
-  `deleted_at`  TIMESTAMP            NULL     DEFAULT NULL,
-  KEY `idx_Category_deleted_at` (`deleted_at`),
+  `created_at`         TIMESTAMP            NULL     DEFAULT NULL,
+  `updated_at`         TIMESTAMP            NULL     DEFAULT NULL,
+  `deleted_at`         TIMESTAMP            NULL     DEFAULT NULL,
+  INDEX `idx_Category_deleted_at` (`deleted_at`),
 
   -- columns
-  `name`        VARCHAR(255)         NOT NULL,
-  `description` TEXT                 NOT NULL,
+  `name`               VARCHAR(255)         NOT NULL,
+  `path`               VARCHAR(255)         NOT NULL,
+  `display_name`       VARCHAR(255)         NOT NULL,
+  `description`        TEXT                 NOT NULL,
 
-  CONSTRAINT `uniq_Category_name` UNIQUE (`name`)
+  INDEX `idx_Category_path` (`path`),
+  CONSTRAINT `uniq_Category_path` UNIQUE (`path`),
 
   -- FK columns
+  `parent_category_id` INTEGER(10) UNSIGNED NULL,
+  INDEX `idx_Category_parent_category_id` (`parent_category_id`),
+  CONSTRAINT `fk_Product_parent_category_id`
+  FOREIGN KEY (`parent_category_id`) REFERENCES `Category` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
 );
 
 
@@ -76,7 +85,7 @@ CREATE TABLE `Image` (
   `created_at` TIMESTAMP            NULL     DEFAULT NULL,
   `updated_at` TIMESTAMP            NULL     DEFAULT NULL,
   `deleted_at` TIMESTAMP            NULL     DEFAULT NULL,
-  KEY `idx_Image_deleted_at` (`deleted_at`),
+  INDEX `idx_Image_deleted_at` (`deleted_at`),
 
   -- columns
   `name`       VARCHAR(255)         NOT NULL,
@@ -94,7 +103,7 @@ CREATE TABLE `Product` (
   `created_at`  TIMESTAMP            NULL     DEFAULT NULL,
   `updated_at`  TIMESTAMP            NULL     DEFAULT NULL,
   `deleted_at`  TIMESTAMP            NULL     DEFAULT NULL,
-  KEY `idx_Product_deleted_at` (`deleted_at`),
+  INDEX `idx_Product_deleted_at` (`deleted_at`),
 
   -- columns
   `name`        VARCHAR(255)         NOT NULL,
@@ -103,7 +112,7 @@ CREATE TABLE `Product` (
 
   -- FK columns
   `category_id` INTEGER(10) UNSIGNED NOT NULL,
-  `image_id`    INTEGER(10) UNSIGNED NOT NULL,
+  `image_id`    INTEGER(10) UNSIGNED NULL,
 
   CONSTRAINT `fk_Product_category_id`
   FOREIGN KEY (`category_id`) REFERENCES `Category` (`id`)
@@ -111,7 +120,7 @@ CREATE TABLE `Product` (
     ON UPDATE CASCADE,
   CONSTRAINT `fk_Product_image_id`
   FOREIGN KEY (`image_id`) REFERENCES `Image` (`id`)
-    ON DELETE RESTRICT
+    ON DELETE SET NULL
     ON UPDATE CASCADE
 );
 
@@ -123,7 +132,7 @@ CREATE TABLE `Order` (
   `created_at`        TIMESTAMP            NULL     DEFAULT NULL,
   `updated_at`        TIMESTAMP            NULL     DEFAULT NULL,
   `deleted_at`        TIMESTAMP            NULL     DEFAULT NULL,
-  KEY `idx_Order_deleted_at` (`deleted_at`),
+  INDEX `idx_Order_deleted_at` (`deleted_at`),
 
   -- columns
   `state`             VARCHAR(30)          NOT NULL,
@@ -161,7 +170,7 @@ CREATE TABLE OrderDetail (
   `created_at` TIMESTAMP            NULL     DEFAULT NULL,
   `updated_at` TIMESTAMP            NULL     DEFAULT NULL,
   `deleted_at` TIMESTAMP            NULL     DEFAULT NULL,
-  KEY `idx_OrderDetail_deleted_at` (`deleted_at`),
+  INDEX `idx_OrderDetail_deleted_at` (`deleted_at`),
 
   -- columns
   `index`      INTEGER(10) UNSIGNED NOT NULL,
@@ -185,10 +194,11 @@ CREATE TABLE OrderDetail (
 );
 
 -- +migrate Down
-DROP TABLE `User`;
-DROP TABLE `Category`;
-DROP TABLE `Image`;
-DROP TABLE `Product`;
-DROP TABLE `Order`;
-DROP TABLE `OrderDetail`;
+DROP TABLE IF EXISTS `User`;
+DROP TABLE IF EXISTS `Category`;
+DROP TABLE IF EXISTS `Image`;
+DROP TABLE IF EXISTS `Product`;
+DROP TABLE IF EXISTS `Order`;
+DROP TABLE IF EXISTS `OrderDetail`;
+
 

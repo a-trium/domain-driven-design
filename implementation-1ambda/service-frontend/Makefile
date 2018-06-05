@@ -19,6 +19,11 @@ install:
 	@ rm -rf node_modules
 	@ $(NPM) install
 
+.PHONY: build
+build:
+	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Building frontend distribution"
+	@ $(NPM) run build
+
 .PHONY: run
 run:
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Running frontend application"

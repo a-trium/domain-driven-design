@@ -9,7 +9,7 @@
             <el-menu-item :index="item.path" :route='item'
                           v-if="shouldDisplay(item.meta.requiresAuth, authenticated, item.meta.common)">
                 <template v-if="item.name == 'home'">
-                    <img src="../assets/gopher-front.svg" height="30" width="30">
+                    <img src="../assets/gopher-front.svg" height="28" width="28" style="margin-right: 3px;">
                 </template>
                 <span>{{item.displayName}}</span>
             </el-menu-item>
