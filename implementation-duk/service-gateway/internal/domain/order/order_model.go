@@ -9,7 +9,6 @@ type Order struct {
 
 	CustomerId uint `gorm:"column:customer_id; type:unsigned big int; not null; index;"`
 	Details    []Detail
-	//TODO : Status (주문상태)
 }
 
 func (Order) TableName() string {

@@ -6,6 +6,7 @@ import (
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain/discount"
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain/order"
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain/product"
+	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain/tag"
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain/user"
 	"github.com/gobuffalo/packr"
 	"github.com/jinzhu/gorm"
@@ -65,13 +66,17 @@ func onAutoMigration(db *gorm.DB) {
 	db.Set("gorm:table_options", "").AutoMigrate(
 		&user.Customer{},
 		&user.Seller{},
+
 		&product.Product{},
 		&product.Option{},
-		&product.Tag{},
+		&product.ProductTag{},
+
+		&tag.Tag{},
+
 		&order.Order{},
 		&order.Detail{},
 		&cart.Cart{},
-		&discount.BaseCoupon{})
+		&discount.Coupon{})
 
 	db.Exec("PRAGMA foreign_keys = ON;")
 }
@@ -83,7 +88,7 @@ func flyway(log *Logger, dataSource db.DataSource) {
 
 	migrations, err := migrationSrc.FindMigrations()
 	if err != nil {
-		log.Fatalw("Failed to find sql migrations")
+		log.Fatalw("Failed to find sql migrations", err)
 	}
 
 	appliedMigrationCount, err := migrate.Exec(
