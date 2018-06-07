@@ -21,8 +21,8 @@ func main() {
 
 	c.Invoke(func(ctrl *controller.CustomerController) {
 		groupV1 := route.Group("/v1")
-		groupV1.GET("/users/:id", ctrl.GetCustomer)
-		groupV1.POST("/users", ctrl.AddCustomer)
+		groupV1.GET("/customers/:id", ctrl.GetCustomer)
+		groupV1.POST("/customers", ctrl.AddCustomer)
 	})
 	c.Invoke(healthCheckHandler(route))
 
