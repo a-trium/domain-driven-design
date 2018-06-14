@@ -17,13 +17,16 @@ func NewProductRepository(datasource db.DataSource) product.Repository {
 
 func (r *ProductRepository) FindById(id int) (*product.Product, error) {
 
-	record := product.Product{}
+	record := product.New()
 	err := r.db.First(&record, id).Error
 
 	if err != nil {
 		return nil, exception.NewProductNotFound()
 	}
-	return &record, nil
+
+	r.db.Model(record).Related(&record.Options)
+
+	return record, nil
 }
 
 func (r *ProductRepository) FindByTagId(tagId int) []product.Product {
