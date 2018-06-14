@@ -14,8 +14,8 @@ type Product struct {
 	ImageUrl string `gorm:"column:image_url; type:varchar(255);"`
 	Sale     string `gorm:"column:on_sale; type:varchar(2);"`
 
-	Options []Option
-	Tags    []ProductTag
+	Options []Option     `gorm:"foreignkey:ID"`
+	Tags    []ProductTag `gorm:"foreignkey:ID"`
 }
 
 func (p Product) OnSale() bool {
@@ -42,4 +42,10 @@ func (o Option) getPrice() uint {
 
 func (Option) TableName() string {
 	return "product_option"
+}
+
+
+type Repository interface {
+	FindById(id int) (*Product, error)
+	FindByTagId(tagId int) []Product
 }
