@@ -2,6 +2,7 @@ package product
 
 import (
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain"
+	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain/tag"
 	"strings"
 )
 
@@ -14,14 +15,14 @@ type Product struct {
 	ImageUrl string `gorm:"column:image_url; type:varchar(255);"`
 	Sale     string `gorm:"column:on_sale; type:varchar(2);"`
 
-	Options []Option     `gorm:"foreignkey:ProductId"`
-	Tags    []ProductTag `gorm:"foreignkey:ID"`
+	Options []Option  `gorm:"foreignkey:ProductId"`
+	Tags    []tag.Tag `gorm:"many2many:product_tag;"`
 }
 
 func New() *Product {
 	return &Product{
 		Options: make([]Option, 1),
-		Tags:    make([]ProductTag, 1),
+		Tags:    make([]tag.Tag, 1),
 	}
 }
 

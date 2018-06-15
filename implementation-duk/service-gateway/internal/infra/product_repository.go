@@ -25,10 +25,15 @@ func (r *ProductRepository) FindById(id int) (*product.Product, error) {
 	}
 
 	r.db.Model(record).Related(&record.Options)
+	r.db.Model(record).Related(&record.Tags)
 
 	return record, nil
 }
 
 func (r *ProductRepository) FindByTagId(tagId int) []product.Product {
+
+	//products := make([]product.Product, 1)
+	//r.db.Where("name = ?", tagId)
+
 	return nil
 }
