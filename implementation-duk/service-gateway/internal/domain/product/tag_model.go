@@ -12,3 +12,10 @@ type Tag struct {
 func (Tag) TableName() string {
 	return "tag"
 }
+
+
+func NewTag() *Tag {
+	return &Tag{
+		Products: make([]Product, 1),
+	}
+}

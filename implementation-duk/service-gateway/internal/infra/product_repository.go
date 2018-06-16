@@ -17,7 +17,7 @@ func NewProductRepository(datasource db.DataSource) product.Repository {
 
 func (r *ProductRepository) FindById(id int) (*product.Product, error) {
 
-	record := product.New()
+	record := product.NewProduct()
 	err := r.db.First(&record, id).Error
 
 	if err != nil {
@@ -30,10 +30,14 @@ func (r *ProductRepository) FindById(id int) (*product.Product, error) {
 	return record, nil
 }
 
-func (r *ProductRepository) FindByTagId(tagId int) []product.Product {
+func (r *ProductRepository) FindByTagName(tagName string) []product.Product {
 
-	//products := make([]product.Product, 1)
-	//r.db.Where("tagId = ?", tagId).Find(&products)
+	record := product.NewTag()
 
-	return nil
+	r.db.Where("name = ?", tagName).Find(&record)
+
+	// product.tag.name = :tagName
+
+
+	return record.Products
 }

@@ -18,7 +18,7 @@ type Product struct {
 	Tags    []Tag    `gorm:"many2many:product_tag;"`
 }
 
-func New() *Product {
+func NewProduct() *Product {
 	return &Product{
 		Options: make([]Option, 1),
 		Tags:    make([]Tag, 1),
