@@ -35,6 +35,7 @@ func main() {
 
 	c.Invoke(func(ctrl *controller.ProductController) {
 		groupV1.GET("/products/:id", ctrl.GetProduct)
+		groupV1.GET("/products", ctrl.GetProductsByTagId)
 	})
 
 	route.Run(":8080")

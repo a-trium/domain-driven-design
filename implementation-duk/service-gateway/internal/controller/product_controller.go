@@ -28,3 +28,12 @@ func (ctrl *ProductController) GetProduct(c *gin.Context) {
 
 	c.JSON(http.StatusOK, product)
 }
+
+func (ctrl *ProductController) GetProductsByTagId(c *gin.Context) {
+
+	tagName := c.DefaultQuery("tag", "")
+
+	products := ctrl.repository.FindByTagName(tagName)
+
+	c.JSON(http.StatusOK, products)
+}
