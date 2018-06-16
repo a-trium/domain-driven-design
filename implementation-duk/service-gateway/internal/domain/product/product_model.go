@@ -14,8 +14,15 @@ type Product struct {
 	ImageUrl string `gorm:"column:image_url; type:varchar(255);"`
 	Sale     string `gorm:"column:on_sale; type:varchar(2);"`
 
-	Options []Option
-	Tags    []ProductTag
+	Options []Option `gorm:"foreignkey:ProductId"`
+	Tags    []Tag    `gorm:"many2many:product_tag;"`
+}
+
+func NewProduct() *Product {
+	return &Product{
+		Options: make([]Option, 1),
+		Tags:    make([]Tag, 1),
+	}
 }
 
 func (p Product) OnSale() bool {
@@ -24,22 +31,4 @@ func (p Product) OnSale() bool {
 
 func (Product) TableName() string {
 	return "product"
-}
-
-type Option struct {
-	domain.BaseModel
-
-	Product   *Product `gorm:"foreignkey:ProductID;"`
-	ProductId uint     `gorm:"column:product_id; type:unsigned big int;"`
-	Name      string   `gorm:"column:name; type:varchar(100);"`
-	Stock     uint     `gorm:"column:stock; type:unsigned big int; not null;"`
-	Price     uint     `gorm:"column:price; type:unsigned big int; not null;"`
-}
-
-func (o Option) getPrice() uint {
-	return o.Price + o.Product.Price
-}
-
-func (Option) TableName() string {
-	return "product_option"
 }

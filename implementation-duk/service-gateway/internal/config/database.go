@@ -6,7 +6,6 @@ import (
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain/discount"
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain/order"
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain/product"
-	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain/tag"
 	"github.com/a-trium/domain-driven-design/implementation-duk/service-gateway/internal/domain/user"
 	"github.com/gobuffalo/packr"
 	"github.com/jinzhu/gorm"
@@ -70,8 +69,7 @@ func onAutoMigration(db *gorm.DB) {
 		&product.Product{},
 		&product.Option{},
 		&product.ProductTag{},
-
-		&tag.Tag{},
+		&product.Tag{},
 
 		&order.Order{},
 		&order.Detail{},

@@ -39,15 +39,15 @@ insert into product_option(`id`, `product_id`, `name`, `stock`, `price`) values 
 insert into product_option(`id`, `product_id`, `name`, `stock`, `price`) values (3, 2, 'BTC', 21000000, 0);
 insert into product_option(`id`, `product_id`, `name`, `stock`, `price`) values (4, 3, 'ETH', 99235862, 0);
 
-insert into product_tag(`id`, `product_id`, `tag_id`) values (1, 1, 1);
-insert into product_tag(`id`, `product_id`, `tag_id`) values (2, 1, 2);
-insert into product_tag(`id`, `product_id`, `tag_id`) values (3, 2, 3);
-insert into product_tag(`id`, `product_id`, `tag_id`) values (4, 2, 4);
-insert into product_tag(`id`, `product_id`, `tag_id`) values (5, 2, 5);
-insert into product_tag(`id`, `product_id`, `tag_id`) values (6, 3, 3);
-insert into product_tag(`id`, `product_id`, `tag_id`) values (7, 3, 4);
-insert into product_tag(`id`, `product_id`, `tag_id`) values (8, 3, 5);
-insert into product_tag(`id`, `product_id`, `tag_id`) values (9, 3, 6);
+insert into product_tag(`product_id`, `tag_id`) values (1, 1);
+insert into product_tag(`product_id`, `tag_id`) values (1, 2);
+insert into product_tag(`product_id`, `tag_id`) values (2, 3);
+insert into product_tag(`product_id`, `tag_id`) values (2, 4);
+insert into product_tag(`product_id`, `tag_id`) values (2, 5);
+insert into product_tag(`product_id`, `tag_id`) values (3, 3);
+insert into product_tag(`product_id`, `tag_id`) values (3, 4);
+insert into product_tag(`product_id`, `tag_id`) values (3, 5);
+insert into product_tag(`product_id`, `tag_id`) values (3, 6);
 
 -- cart
 insert into cart(`id`, `customer_id`, `option_id`, `quantity`) values (1, 2, 3, 10);
