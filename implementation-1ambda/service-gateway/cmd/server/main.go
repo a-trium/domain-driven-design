@@ -13,7 +13,8 @@ import (
 	"github.com/rs/cors"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
 	"github.com/gorilla/sessions"
-	)
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/product"
+)
 
 func main() {
 	env := config.Env
@@ -72,10 +73,14 @@ func main() {
 	logger.Info("Configure REST API handlers")
 
 	userRepo := user.NewRepository(db)
+	productRepo := product.NewRepository(db)
 	encryptor := user.NewEncryptor(0)
-	authHandler := user.NewAuthHandler(userRepo, encryptor, sessionStore)
 
+	authHandler := user.NewAuthHandler(userRepo, encryptor, sessionStore)
 	authHandler.Configure(api)
+
+	productHandler := product.NewProductHandler(productRepo)
+	productHandler.Configure(api)
 
 	logger.Info("Configure REST API middleware")
 

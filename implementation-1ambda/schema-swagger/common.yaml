@@ -30,7 +30,7 @@ definitions:
     properties:
       itemCountPerPage:
         type: integer
-        format: int64
+        format: int32
       currentPageOffset:
         type: integer
         format: int32

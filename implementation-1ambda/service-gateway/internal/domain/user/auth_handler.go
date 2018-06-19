@@ -6,7 +6,7 @@ import (
 	e "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/exception"
 	"github.com/pkg/errors"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi"
-	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/auth"
+	authapi "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/auth"
 	"github.com/go-openapi/runtime/middleware"
 	dto "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagmodel"
 	"github.com/gorilla/sessions"
@@ -41,12 +41,12 @@ func NewAuthHandler(repo Repository, encryptor Encryptor, sessionStore *sessions
 }
 
 func (c *authHandlerImpl) Configure(registry *swagapi.GatewayAPI) () {
-	registry.AuthRegisterHandler = auth.RegisterHandlerFunc(
-		func(params auth.RegisterParams) middleware.Responder {
+	registry.AuthRegisterHandler = authapi.RegisterHandlerFunc(
+		func(params authapi.RegisterParams) middleware.Responder {
 			if params.Body == nil {
 				err := errors.New("Empty Body")
 				ex := e.NewBadRequestException(err)
-				return auth.NewLoginDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
+				return authapi.NewLoginDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
 			}
 
 			uid := params.Body.UID
@@ -55,22 +55,22 @@ func (c *authHandlerImpl) Configure(registry *swagapi.GatewayAPI) () {
 
 			claim, ex := c.Register(uid, email, password)
 			if ex != nil {
-				return auth.NewRegisterDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
+				return authapi.NewRegisterDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
 			}
 
 			response := dto.AuthResponse{
 				UID: claim.UID,
 				// UserID: strconv.FormatUint(uint64(claim.UserID), 10),
 			}
-			return auth.NewRegisterOK().WithPayload(&response)
+			return authapi.NewRegisterOK().WithPayload(&response)
 		})
 
-	registry.AuthLoginHandler = auth.LoginHandlerFunc(
-		func(params auth.LoginParams) middleware.Responder {
+	registry.AuthLoginHandler = authapi.LoginHandlerFunc(
+		func(params authapi.LoginParams) middleware.Responder {
 			if params.Body == nil {
 				err := errors.New("Empty Body")
 				ex := e.NewBadRequestException(err)
-				return auth.NewLoginDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
+				return authapi.NewLoginDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
 			}
 
 			uid := params.Body.UID
@@ -78,7 +78,7 @@ func (c *authHandlerImpl) Configure(registry *swagapi.GatewayAPI) () {
 
 			claim, ex := c.Login(uid, password)
 			if ex != nil {
-				return auth.NewLoginDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
+				return authapi.NewLoginDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
 			}
 
 			response := &dto.AuthResponse{UID: claim.UID,}
@@ -87,21 +87,21 @@ func (c *authHandlerImpl) Configure(registry *swagapi.GatewayAPI) () {
 			session, _ := c.sessionStore.Get(params.HTTPRequest, SessionCookieName)
 			SetLoginSessionCookie(session, claim.UID)
 
-			responder := auth.NewLoginOK().WithPayload(response)
+			responder := authapi.NewLoginOK().WithPayload(response)
 			return NewLoginSessionResponder(responder, params.HTTPRequest, session)
 		})
 
-	registry.AuthLogoutHandler = auth.LogoutHandlerFunc(
-		func(params auth.LogoutParams) middleware.Responder {
+	registry.AuthLogoutHandler = authapi.LogoutHandlerFunc(
+		func(params authapi.LogoutParams) middleware.Responder {
 			session, _ := c.sessionStore.Get(params.HTTPRequest, SessionCookieName)
 			CleanLoginSessionCookie(session)
 
-			responder := auth.NewLogoutOK()
+			responder := authapi.NewLogoutOK()
 			return NewLogoutSessionResponder(responder, params.HTTPRequest, session)
 		})
 
-	registry.AuthWhoamiHandler = auth.WhoamiHandlerFunc(
-		func(params auth.WhoamiParams) middleware.Responder {
+	registry.AuthWhoamiHandler = authapi.WhoamiHandlerFunc(
+		func(params authapi.WhoamiParams) middleware.Responder {
 			session, _ := c.sessionStore.Get(params.HTTPRequest, SessionCookieName)
 			authenticated, uid := IsAuthenticated(session)
 
@@ -111,7 +111,7 @@ func (c *authHandlerImpl) Configure(registry *swagapi.GatewayAPI) () {
 			}
 
 			response := &dto.AuthResponse{UID: uid,}
-			return auth.NewLoginOK().WithPayload(response)
+			return authapi.NewLoginOK().WithPayload(response)
 		})
 
 }
@@ -179,12 +179,12 @@ func IsAuthenticated(session *sessions.Session) (bool, string) {
 }
 
 type LoginSessionResponder struct {
-	auth.LoginOK
+	authapi.LoginOK
 	request *http.Request
 	session *sessions.Session
 }
 
-func NewLoginSessionResponder(responder *auth.LoginOK, r *http.Request, session *sessions.Session) *LoginSessionResponder {
+func NewLoginSessionResponder(responder *authapi.LoginOK, r *http.Request, session *sessions.Session) *LoginSessionResponder {
 	return &LoginSessionResponder{
 		*responder, r, session,
 	}
@@ -197,12 +197,12 @@ func (responder *LoginSessionResponder) WriteResponse(w http.ResponseWriter, p r
 }
 
 type LogoutSessionResponder struct {
-	auth.LogoutOK
+	authapi.LogoutOK
 	request *http.Request
 	session *sessions.Session
 }
 
-func NewLogoutSessionResponder(responder *auth.LogoutOK, r *http.Request, session *sessions.Session) *LogoutSessionResponder {
+func NewLogoutSessionResponder(responder *authapi.LogoutOK, r *http.Request, session *sessions.Session) *LogoutSessionResponder {
 	return &LogoutSessionResponder{
 		*responder, r, session,
 	}

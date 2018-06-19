@@ -45,6 +45,9 @@ func init() {
     },
     "/auth/whoami": {
       "$ref": "./gateway-auth.yaml#/api/whoami"
+    },
+    "/product": {
+      "$ref": "./gateway-product.yaml#/api/findAllProducts"
     }
   }
 }`))
@@ -179,6 +182,44 @@ func init() {
           }
         }
       }
+    },
+    "/product": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "findAllProduct",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int32",
+            "default": 10,
+            "name": "itemCountPerPage",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "format": "int32",
+            "default": 0,
+            "name": "currentPageOffset",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/findAllProductOKBody"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/exception"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -218,6 +259,21 @@ func init() {
         }
       }
     },
+    "findAllProductOKBody": {
+      "type": "object",
+      "properties": {
+        "pagination": {
+          "$ref": "#/definitions/pagination"
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/product"
+          }
+        }
+      },
+      "x-go-gen-location": "operations"
+    },
     "loginRequest": {
       "type": "object",
       "properties": {
@@ -225,6 +281,66 @@ func init() {
           "type": "string"
         },
         "uid": {
+          "type": "string"
+        }
+      }
+    },
+    "pagination": {
+      "type": "object",
+      "required": [
+        "itemCountPerPage",
+        "currentPageOffset",
+        "totalItemCount"
+      ],
+      "properties": {
+        "currentPageOffset": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "itemCountPerPage": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalItemCount": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "product": {
+      "type": "object",
+      "properties": {
+        "categoryDisplayName": {
+          "type": "string"
+        },
+        "categoryID": {
+          "type": "string"
+        },
+        "categoryPath": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "imageID": {
+          "type": "string"
+        },
+        "imagePath": {
+          "type": "string"
+        },
+        "imageType": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "onSale": {
+          "type": "string"
+        },
+        "price": {
           "type": "string"
         }
       }

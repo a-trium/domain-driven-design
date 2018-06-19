@@ -13,6 +13,7 @@ import (
 
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/auth"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/product"
 )
 
 //go:generate swagger generate server --target ../pkg/generated/swagger --name  --spec ../../schema-swagger/gateway-rest.yaml --api-package swagapi --model-package swagmodel --server-package swagserver --exclude-main
@@ -46,6 +47,9 @@ func configureAPI(api *swagapi.GatewayAPI) http.Handler {
 	})
 	api.AuthWhoamiHandler = auth.WhoamiHandlerFunc(func(params auth.WhoamiParams) middleware.Responder {
 		return middleware.NotImplemented("operation auth.Whoami has not yet been implemented")
+	})
+	api.ProductFindAllProductHandler = product.FindAllProductHandlerFunc(func(params product.FindAllProductParams) middleware.Responder {
+		return middleware.NotImplemented("operation product.FindAllProduct has not yet been implemented")
 	})
 
 	api.ServerShutdown = func() {}
