@@ -24,3 +24,5 @@ paths:
   /auth/logout:
     $ref: "./gateway-auth.yaml#/api/logout"
 
+  /product:
+    $ref: "./gateway-product.yaml#/api/findAllProducts"

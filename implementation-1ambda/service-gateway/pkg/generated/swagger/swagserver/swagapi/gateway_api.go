@@ -20,6 +20,7 @@ import (
 	"github.com/go-openapi/swag"
 
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/auth"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/product"
 )
 
 // NewGatewayAPI creates a new Gateway instance
@@ -50,6 +51,9 @@ func NewGatewayAPI(spec *loads.Document) *GatewayAPI {
 		}),
 		AuthWhoamiHandler: auth.WhoamiHandlerFunc(func(params auth.WhoamiParams) middleware.Responder {
 			return middleware.NotImplemented("operation AuthWhoami has not yet been implemented")
+		}),
+		ProductFindAllProductHandler: product.FindAllProductHandlerFunc(func(params product.FindAllProductParams) middleware.Responder {
+			return middleware.NotImplemented("operation ProductFindAllProduct has not yet been implemented")
 		}),
 	}
 }
@@ -90,6 +94,8 @@ type GatewayAPI struct {
 	AuthRegisterHandler auth.RegisterHandler
 	// AuthWhoamiHandler sets the operation handler for the whoami operation
 	AuthWhoamiHandler auth.WhoamiHandler
+	// ProductFindAllProductHandler sets the operation handler for the find all product operation
+	ProductFindAllProductHandler product.FindAllProductHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -167,6 +173,10 @@ func (o *GatewayAPI) Validate() error {
 
 	if o.AuthWhoamiHandler == nil {
 		unregistered = append(unregistered, "auth.WhoamiHandler")
+	}
+
+	if o.ProductFindAllProductHandler == nil {
+		unregistered = append(unregistered, "product.FindAllProductHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -286,6 +296,11 @@ func (o *GatewayAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/auth/whoami"] = auth.NewWhoami(o.context, o.AuthWhoamiHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/product"] = product.NewFindAllProduct(o.context, o.ProductFindAllProductHandler)
 
 }
 

@@ -15,6 +15,7 @@ type Repository interface {
 
 	AddProduct(record *Product) (*Product, e.Exception)
 	FindProduct(id uint) (*Product, e.Exception)
+	FindAllProducts(itemCountPerPage int, currentPageOffset int) (int, []*Product, e.Exception)
 }
 
 func NewRepository(db *gorm.DB) Repository {
@@ -97,7 +98,7 @@ func (r *repositoryImpl) FindProduct(id uint) (*Product, e.Exception) {
 	err := r.db.Where("id = ?", id).First(record).Error
 
 	if err != nil {
-		wrap := errors.Wrap(err, "Failed to find product by id")
+		wrap := errors.Wrap(err, "Failed to find Product by id")
 
 		if gorm.IsRecordNotFoundError(err) {
 			return nil, e.NewNotFoundException(wrap)
@@ -109,3 +110,33 @@ func (r *repositoryImpl) FindProduct(id uint) (*Product, e.Exception) {
 	return record, nil
 }
 
+func (r *repositoryImpl) FindAllProducts(itemCountPerPage int, currentPageOffset int) (int, []*Product, e.Exception) {
+	tx := r.db.Begin()
+
+	product := &Product{}
+	var productList []*Product
+	count := 0
+	if err := tx.Table(product.TableName()).Count(&count).Error; err != nil {
+		tx.Rollback()
+		wrap := errors.Wrap(err, "Failed to get count of Product")
+		return 0, nil, e.NewInternalServerException(wrap)
+	}
+
+	dbOffset := currentPageOffset * itemCountPerPage
+	dbLimit := itemCountPerPage
+
+	if err := tx.Table(product.TableName()).
+		Order("created_at asc").
+		Offset(dbOffset).
+		Limit(dbLimit).
+		Find(&productList).
+		Error; err != nil {
+
+		tx.Rollback()
+		wrap := errors.Wrap(err, "Failed to get Product list")
+		return 0, nil, e.NewInternalServerException(wrap)
+	}
+
+	tx.Commit()
+	return count, productList, nil
+}
