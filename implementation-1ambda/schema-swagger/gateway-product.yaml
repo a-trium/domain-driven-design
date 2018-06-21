@@ -61,4 +61,8 @@ definitions:
         type: string
       imagePath:
         type: string
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
 

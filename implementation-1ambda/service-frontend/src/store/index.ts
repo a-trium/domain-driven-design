@@ -10,6 +10,7 @@ export default new Vuex.Store({
     state: {
         uid: '', // indicates user is logged in
         flashMessage: '',
+        path: '',
     },
     getters: {
         authenticated: (state: any) => {

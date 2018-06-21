@@ -84,6 +84,15 @@ export default class Register extends Vue {
                     this.$router.push('/login')
                 })
                 .catch((response) => {
+                    if (!response.json) {
+                        this.$notify.error({
+                            title: `Error (Connection)`,
+                            message: "Server is not available",
+                        })
+
+                        return
+                    }
+
                     response.json().then((parsed: Exception) => {
                         this.$notify.error({
                             title: `Error (${parsed.type})`,

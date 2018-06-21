@@ -319,6 +319,9 @@ func init() {
         "categoryPath": {
           "type": "string"
         },
+        "createdAt": {
+          "type": "string"
+        },
         "description": {
           "type": "string"
         },
@@ -341,6 +344,9 @@ func init() {
           "type": "string"
         },
         "price": {
+          "type": "string"
+        },
+        "updatedAt": {
           "type": "string"
         }
       }

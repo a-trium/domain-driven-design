@@ -24,6 +24,9 @@ type Product struct {
 	// category path
 	CategoryPath string `json:"categoryPath,omitempty"`
 
+	// created at
+	CreatedAt string `json:"createdAt,omitempty"`
+
 	// description
 	Description string `json:"description,omitempty"`
 
@@ -47,6 +50,9 @@ type Product struct {
 
 	// price
 	Price string `json:"price,omitempty"`
+
+	// updated at
+	UpdatedAt string `json:"updatedAt,omitempty"`
 }
 
 // Validate validates this product
