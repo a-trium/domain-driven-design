@@ -14,4 +14,8 @@ export default {
     login(state: any, uid: string) {
         state.uid = uid
     },
+
+    changePath(state: any, path: string) {
+        state.path = path
+    }
 }

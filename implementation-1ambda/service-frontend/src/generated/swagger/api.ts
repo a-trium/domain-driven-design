@@ -153,6 +153,26 @@ export namespace Exception {
 /**
  * 
  * @export
+ * @interface InlineResponse200
+ */
+export interface InlineResponse200 {
+    /**
+     * 
+     * @type {Array&lt;Product&gt;}
+     * @memberof InlineResponse200
+     */
+    rows?: Array<Product>;
+    /**
+     * 
+     * @type {Pagination}
+     * @memberof InlineResponse200
+     */
+    pagination?: Pagination;
+}
+
+/**
+ * 
+ * @export
  * @interface LoginRequest
  */
 export interface LoginRequest {
@@ -168,6 +188,118 @@ export interface LoginRequest {
      * @memberof LoginRequest
      */
     password?: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface Pagination
+ */
+export interface Pagination {
+    /**
+     * 
+     * @type {number}
+     * @memberof Pagination
+     */
+    itemCountPerPage: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Pagination
+     */
+    currentPageOffset: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Pagination
+     */
+    totalItemCount: number;
+}
+
+/**
+ * 
+ * @export
+ * @interface Product
+ */
+export interface Product {
+    /**
+     * 
+     * @type {string}
+     * @memberof Product
+     */
+    id?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Product
+     */
+    name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Product
+     */
+    price?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Product
+     */
+    description?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Product
+     */
+    onSale?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Product
+     */
+    categoryID?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Product
+     */
+    categoryDisplayName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Product
+     */
+    categoryPath?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Product
+     */
+    imageID?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Product
+     */
+    imageType?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Product
+     */
+    imagePath?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Product
+     */
+    createdAt?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Product
+     */
+    updatedAt?: string;
 }
 
 /**
@@ -481,6 +613,115 @@ export class AuthApi extends BaseAPI {
      */
     public whoami(options?: any) {
         return AuthApiFp(this.configuration).whoami(options)(this.fetch, this.basePath);
+    }
+
+}
+
+/**
+ * ProductApi - fetch parameter creator
+ * @export
+ */
+export const ProductApiFetchParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} [itemCountPerPage] 
+         * @param {number} [currentPageOffset] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findAllProduct(itemCountPerPage?: number, currentPageOffset?: number, options: any = {}): FetchArgs {
+            const localVarPath = `/product`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (itemCountPerPage !== undefined) {
+                localVarQueryParameter['itemCountPerPage'] = itemCountPerPage;
+            }
+
+            if (currentPageOffset !== undefined) {
+                localVarQueryParameter['currentPageOffset'] = currentPageOffset;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ProductApi - functional programming interface
+ * @export
+ */
+export const ProductApiFp = function(configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} [itemCountPerPage] 
+         * @param {number} [currentPageOffset] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findAllProduct(itemCountPerPage?: number, currentPageOffset?: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<InlineResponse200> {
+            const localVarFetchArgs = ProductApiFetchParamCreator(configuration).findAllProduct(itemCountPerPage, currentPageOffset, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    }
+};
+
+/**
+ * ProductApi - factory interface
+ * @export
+ */
+export const ProductApiFactory = function (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) {
+    return {
+        /**
+         * 
+         * @param {number} [itemCountPerPage] 
+         * @param {number} [currentPageOffset] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findAllProduct(itemCountPerPage?: number, currentPageOffset?: number, options?: any) {
+            return ProductApiFp(configuration).findAllProduct(itemCountPerPage, currentPageOffset, options)(fetch, basePath);
+        },
+    };
+};
+
+/**
+ * ProductApi - object-oriented interface
+ * @export
+ * @class ProductApi
+ * @extends {BaseAPI}
+ */
+export class ProductApi extends BaseAPI {
+    /**
+     * 
+     * @param {} [itemCountPerPage] 
+     * @param {} [currentPageOffset] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductApi
+     */
+    public findAllProduct(itemCountPerPage?: number, currentPageOffset?: number, options?: any) {
+        return ProductApiFp(this.configuration).findAllProduct(itemCountPerPage, currentPageOffset, options)(this.fetch, this.basePath);
     }
 
 }

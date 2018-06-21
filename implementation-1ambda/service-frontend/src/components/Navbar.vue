@@ -1,14 +1,14 @@
 <template>
     <el-menu :router="true"
-             :default-active="$route.path"
+             :default-active="path"
              mode="horizontal"
              background-color="#545c64"
              text-color="#fff"
              active-text-color="#ffd04b">
-        <template v-for='item in routes'>
+        <template v-for='item in routes' v-if='item.meta.left'>
             <el-menu-item :index="item.path" :route='item'
                           v-if="shouldDisplay(item.meta.requiresAuth, authenticated, item.meta.common)">
-                <template v-if="item.name == 'home'">
+                <template v-if="item.name === 'home'">
                     <img src="../assets/gopher-front.svg" height="28" width="28" style="margin-right: 3px;">
                 </template>
                 <span>{{item.displayName}}</span>
@@ -26,10 +26,13 @@
             </el-menu-item>
         </el-submenu>
         <el-menu-item index="github" v-else style="float: right;">
-            <a href="https://github.com/1ambda" target="_blank"style="display: block; text-decoration: none;">
+            <a href="https://github.com/1ambda" target="_blank" style="display: block; text-decoration: none;">
                 <img src="../assets/github.svg" class="github-icon" height="24" width="24" style="margin-bottom: 2px; margin-right: 5px;">
                 <span>Github</span>
             </a>
+        </el-menu-item>
+        <el-menu-item :index="'/about'" v-if="!authenticated" style="float: right;">
+            <span>About</span>
         </el-menu-item>
     </el-menu>
 </template>
@@ -45,7 +48,7 @@ import { Exception } from '@/generated/swagger'
 @Component({
     components: {},
     computed: {
-        ...mapState([ 'uid', 'flashMessage' ]),
+        ...mapState([ 'uid', 'flashMessage', 'path' ]),
         ...mapGetters([ 'authenticated' ]),
     },
     watch: {
@@ -69,6 +72,7 @@ export default class Navbar extends Vue {
     public $route: any
     public $router: any
     public $store: any
+    public path: string
 
     public shouldDisplay(requiresAuth: boolean, authenticated: boolean, common: boolean) {
         if (common) {

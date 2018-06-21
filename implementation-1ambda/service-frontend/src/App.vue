@@ -12,13 +12,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import Navbar from '@/components/Navbar.vue' // @ is an alias to /src
+    import { Component, Vue } from "vue-property-decorator"
+    import Navbar from "@/components/Navbar.vue" // @ is an alias to /src
 
-@Component({ components: { 'app-navbar': Navbar } })
-export default class App extends Vue {
+    @Component({ components: { "app-navbar": Navbar } })
+    export default class App extends Vue {
 
-}
+    }
 </script>
 
 <style lang="scss">

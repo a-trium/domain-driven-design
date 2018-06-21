@@ -75,6 +75,7 @@ export default class Login extends Vue {
 
             AuthAPI.login(request, { credentials: 'include' })
                 .then((response) => {
+                    console.log(response)
                     if (!response.uid) {
                         return
                     }
@@ -83,6 +84,15 @@ export default class Login extends Vue {
                     this.$router.push('/')
                 })
                 .catch((response) => {
+                    if (!response.json) {
+                        this.$notify.error({
+                            title: `Error (Connection)`,
+                            message: "Server is not available",
+                        })
+
+                        return
+                    }
+
                     response.json().then((parsed: Exception) => {
                         this.$notify.error({
                             title: `Error (${parsed.type})`,
