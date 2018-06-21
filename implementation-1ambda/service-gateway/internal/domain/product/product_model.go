@@ -4,6 +4,8 @@ import (
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/persistent"
 	dto "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagmodel"
 	"strconv"
+	"time"
+	"strings"
 )
 
 type OnSale string
@@ -31,7 +33,7 @@ func (Product) TableName() string {
 }
 
 func (p *Product) convertToDTO() *dto.Product {
-	return &dto.Product{
+	dto := &dto.Product{
 		CategoryDisplayName: p.Category.DisplayName,
 		CategoryID: strconv.FormatUint(uint64(p.CategoryID), 10),
 		CategoryPath: p.Category.Path,
@@ -43,5 +45,13 @@ func (p *Product) convertToDTO() *dto.Product {
 		Name: p.Name,
 		OnSale: string(p.OnSale),
 		Price: strconv.FormatUint(uint64(p.Price), 10),
+		CreatedAt: p.CreatedAt.Format(time.RFC3339),
+		UpdatedAt: p.UpdatedAt.Format(time.RFC3339),
 	}
+
+	if strings.HasPrefix(dto.UpdatedAt, "0001") {
+		dto.UpdatedAt = ""
+	}
+
+	return dto
 }

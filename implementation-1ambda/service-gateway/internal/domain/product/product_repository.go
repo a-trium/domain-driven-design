@@ -116,16 +116,15 @@ func (r *repositoryImpl) FindAllProducts(itemCountPerPage int, currentPageOffset
 	product := &Product{}
 	var productList []*Product
 	count := 0
-	if err := tx.Table(product.TableName()).Count(&count).Error; err != nil {
-		tx.Rollback()
-		wrap := errors.Wrap(err, "Failed to get count of Product")
-		return 0, nil, e.NewInternalServerException(wrap)
-	}
 
 	dbOffset := currentPageOffset * itemCountPerPage
 	dbLimit := itemCountPerPage
 
-	if err := tx.Table(product.TableName()).
+	if err := tx.
+		Table(product.TableName()).
+		Count(&count).
+		Preload("Category").
+		Preload("Image").
 		Order("created_at asc").
 		Offset(dbOffset).
 		Limit(dbLimit).
