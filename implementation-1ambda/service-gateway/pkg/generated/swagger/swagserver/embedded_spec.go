@@ -48,6 +48,9 @@ func init() {
     },
     "/product": {
       "$ref": "./gateway-product.yaml#/api/findAllProducts"
+    },
+    "/product/{productID}": {
+      "$ref": "./gateway-product.yaml#/api/findOneProductWithOptions"
     }
   }
 }`))
@@ -188,7 +191,7 @@ func init() {
         "tags": [
           "product"
         ],
-        "operationId": "findAllProduct",
+        "operationId": "findAll",
         "parameters": [
           {
             "type": "integer",
@@ -209,7 +212,36 @@ func init() {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/findAllProductOKBody"
+              "$ref": "#/definitions/findAllOKBody"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/exception"
+            }
+          }
+        }
+      }
+    },
+    "/product/{productID}": {
+      "get": {
+        "tags": [
+          "product"
+        ],
+        "operationId": "findOneWithOptions",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "productID",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/findOneWithOptionsOKBody"
             }
           },
           "default": {
@@ -259,7 +291,7 @@ func init() {
         }
       }
     },
-    "findAllProductOKBody": {
+    "findAllOKBody": {
       "type": "object",
       "properties": {
         "pagination": {
@@ -270,6 +302,21 @@ func init() {
           "items": {
             "$ref": "#/definitions/product"
           }
+        }
+      },
+      "x-go-gen-location": "operations"
+    },
+    "findOneWithOptionsOKBody": {
+      "type": "object",
+      "properties": {
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/productOption"
+          }
+        },
+        "product": {
+          "$ref": "#/definitions/product"
         }
       },
       "x-go-gen-location": "operations"
@@ -347,6 +394,26 @@ func init() {
           "type": "string"
         },
         "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "productOption": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "onSale": {
+          "type": "string"
+        },
+        "price": {
           "type": "string"
         }
       }
