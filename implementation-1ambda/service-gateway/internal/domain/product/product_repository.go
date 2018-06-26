@@ -14,7 +14,7 @@ type Repository interface {
 	FindImageById(id uint) (*Image, e.Exception)
 
 	AddProduct(record *Product) (*Product, e.Exception)
-	FindProduct(id uint) (*Product, e.Exception)
+	FindProductWithOptions(id uint) (*Product, []*ProductOption, e.Exception)
 	FindAllProducts(itemCountPerPage int, currentPageOffset int) (int, []*Product, e.Exception)
 }
 
@@ -93,21 +93,37 @@ func (r *repositoryImpl) AddProduct(record *Product) (*Product, e.Exception) {
 	return record, nil
 }
 
-func (r *repositoryImpl) FindProduct(id uint) (*Product, e.Exception) {
+func (r *repositoryImpl) FindProductWithOptions(id uint) (*Product, []*ProductOption, e.Exception) {
 	record := &Product{}
-	err := r.db.Where("id = ?", id).First(record).Error
+
+	tx := r.db.Begin()
+	err := tx.Where("id = ?", id).First(record).Error
 
 	if err != nil {
 		wrap := errors.Wrap(err, "Failed to find Product by id")
+		tx.Rollback()
 
 		if gorm.IsRecordNotFoundError(err) {
-			return nil, e.NewNotFoundException(wrap)
+			return nil, nil, e.NewNotFoundException(wrap)
 		}
-
-		return nil, e.NewInternalServerException(wrap)
+		return nil, nil, e.NewInternalServerException(wrap)
 	}
 
-	return record, nil
+	var productOptions []*ProductOption
+
+	if err := tx.
+		Where("product_id = ?", id).
+		Find(&productOptions).
+		Error; err != nil {
+
+		wrap := errors.Wrap(err, "Failed to get ProductOption list")
+		tx.Rollback()
+		return nil, nil, e.NewInternalServerException(wrap)
+	}
+
+	tx.Commit()
+
+	return record, productOptions, nil
 }
 
 func (r *repositoryImpl) FindAllProducts(itemCountPerPage int, currentPageOffset int) (int, []*Product, e.Exception) {
