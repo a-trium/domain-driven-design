@@ -97,7 +97,11 @@ func (r *repositoryImpl) FindProductWithOptions(id uint) (*Product, []*ProductOp
 	record := &Product{}
 
 	tx := r.db.Begin()
-	err := tx.Where("id = ?", id).First(record).Error
+	err := tx.Where("id = ?", id).
+		Preload("Category").
+		Preload("Image").
+		First(record).
+		Error
 
 	if err != nil {
 		wrap := errors.Wrap(err, "Failed to find Product by id")
