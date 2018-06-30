@@ -2,12 +2,30 @@
     <div>
         <el-row type="flex" justify="center">
             <el-col :xs="20" :sm="20" :md="18" :lg="18">
-                <div>
-                    <h1>Product Detail</h1>
-                </div>
+                <span style="margin-left: 8px; margin-right: 8px;">
+                    <router-link :to="{name: 'product'}">
+                    <el-button icon="el-icon-menu" :to="'/product'">
+                        Products
+                    </el-button>
+                    </router-link>
+                </span>
+                <template v-for="(category, index) in currentCategories">
+                    <span style="margin-left: 8px; margin-right: 8px;">
+                        <i class="el-icon-arrow-right"></i>
+                    </span>
+                    <el-select v-model="currentCategories[index]"
+                               placeholder="Select">
+                        <el-option
+                                :key="optionsPerCategory[index][0].value"
+                                :label="optionsPerCategory[index][0].label"
+                                :value="optionsPerCategory[index][0].value">
+                        </el-option>
+                    </el-select>
+                </template>
             </el-col>
         </el-row>
         <el-row type="flex" justify="center" class="detail">
+
         </el-row>
     </div>
 </template>
@@ -36,12 +54,21 @@ export default class ProductDetail extends Vue {
     public productItem: ProductItem = null
     public productOptions: Array<ProductOption> = []
 
+    public currentCategories = []
+    public optionsPerCategory = []
+
     mounted() {
         this.productID = this.$route.params.productID
         ProductAPI.findOneWithOptions(this.productID, { credentials: 'include' })
             .then((response: any) => {
                 this.productItem = response.product
                 this.productOptions = response.options
+                const filtered = response.product.categoryPath.split("/").filter(x => x.trim() !== "")
+                this.currentCategories = filtered
+
+                // TODO: List all available categories for navigation
+                this.optionsPerCategory = filtered.map(x => [{ label: x, value: x }])
+
             })
             .catch((response) => {
                 if (!response.json) {
