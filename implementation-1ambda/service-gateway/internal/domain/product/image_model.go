@@ -4,6 +4,9 @@ import (
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/persistent"
 )
 
+const ImageTypeBIN = "BIN"
+const ImageTypeURL = "URL"
+
 type Image struct {
 	persistent.BaseModel
 

@@ -173,6 +173,26 @@ export interface InlineResponse200 {
 /**
  * 
  * @export
+ * @interface InlineResponse2001
+ */
+export interface InlineResponse2001 {
+    /**
+     * 
+     * @type {Product}
+     * @memberof InlineResponse2001
+     */
+    product?: Product;
+    /**
+     * 
+     * @type {Array&lt;ProductOption&gt;}
+     * @memberof InlineResponse2001
+     */
+    options?: Array<ProductOption>;
+}
+
+/**
+ * 
+ * @export
  * @interface LoginRequest
  */
 export interface LoginRequest {
@@ -300,6 +320,44 @@ export interface Product {
      * @memberof Product
      */
     updatedAt?: string;
+}
+
+/**
+ * 
+ * @export
+ * @interface ProductOption
+ */
+export interface ProductOption {
+    /**
+     * 
+     * @type {string}
+     * @memberof ProductOption
+     */
+    id?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProductOption
+     */
+    name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProductOption
+     */
+    price?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProductOption
+     */
+    description?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProductOption
+     */
+    onSale?: string;
 }
 
 /**
@@ -630,7 +688,7 @@ export const ProductApiFetchParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findAllProduct(itemCountPerPage?: number, currentPageOffset?: number, options: any = {}): FetchArgs {
+        findAll(itemCountPerPage?: number, currentPageOffset?: number, options: any = {}): FetchArgs {
             const localVarPath = `/product`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
@@ -644,6 +702,34 @@ export const ProductApiFetchParamCreator = function (configuration?: Configurati
             if (currentPageOffset !== undefined) {
                 localVarQueryParameter['currentPageOffset'] = currentPageOffset;
             }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} productID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findOneWithOptions(productID: string, options: any = {}): FetchArgs {
+            // verify required parameter 'productID' is not null or undefined
+            if (productID === null || productID === undefined) {
+                throw new RequiredError('productID','Required parameter productID was null or undefined when calling findOneWithOptions.');
+            }
+            const localVarPath = `/product/{productID}`
+                .replace(`{${"productID"}}`, encodeURIComponent(String(productID)));
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -671,8 +757,26 @@ export const ProductApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findAllProduct(itemCountPerPage?: number, currentPageOffset?: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<InlineResponse200> {
-            const localVarFetchArgs = ProductApiFetchParamCreator(configuration).findAllProduct(itemCountPerPage, currentPageOffset, options);
+        findAll(itemCountPerPage?: number, currentPageOffset?: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<InlineResponse200> {
+            const localVarFetchArgs = ProductApiFetchParamCreator(configuration).findAll(itemCountPerPage, currentPageOffset, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * 
+         * @param {string} productID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findOneWithOptions(productID: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<InlineResponse2001> {
+            const localVarFetchArgs = ProductApiFetchParamCreator(configuration).findOneWithOptions(productID, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -699,8 +803,17 @@ export const ProductApiFactory = function (configuration?: Configuration, fetch?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findAllProduct(itemCountPerPage?: number, currentPageOffset?: number, options?: any) {
-            return ProductApiFp(configuration).findAllProduct(itemCountPerPage, currentPageOffset, options)(fetch, basePath);
+        findAll(itemCountPerPage?: number, currentPageOffset?: number, options?: any) {
+            return ProductApiFp(configuration).findAll(itemCountPerPage, currentPageOffset, options)(fetch, basePath);
+        },
+        /**
+         * 
+         * @param {string} productID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findOneWithOptions(productID: string, options?: any) {
+            return ProductApiFp(configuration).findOneWithOptions(productID, options)(fetch, basePath);
         },
     };
 };
@@ -720,8 +833,19 @@ export class ProductApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ProductApi
      */
-    public findAllProduct(itemCountPerPage?: number, currentPageOffset?: number, options?: any) {
-        return ProductApiFp(this.configuration).findAllProduct(itemCountPerPage, currentPageOffset, options)(this.fetch, this.basePath);
+    public findAll(itemCountPerPage?: number, currentPageOffset?: number, options?: any) {
+        return ProductApiFp(this.configuration).findAll(itemCountPerPage, currentPageOffset, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * 
+     * @param {} productID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProductApi
+     */
+    public findOneWithOptions(productID: string, options?: any) {
+        return ProductApiFp(this.configuration).findOneWithOptions(productID, options)(this.fetch, this.basePath);
     }
 
 }
