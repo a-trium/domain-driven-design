@@ -72,7 +72,7 @@ func (c *DatabaseContainer) Close() {
 
 func GetTestDatabase(debug bool) *gorm.DB {
 	config.Env.Mode = "TEST"
-	config.Env.Debug = debug
+	config.Env.DebugSQL = debug
 
 	return config.GetDatabase()
 }

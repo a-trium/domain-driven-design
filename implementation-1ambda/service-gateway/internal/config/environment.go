@@ -14,19 +14,26 @@ var (
 )
 
 type Environment struct {
-	Debug bool   `default:"true"`
-	Mode  string `default:"LOCAL"` // `LOCAL`, `TEST`, `DEV`, `PROD`
+	// general
+	Mode        string `envconfig:"SERVICE_MODE" default:"LOCAL"` // `LOCAL`, `TEST`, `DEV`, `PROD`
+	ServiceName string `envconfig:"SERVICE_NAME" default:"service-gateway"`
+	ServiceId   string `envconfig:"SERVICE_ID" default:"0"`
+	Host        string `envconfig:"SERVICE_HOST" default:"localhost"`
+	RestPort    int    `envconfig:"SERVICE_PORT_REST" default:"30001"`
 
-	Host          string `default:"localhost"`
-	RestPort      int    `default:"30001"`
-	CorsAllowUrl  string `default:"localhost:8080"`
-	ServiceName   string `default:"service-gateway"`
-	ServiceId     string `default:"0"`
-	MysqlHost     string `default:"localhost"`
-	MysqlPort     string `default:"3306"`
-	MysqlUserName string `default:"root"`
-	MysqlPassword string `default:"root"`
-	MysqlDatabase string `default:"application"`
+	// storage
+	MysqlHost     string `envconfig:"MYSQL_HOST" default:"localhost"`
+	MysqlPort     string `envconfig:"MYSQL_PORT" default:"3306"`
+	MysqlUserName string `envconfig:"MYSQL_USERNAME" default:"root"`
+	MysqlPassword string `envconfig:"MYSQL_PASSWORD" default:"root"`
+	MysqlDatabase string `envconfig:"MYSQL_DATABASE" default:"application"`
+
+	// server
+	CorsAllowUrl  string `envconfig:"GATEWAY_CORS_URL" default:"localhost:8080"`
+
+	// debugging
+	DebugSQL  bool `envconfig:"DEBUG_SQL" default:"true"`
+	DebugHTTP bool `envconfig:"DEBUG_HTTP" default:"true"`
 
 	// copied from govvv injected values
 	BuildDate string
@@ -36,8 +43,12 @@ type Environment struct {
 	Version   string
 }
 
-func (e *Environment) DebugEnabled() bool {
-	return e.Debug
+func (e *Environment) DebugSQLEnabled() bool {
+	return e.DebugSQL
+}
+
+func (e *Environment) DebugHTTPEnabled() bool {
+	return e.DebugHTTP
 }
 
 func (e *Environment) IsTestMode() bool {

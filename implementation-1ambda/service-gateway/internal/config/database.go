@@ -199,7 +199,7 @@ func GetDatabase() *gorm.DB {
 
 	logger.Infow("Database connected", "dialect", database.Dialect())
 
-	if (env.IsLocalMode() && env.DebugEnabled()) || (env.IsTestMode() && env.DebugEnabled()) {
+	if (env.IsLocalMode() && env.DebugSQLEnabled()) || (env.IsTestMode() && env.DebugSQLEnabled()) {
 		database.EnableDebug()
 	}
 

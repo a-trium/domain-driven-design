@@ -27,7 +27,7 @@ func main() {
 		"git_state", env.GitState,
 		"version", env.Version,
 		"host", env.Host,
-		"port", env.RestPort,
+		"rest_port", env.RestPort,
 	)
 
 	swaggerSpec, err := loads.Analyzed(swagserver.FlatSwaggerJSON, "")
