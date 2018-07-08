@@ -8,9 +8,11 @@
                             :data="productList"
                             stripe
                             border
+                            @cell-click='handleCellClick'
                             style="width: 100%">
 
                         <el-table-column v-for="column in columns"
+                                         :class-name="column.prop === 'name' ? 'column-name' : 'column-default'"
                                          :prop="column.prop" :label="column.label">
                         </el-table-column>
                     </el-table>
@@ -68,9 +70,8 @@ export default class Product extends Vue {
     public productList = []
 
     fetchAllProducts(currentPage) {
-        ProductAPI.findAllProduct(this.itemCountPerPage, currentPage - 1)
+        ProductAPI.findAll(this.itemCountPerPage, currentPage - 1, { credentials: 'include' })
             .then((response: any) => {
-                console.log(response)
                 const pagination: Pagination = response.pagination
                 this.totalItemCount = pagination.totalItemCount
                 this.productList = response.rows
@@ -102,6 +103,20 @@ export default class Product extends Vue {
     handleCurrentPageChange(newPage) {
         this.fetchAllProducts(newPage)
     }
+
+    handleCellClick(row, column, cell, event) {
+        const productID = row.id
+        const columnName = column.property
+
+        if (columnName === 'name') {
+            this.$router.push({
+                name: 'product.detail',
+                params: {
+                    productID: productID,
+                }
+            })
+        }
+    }
 }
 </script>
 
@@ -109,5 +124,14 @@ export default class Product extends Vue {
 .pagination {
     margin-top: 30px;
     text-align: center;
+}
+
+.column-name:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.column-default {
+
 }
 </style>

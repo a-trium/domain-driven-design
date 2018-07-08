@@ -14,9 +14,9 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// FindAllProductOKBody find all product o k body
-// swagger:model findAllProductOKBody
-type FindAllProductOKBody struct {
+// FindAllOKBody find all o k body
+// swagger:model findAllOKBody
+type FindAllOKBody struct {
 
 	// pagination
 	Pagination *Pagination `json:"pagination,omitempty"`
@@ -25,8 +25,8 @@ type FindAllProductOKBody struct {
 	Rows []*Product `json:"rows"`
 }
 
-// Validate validates this find all product o k body
-func (m *FindAllProductOKBody) Validate(formats strfmt.Registry) error {
+// Validate validates this find all o k body
+func (m *FindAllOKBody) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validatePagination(formats); err != nil {
@@ -43,7 +43,7 @@ func (m *FindAllProductOKBody) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *FindAllProductOKBody) validatePagination(formats strfmt.Registry) error {
+func (m *FindAllOKBody) validatePagination(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Pagination) { // not required
 		return nil
@@ -61,7 +61,7 @@ func (m *FindAllProductOKBody) validatePagination(formats strfmt.Registry) error
 	return nil
 }
 
-func (m *FindAllProductOKBody) validateRows(formats strfmt.Registry) error {
+func (m *FindAllOKBody) validateRows(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Rows) { // not required
 		return nil
@@ -87,7 +87,7 @@ func (m *FindAllProductOKBody) validateRows(formats strfmt.Registry) error {
 }
 
 // MarshalBinary interface implementation
-func (m *FindAllProductOKBody) MarshalBinary() ([]byte, error) {
+func (m *FindAllOKBody) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -95,8 +95,8 @@ func (m *FindAllProductOKBody) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *FindAllProductOKBody) UnmarshalBinary(b []byte) error {
-	var res FindAllProductOKBody
+func (m *FindAllOKBody) UnmarshalBinary(b []byte) error {
+	var res FindAllOKBody
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

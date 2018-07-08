@@ -33,13 +33,18 @@ func (Product) TableName() string {
 }
 
 func (p *Product) convertToDTO() *dto.Product {
+	imageID := strconv.FormatUint(uint64(p.ImageID), 10)
+	if p.Image.Name == "" {
+		imageID = ""
+	}
+
 	dto := &dto.Product{
 		CategoryDisplayName: p.Category.DisplayName,
 		CategoryID: strconv.FormatUint(uint64(p.CategoryID), 10),
 		CategoryPath: p.Category.Path,
 		Description: p.Description,
 		ID: strconv.FormatUint(uint64(p.ID), 10),
-		ImageID: strconv.FormatUint(uint64(p.ImageID), 10),
+		ImageID: imageID,
 		ImagePath: p.Image.Path,
 		ImageType: p.Image.Type,
 		Name: p.Name,

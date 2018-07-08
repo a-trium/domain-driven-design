@@ -2,6 +2,8 @@ package product
 
 import (
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/persistent"
+	dto "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagmodel"
+	"strconv"
 )
 
 type ProductOption struct {
@@ -21,4 +23,14 @@ type ProductOption struct {
 
 func (ProductOption) TableName() string {
 	return "ProductOption"
+}
+
+func (o *ProductOption) convertToDTO() *dto.ProductOption {
+	return &dto.ProductOption{
+		ID:          strconv.FormatUint(uint64(o.ID), 10),
+		Name:        o.Name,
+		Price:       strconv.FormatUint(uint64(o.Price), 10),
+		Description: o.Description,
+		OnSale:      string(o.OnSale),
+	}
 }

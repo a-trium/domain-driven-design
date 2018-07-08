@@ -13,8 +13,8 @@
 [[projects]]
   name = "github.com/Microsoft/go-winio"
   packages = ["."]
-  revision = "7da180ee92d8bd8bb8c37fc560e673e6557c392f"
-  version = "v0.4.7"
+  revision = "67921128fb397dd80339870d2193d6b1e6856fd4"
+  version = "v0.4.8"
 
 [[projects]]
   branch = "master"
@@ -68,7 +68,7 @@
   branch = "master"
   name = "github.com/go-openapi/analysis"
   packages = ["."]
-  revision = "5957818e100395077187fb7ef3b8a28227af06c6"
+  revision = "ecce8cb68f3d9cdf720bd203b6de599fe03e5673"
 
 [[projects]]
   branch = "master"
@@ -107,7 +107,7 @@
     "middleware/untyped",
     "security"
   ]
-  revision = "90c7afbb4bd8b22431e1c32d65caf405abf170c3"
+  revision = "9a3091f566c0811ef4d54b535179bc0fc484a11f"
 
 [[projects]]
   branch = "master"
@@ -338,7 +338,7 @@
     ".",
     "sqlparse"
   ]
-  revision = "081fe17d19ff4e2dd9f5a0c1158e6bcf74da6906"
+  revision = "aff46b65bb7f71e015dc28dc2edd083737985dfb"
 
 [[projects]]
   name = "github.com/satori/go.uuid"
@@ -391,7 +391,7 @@
     "blowfish",
     "ssh/terminal"
   ]
-  revision = "a8fb68e7206f8c78be19b432c58eb52a6aa34462"
+  revision = "a49355c7e3f8fe157a85be2f77e6e269a0f89602"
 
 [[projects]]
   branch = "master"
@@ -403,7 +403,7 @@
     "html/charset",
     "idna"
   ]
-  revision = "db08ff08e8622530d9ed3a0e8ac279f6d4c02196"
+  revision = "4cb1c02c05b0e749b0365f61ae859a8e0cfceed9"
 
 [[projects]]
   branch = "master"
@@ -412,7 +412,7 @@
     "unix",
     "windows"
   ]
-  revision = "6c888cc515d3ed83fc103cf1d84468aad274b0a7"
+  revision = "7138fd3d9dc8335c567ca206f4333fb75eb05d56"
 
 [[projects]]
   name = "golang.org/x/text"

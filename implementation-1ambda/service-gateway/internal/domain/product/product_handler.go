@@ -6,6 +6,8 @@ import (
 	productapi "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/product"
 	"github.com/go-openapi/runtime/middleware"
 	dto "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagmodel"
+	"github.com/pkg/errors"
+	"strconv"
 )
 
 type ProductHandler interface {
@@ -24,35 +26,70 @@ func NewProductHandler(repo Repository) ProductHandler {
 }
 
 func (h *productHandlerImpl) Configure(registry *swagapi.GatewayAPI) () {
-	registry.ProductFindAllProductHandler = productapi.FindAllProductHandlerFunc(
-		func(params productapi.FindAllProductParams) middleware.Responder {
+	registry.ProductFindAllHandler = productapi.FindAllHandlerFunc(
+		func(params productapi.FindAllParams) middleware.Responder {
 			currentPageOffset := int(*params.CurrentPageOffset)
 			itemCountPerPage := int(*params.ItemCountPerPage)
 			totalCount, productList, ex := h.FindAllProducts(currentPageOffset, itemCountPerPage)
 			totalItemCount := int64(totalCount)
 
 			if ex != nil {
-				return productapi.NewFindAllProductDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
+				return productapi.NewFindAllDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
 			}
 
 			rows := make([]*dto.Product, 0)
 			for i := range productList {
-				product := productList[i]
-				dto := product.convertToDTO()
-				rows = append(rows, dto)
+				model := productList[i]
+				converted := model.convertToDTO()
+				rows = append(rows, converted)
 			}
 
-			response := dto.FindAllProductOKBody{
+			response := dto.FindAllOKBody{
 				Pagination: &dto.Pagination{
 					CurrentPageOffset: params.CurrentPageOffset,
-					ItemCountPerPage: params.ItemCountPerPage,
-					TotalItemCount: &totalItemCount,
+					ItemCountPerPage:  params.ItemCountPerPage,
+					TotalItemCount:    &totalItemCount,
 				},
 
 				Rows: rows,
 			}
 
-			return productapi.NewFindAllProductOK().WithPayload(&response)
+			return productapi.NewFindAllOK().WithPayload(&response)
+		})
+
+	registry.ProductFindOneWithOptionsHandler = productapi.FindOneWithOptionsHandlerFunc(
+		func(params productapi.FindOneWithOptionsParams) middleware.Responder {
+			if params.ProductID == nil {
+				err := errors.New("Got invalid Product ID")
+				ex := e.NewBadRequestException(err)
+				return productapi.NewFindOneWithOptionsDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
+			}
+
+			var productID, err = strconv.ParseUint(*params.ProductID, 10, 64)
+			if err != nil {
+				wrap := errors.Wrap(err, "Failed to parse Product ID")
+				ex := e.NewInternalServerException(wrap)
+				return productapi.NewFindOneWithOptionsDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
+			}
+
+			product, productOptions, ex := h.FindProductWithOptions(uint(productID))
+			if ex != nil {
+				return productapi.NewFindOneWithOptionsDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
+			}
+
+			options := make([]*dto.ProductOption, 0)
+			for i := range productOptions {
+				model := productOptions[i]
+				converted := model.convertToDTO()
+				options = append(options, converted)
+			}
+
+			response := dto.FindOneWithOptionsOKBody{
+				Product: product.convertToDTO(),
+				Options: options,
+			}
+
+			return productapi.NewFindOneWithOptionsOK().WithPayload(&response)
 		})
 }
 
@@ -70,4 +107,8 @@ func (h *productHandlerImpl) FindAllProducts(currentPageOffset int, itemCountPer
 	}
 
 	return totalCount, productList, nil
+}
+
+func (h *productHandlerImpl) FindProductWithOptions(productID uint) (*Product, []*ProductOption, e.Exception) {
+	return h.productRepository.FindProductWithOptions(productID)
 }

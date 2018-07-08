@@ -26,3 +26,6 @@ paths:
 
   /product:
     $ref: "./gateway-product.yaml#/api/findAllProducts"
+
+  /product/{productID}:
+    $ref: "./gateway-product.yaml#/api/findOneProductWithOptions"

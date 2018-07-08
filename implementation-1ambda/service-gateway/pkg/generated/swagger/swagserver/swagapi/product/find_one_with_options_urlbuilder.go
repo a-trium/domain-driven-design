@@ -9,14 +9,12 @@ import (
 	"errors"
 	"net/url"
 	golangswaggerpaths "path"
-
-	"github.com/go-openapi/swag"
+	"strings"
 )
 
-// FindAllProductURL generates an URL for the find all product operation
-type FindAllProductURL struct {
-	CurrentPageOffset *int32
-	ItemCountPerPage  *int32
+// FindOneWithOptionsURL generates an URL for the find one with options operation
+type FindOneWithOptionsURL struct {
+	ProductID string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -26,7 +24,7 @@ type FindAllProductURL struct {
 // WithBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *FindAllProductURL) WithBasePath(bp string) *FindAllProductURL {
+func (o *FindOneWithOptionsURL) WithBasePath(bp string) *FindOneWithOptionsURL {
 	o.SetBasePath(bp)
 	return o
 }
@@ -34,15 +32,22 @@ func (o *FindAllProductURL) WithBasePath(bp string) *FindAllProductURL {
 // SetBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *FindAllProductURL) SetBasePath(bp string) {
+func (o *FindOneWithOptionsURL) SetBasePath(bp string) {
 	o._basePath = bp
 }
 
 // Build a url path and query string
-func (o *FindAllProductURL) Build() (*url.URL, error) {
+func (o *FindOneWithOptionsURL) Build() (*url.URL, error) {
 	var result url.URL
 
-	var _path = "/product"
+	var _path = "/product/{productID}"
+
+	productID := o.ProductID
+	if productID != "" {
+		_path = strings.Replace(_path, "{productID}", productID, -1)
+	} else {
+		return nil, errors.New("ProductID is required on FindOneWithOptionsURL")
+	}
 
 	_basePath := o._basePath
 	if _basePath == "" {
@@ -50,31 +55,11 @@ func (o *FindAllProductURL) Build() (*url.URL, error) {
 	}
 	result.Path = golangswaggerpaths.Join(_basePath, _path)
 
-	qs := make(url.Values)
-
-	var currentPageOffset string
-	if o.CurrentPageOffset != nil {
-		currentPageOffset = swag.FormatInt32(*o.CurrentPageOffset)
-	}
-	if currentPageOffset != "" {
-		qs.Set("currentPageOffset", currentPageOffset)
-	}
-
-	var itemCountPerPage string
-	if o.ItemCountPerPage != nil {
-		itemCountPerPage = swag.FormatInt32(*o.ItemCountPerPage)
-	}
-	if itemCountPerPage != "" {
-		qs.Set("itemCountPerPage", itemCountPerPage)
-	}
-
-	result.RawQuery = qs.Encode()
-
 	return &result, nil
 }
 
 // Must is a helper function to panic when the url builder returns an error
-func (o *FindAllProductURL) Must(u *url.URL, err error) *url.URL {
+func (o *FindOneWithOptionsURL) Must(u *url.URL, err error) *url.URL {
 	if err != nil {
 		panic(err)
 	}
@@ -85,17 +70,17 @@ func (o *FindAllProductURL) Must(u *url.URL, err error) *url.URL {
 }
 
 // String returns the string representation of the path with query string
-func (o *FindAllProductURL) String() string {
+func (o *FindOneWithOptionsURL) String() string {
 	return o.Must(o.Build()).String()
 }
 
 // BuildFull builds a full url with scheme, host, path and query string
-func (o *FindAllProductURL) BuildFull(scheme, host string) (*url.URL, error) {
+func (o *FindOneWithOptionsURL) BuildFull(scheme, host string) (*url.URL, error) {
 	if scheme == "" {
-		return nil, errors.New("scheme is required for a full url on FindAllProductURL")
+		return nil, errors.New("scheme is required for a full url on FindOneWithOptionsURL")
 	}
 	if host == "" {
-		return nil, errors.New("host is required for a full url on FindAllProductURL")
+		return nil, errors.New("host is required for a full url on FindOneWithOptionsURL")
 	}
 
 	base, err := o.Build()
@@ -109,6 +94,6 @@ func (o *FindAllProductURL) BuildFull(scheme, host string) (*url.URL, error) {
 }
 
 // StringFull returns the string representation of a complete url
-func (o *FindAllProductURL) StringFull(scheme, host string) string {
+func (o *FindOneWithOptionsURL) StringFull(scheme, host string) string {
 	return o.Must(o.BuildFull(scheme, host)).String()
 }

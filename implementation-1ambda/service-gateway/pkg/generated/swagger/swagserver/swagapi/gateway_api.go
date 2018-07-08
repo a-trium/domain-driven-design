@@ -52,8 +52,11 @@ func NewGatewayAPI(spec *loads.Document) *GatewayAPI {
 		AuthWhoamiHandler: auth.WhoamiHandlerFunc(func(params auth.WhoamiParams) middleware.Responder {
 			return middleware.NotImplemented("operation AuthWhoami has not yet been implemented")
 		}),
-		ProductFindAllProductHandler: product.FindAllProductHandlerFunc(func(params product.FindAllProductParams) middleware.Responder {
-			return middleware.NotImplemented("operation ProductFindAllProduct has not yet been implemented")
+		ProductFindAllHandler: product.FindAllHandlerFunc(func(params product.FindAllParams) middleware.Responder {
+			return middleware.NotImplemented("operation ProductFindAll has not yet been implemented")
+		}),
+		ProductFindOneWithOptionsHandler: product.FindOneWithOptionsHandlerFunc(func(params product.FindOneWithOptionsParams) middleware.Responder {
+			return middleware.NotImplemented("operation ProductFindOneWithOptions has not yet been implemented")
 		}),
 	}
 }
@@ -94,8 +97,10 @@ type GatewayAPI struct {
 	AuthRegisterHandler auth.RegisterHandler
 	// AuthWhoamiHandler sets the operation handler for the whoami operation
 	AuthWhoamiHandler auth.WhoamiHandler
-	// ProductFindAllProductHandler sets the operation handler for the find all product operation
-	ProductFindAllProductHandler product.FindAllProductHandler
+	// ProductFindAllHandler sets the operation handler for the find all operation
+	ProductFindAllHandler product.FindAllHandler
+	// ProductFindOneWithOptionsHandler sets the operation handler for the find one with options operation
+	ProductFindOneWithOptionsHandler product.FindOneWithOptionsHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -175,8 +180,12 @@ func (o *GatewayAPI) Validate() error {
 		unregistered = append(unregistered, "auth.WhoamiHandler")
 	}
 
-	if o.ProductFindAllProductHandler == nil {
-		unregistered = append(unregistered, "product.FindAllProductHandler")
+	if o.ProductFindAllHandler == nil {
+		unregistered = append(unregistered, "product.FindAllHandler")
+	}
+
+	if o.ProductFindOneWithOptionsHandler == nil {
+		unregistered = append(unregistered, "product.FindOneWithOptionsHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -300,7 +309,12 @@ func (o *GatewayAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/product"] = product.NewFindAllProduct(o.context, o.ProductFindAllProductHandler)
+	o.handlers["GET"]["/product"] = product.NewFindAll(o.context, o.ProductFindAllHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/product/{productID}"] = product.NewFindOneWithOptions(o.context, o.ProductFindOneWithOptionsHandler)
 
 }
 
