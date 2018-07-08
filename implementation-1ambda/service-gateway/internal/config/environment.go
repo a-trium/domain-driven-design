@@ -34,6 +34,7 @@ type Environment struct {
 	// debugging
 	DebugSQL  bool `envconfig:"DEBUG_SQL" default:"true"`
 	DebugHTTP bool `envconfig:"DEBUG_HTTP" default:"true"`
+	LogLevel string `envconfig:"LOG_LEVEL" default:"INFO"` // `DEBUG`, `INFO`
 
 	// copied from govvv injected values
 	BuildDate string
@@ -49,6 +50,14 @@ func (e *Environment) DebugSQLEnabled() bool {
 
 func (e *Environment) DebugHTTPEnabled() bool {
 	return e.DebugHTTP
+}
+
+func (e *Environment) IsInfoLogLevel() bool {
+	return e.LogLevel == "INFO"
+}
+
+func (e *Environment) isDebugLogLevel() bool {
+	return e.LogLevel == "DEBUG"
 }
 
 func (e *Environment) IsTestMode() bool {

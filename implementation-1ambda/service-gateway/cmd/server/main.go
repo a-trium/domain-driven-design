@@ -26,9 +26,12 @@ func main() {
 		"git_branch", env.GitBranch,
 		"git_state", env.GitState,
 		"version", env.Version,
-		"host", env.Host,
-		"rest_port", env.RestPort,
+		"service_host", env.Host,
+		"service_port", env.RestPort,
+		"mode", env.Mode,
 	)
+
+	logger.Debug("asdasd")
 
 	swaggerSpec, err := loads.Analyzed(swagserver.FlatSwaggerJSON, "")
 	if err != nil {
