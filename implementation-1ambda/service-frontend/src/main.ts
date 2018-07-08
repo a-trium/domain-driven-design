@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import locale from 'element-ui/lib/locale/lang/en'
 
 import App from '@/App.vue'
 import routes from '@/router.ts'
@@ -11,7 +12,7 @@ import '@/registerServiceWorker'
 import { AuthAPI } from '@/common/auth.service.ts'
 import { Exception } from '@/generated/swagger'
 
-Vue.use(ElementUI)
+Vue.use(ElementUI, { locale })
 
 const router = new Router({
     routes,

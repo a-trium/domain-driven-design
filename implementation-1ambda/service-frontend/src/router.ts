@@ -14,7 +14,7 @@ export default [
     {
         path: '/',
         name: 'home',
-        displayName: '7 Street',
+        displayName: 'G Street',
         component: Home,
         meta: { requiresAuth: true, common: true, left: true, },
     },

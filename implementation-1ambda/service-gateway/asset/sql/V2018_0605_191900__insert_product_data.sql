@@ -1,6 +1,6 @@
 -- +migrate Up
 INSERT INTO `Product` (`id`, `created_at`, `name`, `price`, `description`, `on_sale`, `category_id`, `image_id`)
-VALUES (1, CURRENT_TIMESTAMP(), 'LG Notebook GRAM 13', '1350000', 'OS is not installed', 'Y', 5, null);
+VALUES (1, CURRENT_TIMESTAMP(), 'LG Notebook GRAM 13', '1350000', 'LG gram Thin & Light Laptop - Up to 16.5 hrs, Thunderbolt 3, Finger Print Reader (Windows not installed)', 'Y', 5, null);
 INSERT INTO `ProductOption` (`id`, `created_at`, `name`, `price`, `description`, `on_sale`, `product_id`, `image_id`)
 VALUES (1, CURRENT_TIMESTAMP(), 'Memory 8 GB+', '160000', '', 'Y', 1, null);
 INSERT INTO `ProductOption` (`id`, `created_at`, `name`, `price`, `description`, `on_sale`, `product_id`, `image_id`)
