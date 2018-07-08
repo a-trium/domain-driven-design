@@ -14,6 +14,7 @@ import (
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
 	"github.com/gorilla/sessions"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/product"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/rest"
 )
 
 func main() {
@@ -88,6 +89,7 @@ func main() {
 	logger.Info("Configure REST API middleware")
 
 	handler := api.Serve(nil)
+	handler = rest.InjectHttpLoggingMiddleware(handler)
 	handler = cors.AllowAll().Handler(handler)
 	server.SetHandler(handler)
 
