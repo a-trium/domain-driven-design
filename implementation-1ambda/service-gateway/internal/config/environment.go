@@ -29,12 +29,14 @@ type Environment struct {
 	MysqlDatabase string `envconfig:"MYSQL_DATABASE" default:"application"`
 
 	// server
-	CorsAllowUrl  string `envconfig:"GATEWAY_CORS_URL" default:"localhost:8080"`
+	CorsAllowUrl string `envconfig:"GATEWAY_CORS_URL" default:"localhost:8080"`
 
 	// debugging
-	DebugSQL  bool `envconfig:"DEBUG_SQL" default:"true"`
-	DebugHTTP bool `envconfig:"DEBUG_HTTP" default:"true"`
-	LogLevel string `envconfig:"LOG_LEVEL" default:"INFO"` // `DEBUG`, `INFO`
+	EnableDebugSQL  bool   `envconfig:"ENABLE_DEBUG_SQL" default:"true"`
+	EnableDebugHTTP bool   `envconfig:"ENABLE_DEBUG_HTTP" default:"true"`
+	EnableSwaggerUI bool   `envconfig:"ENABLE_SWAGGER_UI" default:"true"`
+	EnableAPIAuth   bool   `envconfig:"ENABLE_API_AUTH" default:"true"`
+	LogLevel        string `envconfig:"LOG_LEVEL" default:"INFO"` // `DEBUG`, `INFO`
 
 	// copied from govvv injected values
 	BuildDate string
@@ -45,11 +47,15 @@ type Environment struct {
 }
 
 func (e *Environment) DebugSQLEnabled() bool {
-	return e.DebugSQL
+	return e.EnableDebugSQL
 }
 
 func (e *Environment) DebugHTTPEnabled() bool {
-	return e.DebugHTTP
+	return e.EnableDebugHTTP
+}
+
+func (e *Environment) SwaggerUIEnabled() bool {
+	return e.EnableSwaggerUI
 }
 
 func (e *Environment) IsInfoLogLevel() bool {

@@ -19,7 +19,7 @@ import (
 
 func main() {
 	env := config.Env
-	logger := config.GetLogger().With("service_name", env.ServiceName, "service_id", env.ServiceId, )
+	logger := config.GetLogger()
 
 	logger.Infow("Build Manifest",
 		"build_date", env.BuildDate,
@@ -89,6 +89,7 @@ func main() {
 	logger.Info("Configure REST API middleware")
 
 	handler := api.Serve(nil)
+	handler = rest.InjectAuthMiddleware(sessionStore, handler)
 	handler = rest.InjectHttpLoggingMiddleware(handler)
 	handler = cors.AllowAll().Handler(handler)
 	server.SetHandler(handler)
