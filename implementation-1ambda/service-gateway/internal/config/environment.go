@@ -32,11 +32,11 @@ type Environment struct {
 	CorsAllowUrl string `envconfig:"GATEWAY_CORS_URL" default:"localhost:8080"`
 
 	// debugging
-	EnableDebugSQL  bool   `envconfig:"ENABLE_DEBUG_SQL" default:"true"`
-	EnableDebugHTTP bool   `envconfig:"ENABLE_DEBUG_HTTP" default:"true"`
-	EnableSwaggerUI bool   `envconfig:"ENABLE_SWAGGER_UI" default:"true"`
-	EnableAPIAuth   bool   `envconfig:"ENABLE_API_AUTH" default:"true"`
-	LogLevel        string `envconfig:"LOG_LEVEL" default:"INFO"` // `DEBUG`, `INFO`
+	EnableDebugSQL      bool   `envconfig:"ENABLE_DEBUG_SQL" default:"true"`
+	EnableDebugHTTP     bool   `envconfig:"ENABLE_DEBUG_HTTP" default:"true"`
+	EnableSwaggerUI     bool   `envconfig:"ENABLE_SWAGGER_UI" default:"true"`
+	DisableSessionCheck bool   `envconfig:"DISABLE_SESSION_CHECK" default:"false"`
+	LogLevel            string `envconfig:"LOG_LEVEL" default:"INFO"` // `DEBUG`, `INFO`
 
 	// copied from govvv injected values
 	BuildDate string
@@ -56,6 +56,10 @@ func (e *Environment) DebugHTTPEnabled() bool {
 
 func (e *Environment) SwaggerUIEnabled() bool {
 	return e.EnableSwaggerUI
+}
+
+func (e *Environment) SessionCheckDisabled() bool {
+	return e.DisableSessionCheck
 }
 
 func (e *Environment) IsInfoLogLevel() bool {
