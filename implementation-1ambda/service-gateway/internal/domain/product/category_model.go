@@ -12,7 +12,7 @@ type Category struct {
 	DisplayName string `gorm:"column:display_name; type:VARCHAR(255); NOT NULL;"`
 	Description string `gorm:"column:description; type:TEXT; NOT NULL;"`
 
-	ParentCategoryID uint `gorm:"column:parent_category_id;" sql:"type:UNSIGNED BIG INT NULL REFERENCES Category(id) ON DELETE SET NULL ON UPDATE CASCADE;"`
+	ParentCategoryID *uint `gorm:"column:parent_category_id;" sql:"type:UNSIGNED BIG INT NULL REFERENCES Category(id) ON DELETE SET NULL ON UPDATE CASCADE;"`
 }
 
 func (Category) TableName() string {

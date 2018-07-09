@@ -26,7 +26,13 @@ var _ = Describe("ProductRepository", func() {
 	Describe("AddCategory()", func() {
 		Context("When got valid record", func() {
 			It("should return the created record", func() {
-				r := &product.Category{}
+				r := &product.Category{
+					Path: "/test",
+					Name: "test",
+					DisplayName: "TEST",
+					Description: "description",
+					ParentCategoryID: nil,
+				}
 				created, ex := repo.AddCategory(r)
 
 				Expect(ex).To(BeNil())

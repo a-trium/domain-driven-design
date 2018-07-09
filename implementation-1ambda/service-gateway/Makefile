@@ -107,8 +107,8 @@ clean:
 
 .PHONY: test
 test:
-	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Clean"
-	@ ginkgo -progress -race -cover -r
+	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Test"
+	@ ginkgo -progress -race -cover -r -randomizeAllSpecs -randomizeSuites
 	@ echo ""
 
 

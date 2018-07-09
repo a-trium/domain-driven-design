@@ -25,14 +25,19 @@ type AuthHandler interface {
 type authHandlerImpl struct {
 	userRepository Repository
 	encryptor      Encryptor
-	sessionStore   *sessions.CookieStore
+	sessionStore   sessions.Store
 }
 
+const SessionSecret = "something-very-secret"
 const SessionCookieName = "SESSION"
 const SessionFieldUID = "uid"
 const SessionFieldAuthenticated = "authenticated"
 
-func NewAuthHandler(repo Repository, encryptor Encryptor, sessionStore *sessions.CookieStore) AuthHandler {
+func NewSessionStore() sessions.Store{
+	return sessions.NewCookieStore([]byte(SessionSecret))
+}
+
+func NewAuthHandler(repo Repository, encryptor Encryptor, sessionStore sessions.Store) AuthHandler {
 	return &authHandlerImpl{
 		userRepository: repo,
 		encryptor:      encryptor,
@@ -117,7 +122,9 @@ func (c *authHandlerImpl) Configure(registry *swagapi.GatewayAPI) () {
 }
 
 func (c *authHandlerImpl) Register(uid string, email string, password string) (*AuthClaim, e.Exception) {
-	if strings.TrimSpace(uid) == "" || strings.TrimSpace(password) == "" {
+	if strings.TrimSpace(uid) == "" ||
+		strings.TrimSpace(email) == "" ||
+		strings.TrimSpace(password) == "" {
 		err := errors.New("Empty uid or password")
 		return nil, e.NewBadRequestException(err)
 	}

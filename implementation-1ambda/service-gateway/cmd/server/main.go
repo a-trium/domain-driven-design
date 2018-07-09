@@ -12,8 +12,7 @@ import (
 	"github.com/jessevdk/go-flags"
 	"github.com/rs/cors"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
-	"github.com/gorilla/sessions"
-	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/product"
+		"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/product"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/rest"
 )
 
@@ -67,8 +66,7 @@ func main() {
 	api.Logger = logger.Infof
 
 	// configure session storage
-	sessionSecret := "something-very-secret"
-	sessionStore := sessions.NewCookieStore([]byte(sessionSecret))
+	sessionStore := user.NewSessionStore()
 
 	// configure database
 	db := config.GetDatabase()
