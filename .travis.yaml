@@ -14,7 +14,7 @@ matrix:
     # skip `go get`
     install: true
     before_script:
-      - cd service-gateway
+      - cd implementation-1ambda/service-gateway
     script:
       - make prepare check test build
 
@@ -27,7 +27,7 @@ matrix:
     env:
       - PROJECT=GATEWAY
     before_script:
-      - cd service-front
+      - cd implementation-1ambda/service-front
     script:
       - make build
 
