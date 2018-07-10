@@ -25,9 +25,9 @@ matrix:
     node_js:
       - "8"
     env:
-      - PROJECT=GATEWAY
+      - PROJECT=FRONTEND
     before_script:
-      - cd implementation-1ambda/service-front
+      - cd implementation-1ambda/service-frontend
     script:
       - make build
 
