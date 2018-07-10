@@ -19,7 +19,7 @@ matrix:
       - make install.tool check test coverage build
 
     after_success:
-      - bash <(curl -s https://codecov.io/bash)
+      - echo "TODO_SLACK"
 
   - language: node_js
     node_js:
