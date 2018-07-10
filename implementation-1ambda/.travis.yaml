@@ -1,0 +1,36 @@
+sudo: false
+
+branches:
+  only:
+  - master
+
+matrix:
+  include:
+  - language: go
+    go:
+      - 1.10.x
+    env:
+      - PROJECT=GATEWAY
+    # skip `go get`
+    install: true
+    before_script:
+      - cd service-gateway
+    script:
+      - make prepare check test build
+
+    after_success:
+      - bash <(curl -s https://codecov.io/bash)
+
+  - language: node_js
+    node_js:
+      - "8"
+    env:
+      - PROJECT=GATEWAY
+    before_script:
+      - cd service-front
+    script:
+      - make build
+
+notifications:
+  email: false
+
