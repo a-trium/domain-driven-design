@@ -27,8 +27,8 @@ matrix:
     env:
       - PROJECT=FRONTEND
     before_script:
+      - npm update -g @vue/cli
       - cd implementation-1ambda/service-frontend
-      - npm install -g vue-cli
     script:
       - make build
 
