@@ -24,6 +24,12 @@ BIN_DIR		= bin
 CMD_DIR		= cmd
 VENDOR_DIR	= vendor
 
+# Pure go sources (not vendored and not generated)
+PKG = github.com/a-trium/domain-driven-design/implementation-1ambda
+LEFTPAREN:=(
+RIGHTPAREN:=)
+GOFILES = $(shell find . -type f -name '*.go' -not -path "./vendor/*" -not -path "./pkg/*" -not -path "./internal/mock*")
+GODIRS = $(shell go list -f '{{.Dir}}' ./...  | grep -vFf <$(LEFTPAREN)go list -f '{{.Dir}}' ./vendor/...$(RIGHTPAREN) | grep -vFf <$(LEFTPAREN)go list -f '{{.Dir}}' ./pkg/...$(RIGHTPAREN))
 
 GIT_COMMIT		= $(shell git rev-parse HEAD)
 GIT_DIRTY		= $(shell test -n "`git status --porcelain`" && echo "+CHANGES" || true)
@@ -45,13 +51,17 @@ prepare:
 	@ $(GOGET) github.com/ahmetb/govvv
 
 	@ echo "\t golang:ginkgo \t\t\t(testing)"
-	@ $(GOGET) github.com/ahmetb/govvv
+	@ $(GOGET) github.com/onsi/ginkgo/ginkgo
 
 	@ echo "\t golang:gomega \t\t\t(testing)"
-	@ $(GOGET) github.com/ahmetb/govvv
+	@ $(GOGET) github.com/onsi/gomega/...
 
 	@ echo "\t golang:mockgen \t\t(testing)"
 	@ $(GOGET) github.com/golang/mock/mockgen
+
+	@ echo "\t golang:gometalinter \t\t(check)"
+	@ $(GOGET) github.com/alecthomas/gometalinter
+	@ $(GOLINT) --install
 
 	@ echo ""
 
@@ -111,6 +121,26 @@ test:
 	@ ginkgo -progress -race -cover -r -randomizeAllSpecs -randomizeSuites
 	@ echo ""
 
+.PHONY: lint
+lint:
+	@echo "[$(TAG)] ($(shell TZ=UTC date -u +'%H:%M:%S')) - Lint"
+	@$(GOLINT) --vendor --errors ./...  \
+		--exclude=vendor --exclude=pkg --exclude=internal/*mock_ \
+		--enable=unparam --enable=nakedret --enable=safesql \
+		--deadline=600s
+
+.PHONY: format
+format:
+	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Code Format"
+	@$(GOFMT) -l -w $(GOFILES)
+
+.PHONY: simplify
+simplify:
+	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Code Simplify"
+	@gofmt -s -l -w $(GOFILES)
+
+check: format simplify lint
+
 
 MOCKGEN			= mockgen
 MOCK_PREFIX		= mock
@@ -129,6 +159,10 @@ $(MOCK_PKG_DIRS):
 .PHONY: mock-internal
 mock-internal: $(MOCK_PKG_DIRS)
 
+
+.PHONY: godoc
+godoc:
+	godoc -http=:8080 -index
 
 
 .PHONY: release
