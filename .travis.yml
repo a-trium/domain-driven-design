@@ -24,12 +24,16 @@ matrix:
   - language: node_js
     node_js:
       - "10"
+    cache:
+      directories:
+        - implementation-1ambda/service-frontend/node_modules
     env:
       - PROJECT=FRONTEND
     before_script:
       - npm update -g @vue/cli
       - cd implementation-1ambda/service-frontend
     script:
+      - npm i
       - make build
 
 notifications:
