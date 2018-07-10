@@ -5,20 +5,20 @@ import (
 	"os"
 
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/config"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/product"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/rest"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi"
 	"github.com/go-openapi/loads"
 	"github.com/go-openapi/runtime"
 	"github.com/jessevdk/go-flags"
 	"github.com/rs/cors"
-	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
-	"github.com/gorilla/sessions"
-	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/product"
 )
 
 func main() {
 	env := config.Env
-	logger := config.GetLogger().With("service_name", env.ServiceName, "service_id", env.ServiceId, )
+	logger := config.GetLogger()
 
 	logger.Infow("Build Manifest",
 		"build_date", env.BuildDate,
@@ -26,9 +26,12 @@ func main() {
 		"git_branch", env.GitBranch,
 		"git_state", env.GitState,
 		"version", env.Version,
-		"host", env.Host,
-		"port", env.RestPort,
+		"service_host", env.Host,
+		"service_port", env.RestPort,
+		"mode", env.Mode,
 	)
+
+	logger.Debug("asdasd")
 
 	swaggerSpec, err := loads.Analyzed(swagserver.FlatSwaggerJSON, "")
 	if err != nil {
@@ -63,8 +66,7 @@ func main() {
 	api.Logger = logger.Infof
 
 	// configure session storage
-	sessionSecret := "something-very-secret"
-	sessionStore := sessions.NewCookieStore([]byte(sessionSecret))
+	sessionStore := user.NewSessionStore()
 
 	// configure database
 	db := config.GetDatabase()
@@ -85,6 +87,8 @@ func main() {
 	logger.Info("Configure REST API middleware")
 
 	handler := api.Serve(nil)
+	handler = rest.InjectAuthMiddleware(sessionStore, handler)
+	handler = rest.InjectHttpLoggingMiddleware(handler)
 	handler = cors.AllowAll().Handler(handler)
 	server.SetHandler(handler)
 

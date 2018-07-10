@@ -1,4 +1,4 @@
-package user
+package order_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestDomain(t *testing.T) {
+func TestOrder(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "User Suite")
+	RunSpecs(t, "Order Suite")
 }

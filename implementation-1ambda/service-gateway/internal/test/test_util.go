@@ -58,7 +58,7 @@ type DatabaseContainer struct {
 	resource *dockertest.Resource
 }
 
-func GetDatabaseContainer() (DatabaseContainer) {
+func GetDatabaseContainer() DatabaseContainer {
 	pool, resource, dbHostPort := PrepareDatabase()
 	config.Env.MysqlPort = dbHostPort
 	db := config.GetDatabase()
@@ -72,8 +72,7 @@ func (c *DatabaseContainer) Close() {
 
 func GetTestDatabase(debug bool) *gorm.DB {
 	config.Env.Mode = "TEST"
-	config.Env.Debug = debug
+	config.Env.EnableDebugSQL = debug
 
 	return config.GetDatabase()
 }
-

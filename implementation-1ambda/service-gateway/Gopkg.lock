@@ -68,7 +68,7 @@
   branch = "master"
   name = "github.com/go-openapi/analysis"
   packages = ["."]
-  revision = "ecce8cb68f3d9cdf720bd203b6de599fe03e5673"
+  revision = "a300ac7e9cfde2614eb71f7fe78ea4514bb14cfa"
 
 [[projects]]
   branch = "master"
@@ -113,25 +113,25 @@
   branch = "master"
   name = "github.com/go-openapi/spec"
   packages = ["."]
-  revision = "bcff419492eeeb01f76e77d2ebc714dc97b607f5"
+  revision = "16284f9da51d5a5b5dc67c8109a99b014c4b7f0a"
 
 [[projects]]
   branch = "master"
   name = "github.com/go-openapi/strfmt"
   packages = ["."]
-  revision = "481808443b00a14745fada967cb5eeff0f9b1df2"
+  revision = "913ee058e387ac83a67e2d9f13acecdcd5769fc6"
 
 [[projects]]
   branch = "master"
   name = "github.com/go-openapi/swag"
   packages = ["."]
-  revision = "811b1089cde9dad18d4d0c2d09fbdbf28dbd27a5"
+  revision = "2b0bd4f193d011c203529df626a65d63cb8a79e8"
 
 [[projects]]
   branch = "master"
   name = "github.com/go-openapi/validate"
   packages = ["."]
-  revision = "b0a3ed684d0fdd3e1eda00433382188ce8aa7169"
+  revision = "9a6e517cddf1ddd47449be5d06a6a786e51d9986"
 
 [[projects]]
   name = "github.com/go-sql-driver/mysql"
@@ -338,7 +338,7 @@
     ".",
     "sqlparse"
   ]
-  revision = "aff46b65bb7f71e015dc28dc2edd083737985dfb"
+  revision = "3f452fc0ebebbb784fdab91f7bc79a31dcacab5c"
 
 [[projects]]
   name = "github.com/satori/go.uuid"
@@ -403,7 +403,7 @@
     "html/charset",
     "idna"
   ]
-  revision = "4cb1c02c05b0e749b0365f61ae859a8e0cfceed9"
+  revision = "32a936f46389aa10549d60bd7833e54b01685d09"
 
 [[projects]]
   branch = "master"
@@ -412,7 +412,7 @@
     "unix",
     "windows"
   ]
-  revision = "7138fd3d9dc8335c567ca206f4333fb75eb05d56"
+  revision = "3c6ecd8f22c6f40fbeec94c000a069d7d87c7624"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -467,7 +467,7 @@
     "bson",
     "internal/json"
   ]
-  revision = "3f83fa5005286a7fe593b055f0d7771a7dce4655"
+  revision = "9856a29383ce1c59f308dd1cf0363a79b5bef6b5"
 
 [[projects]]
   name = "gopkg.in/yaml.v2"

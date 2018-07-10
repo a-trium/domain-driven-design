@@ -2,10 +2,10 @@ package product
 
 import (
 	e "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/exception"
+	dto "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagmodel"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi"
 	productapi "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/product"
 	"github.com/go-openapi/runtime/middleware"
-	dto "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagmodel"
 	"github.com/pkg/errors"
 	"strconv"
 )
@@ -25,7 +25,7 @@ func NewProductHandler(repo Repository) ProductHandler {
 	}
 }
 
-func (h *productHandlerImpl) Configure(registry *swagapi.GatewayAPI) () {
+func (h *productHandlerImpl) Configure(registry *swagapi.GatewayAPI) {
 	registry.ProductFindAllHandler = productapi.FindAllHandlerFunc(
 		func(params productapi.FindAllParams) middleware.Responder {
 			currentPageOffset := int(*params.CurrentPageOffset)
