@@ -16,19 +16,24 @@ matrix:
     before_script:
       - cd implementation-1ambda/service-gateway
     script:
-      - make prepare check test build
+      - make install.tool check test coverage build
 
     after_success:
-      - bash <(curl -s https://codecov.io/bash)
+      - echo "TODO_SLACK"
 
   - language: node_js
     node_js:
-      - "8"
+      - "10"
+    cache:
+      directories:
+        - implementation-1ambda/service-frontend/node_modules
     env:
-      - PROJECT=GATEWAY
+      - PROJECT=FRONTEND
     before_script:
-      - cd implementation-1ambda/service-front
+      - npm update -g @vue/cli
+      - cd implementation-1ambda/service-frontend
     script:
+      - npm i
       - make build
 
 notifications:
