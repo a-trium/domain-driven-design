@@ -11,13 +11,11 @@ hash goveralls 2>/dev/null || go get github.com/mattn/goveralls
 hash godir 2>/dev/null || go get github.com/Masterminds/godir
 
 remove_mock_from_cover_data() {
-  local COVER_FILES=$(find . -type f -name "*.coverprofile")
-   # while read -r file; do cat $file | grep -v mock >> ${coveragetxt} && mv $file ${coverdir}; done
-
   for file in $(find . -type f -name "*.coverprofile")
   do
-    sed -i '.bak' '/mock_*.go/d' ${file}
-    rm -rf ${file}.bak
+    grep -v "mock_" ${file} > ${file}.tmp;
+    rm -rf ${file}
+    mv ${file}.tmp ${file}
   done
 }
 
