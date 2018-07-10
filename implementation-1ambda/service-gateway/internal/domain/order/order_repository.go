@@ -49,7 +49,6 @@ func (r *repositoryImpl) FindOrderById(id uint) (*Order, e.Exception) {
 	return record, nil
 }
 
-
 func (r *repositoryImpl) AddOrderDetail(record *OrderDetail) (*OrderDetail, e.Exception) {
 	err := r.db.Create(record).Error
 
@@ -77,4 +76,3 @@ func (r *repositoryImpl) FindOrderDetailById(id uint) (*OrderDetail, e.Exception
 
 	return record, nil
 }
-

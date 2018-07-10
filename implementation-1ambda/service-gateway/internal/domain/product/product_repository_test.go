@@ -27,10 +27,10 @@ var _ = Describe("ProductRepository", func() {
 		Context("When got valid record", func() {
 			It("should return the created record", func() {
 				r := &product.Category{
-					Path: "/test",
-					Name: "test",
-					DisplayName: "TEST",
-					Description: "description",
+					Path:             "/test",
+					Name:             "test",
+					DisplayName:      "TEST",
+					Description:      "description",
 					ParentCategoryID: nil,
 				}
 				created, ex := repo.AddCategory(r)
@@ -53,7 +53,6 @@ var _ = Describe("ProductRepository", func() {
 			})
 		})
 	})
-
 
 	Describe("AddImage()", func() {
 		Context("When got valid record", func() {

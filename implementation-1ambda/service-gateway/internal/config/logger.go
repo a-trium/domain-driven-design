@@ -19,7 +19,7 @@ func GetLogger() *zap.SugaredLogger {
 	}
 
 	log, _ = conf.Build()
-	logger := log.Sugar().With("service_name", Env.ServiceName, "service_id", Env.ServiceId, )
+	logger := log.Sugar().With("service_name", Env.ServiceName, "service_id", Env.ServiceId)
 
 	return logger
 }

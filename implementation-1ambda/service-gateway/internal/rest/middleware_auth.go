@@ -1,18 +1,18 @@
 package rest
 
 import (
-	"net/http"
-	"github.com/gorilla/sessions"
-	"fmt"
 	"encoding/json"
-	"github.com/pkg/errors"
-	e "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/exception"
+	"fmt"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/config"
-	"strings"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
+	e "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/exception"
+	"github.com/gorilla/sessions"
+	"github.com/pkg/errors"
+	"net/http"
+	"strings"
 )
 
-func InjectAuthMiddleware(sessionStore *sessions.CookieStore, h http.Handler) http.Handler {
+func InjectAuthMiddleware(sessionStore sessions.Store, h http.Handler) http.Handler {
 	env := config.Env
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// if CORS

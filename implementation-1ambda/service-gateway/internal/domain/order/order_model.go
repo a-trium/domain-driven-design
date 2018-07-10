@@ -26,7 +26,7 @@ type Order struct {
 	RecipientPhone string `gorm:"column:recipient_phone; 	type:VARCHAR(50); 	NOT NULL;"`
 	RecipientEmail string `gorm:"column:recipient_email; 	type:VARCHAR(50); 	NOT NULL;"`
 
-	UserID uint      `gorm:"column:user_id" sql:"type:UNSIGNED BIG INT REFERENCES User(id) ON DELETE RESTRICT ON UPDATE CASCADE"`
+	UserID uint `gorm:"column:user_id" sql:"type:UNSIGNED BIG INT REFERENCES User(id) ON DELETE RESTRICT ON UPDATE CASCADE"`
 
 	OrderDetails []Order `gorm:"foreignkey:OrderID"`
 }

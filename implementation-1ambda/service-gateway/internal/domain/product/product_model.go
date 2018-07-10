@@ -4,8 +4,8 @@ import (
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/persistent"
 	dto "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagmodel"
 	"strconv"
-	"time"
 	"strings"
+	"time"
 )
 
 type OnSale string
@@ -19,7 +19,7 @@ type Product struct {
 	Name        string `gorm:"column:name; type:VARCHAR(255); NOT NULL;"`
 	Price       uint   `gorm:"column:price; type:UNSIGNED BIG INT; NOT NULL;"`
 	Description string `gorm:"column:description; type:TEXT; NOT NULL;"`
-	OnSale    OnSale  `gorm:"column:on_sale; type:VARCHAR(4); NOT NULL;"`
+	OnSale      OnSale `gorm:"column:on_sale; type:VARCHAR(4); NOT NULL;"`
 
 	Category   Category `gorm:"foreignkey:CategoryID;"`
 	CategoryID uint     `gorm:"column:category_id;" sql:"type:UNSIGNED BIG INT REFERENCES Category(id) ON DELETE RESTRICT ON UPDATE CASCADE;"`
@@ -40,18 +40,18 @@ func (p *Product) convertToDTO() *dto.Product {
 
 	dto := &dto.Product{
 		CategoryDisplayName: p.Category.DisplayName,
-		CategoryID: strconv.FormatUint(uint64(p.CategoryID), 10),
-		CategoryPath: p.Category.Path,
-		Description: p.Description,
-		ID: strconv.FormatUint(uint64(p.ID), 10),
-		ImageID: imageID,
-		ImagePath: p.Image.Path,
-		ImageType: p.Image.Type,
-		Name: p.Name,
-		OnSale: string(p.OnSale),
-		Price: strconv.FormatUint(uint64(p.Price), 10),
-		CreatedAt: p.CreatedAt.Format(time.RFC3339),
-		UpdatedAt: p.UpdatedAt.Format(time.RFC3339),
+		CategoryID:          strconv.FormatUint(uint64(p.CategoryID), 10),
+		CategoryPath:        p.Category.Path,
+		Description:         p.Description,
+		ID:                  strconv.FormatUint(uint64(p.ID), 10),
+		ImageID:             imageID,
+		ImagePath:           p.Image.Path,
+		ImageType:           p.Image.Type,
+		Name:                p.Name,
+		OnSale:              string(p.OnSale),
+		Price:               strconv.FormatUint(uint64(p.Price), 10),
+		CreatedAt:           p.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:           p.UpdatedAt.Format(time.RFC3339),
 	}
 
 	if strings.HasPrefix(dto.UpdatedAt, "0001") {

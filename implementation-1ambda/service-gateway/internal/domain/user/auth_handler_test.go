@@ -3,10 +3,10 @@ package user_test
 import (
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/test"
+	"github.com/gorilla/sessions"
 	"github.com/jinzhu/gorm"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/gorilla/sessions"
 )
 
 var _ = Describe("AuthHandler", func() {

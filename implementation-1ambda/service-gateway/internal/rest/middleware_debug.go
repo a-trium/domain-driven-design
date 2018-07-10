@@ -1,14 +1,13 @@
 package rest
 
 import (
-	"net/http"
-			"fmt"
-	"time"
-	"net"
 	"bufio"
+	"fmt"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/config"
+	"net"
+	"net/http"
+	"time"
 )
-
 
 // wrap `http.ResponseWriter` to persist status and size which are not exposed
 type statusWriter struct {
@@ -42,7 +41,7 @@ func (c *statusWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
 
 func InjectHttpLoggingMiddleware(next http.Handler) http.Handler {
 	env := config.Env
-	logger := config.GetLogger().With("service_name", env.ServiceName, "service_id", env.ServiceId, )
+	logger := config.GetLogger().With("service_name", env.ServiceName, "service_id", env.ServiceId)
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
@@ -74,4 +73,3 @@ func InjectHttpLoggingMiddleware(next http.Handler) http.Handler {
 		)
 	})
 }
-

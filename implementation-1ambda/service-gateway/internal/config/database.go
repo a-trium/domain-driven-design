@@ -3,6 +3,9 @@ package config
 import (
 	"fmt"
 
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/order"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/product"
+	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gobuffalo/packr"
 	"github.com/jinzhu/gorm"
@@ -11,9 +14,6 @@ import (
 	"github.com/rubenv/sql-migrate"
 	"github.com/satori/go.uuid"
 	"go.uber.org/zap"
-	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/user"
-	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/product"
-	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/domain/order"
 )
 
 const SqlSchemaDir = "../../asset/sql"
@@ -51,7 +51,7 @@ func NewSQLiteDatabase(env Environment) Database {
 		logger.Fatalw("Failed to connect DB", "error", err)
 	}
 
-	return &SQLiteDatabase{db: db, dialect: dialect,}
+	return &SQLiteDatabase{db: db, dialect: dialect}
 }
 
 func (d *SQLiteDatabase) Get() *gorm.DB {
@@ -108,7 +108,7 @@ func NewMySQLDatabase(env Environment) Database {
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 
-	return &MySQLDatabase{db: db, dialect: dialect,}
+	return &MySQLDatabase{db: db, dialect: dialect}
 }
 
 func (d *MySQLDatabase) Dialect() string {

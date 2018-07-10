@@ -3,17 +3,17 @@ package user
 import (
 	"strings"
 
+	"encoding/json"
+	"fmt"
 	e "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/internal/exception"
-	"github.com/pkg/errors"
+	dto "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagmodel"
 	"github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi"
 	authapi "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagserver/swagapi/auth"
-	"github.com/go-openapi/runtime/middleware"
-	dto "github.com/a-trium/domain-driven-design/implementation-1ambda/service-gateway/pkg/generated/swagger/swagmodel"
-	"github.com/gorilla/sessions"
-	"net/http"
-	"fmt"
-	"encoding/json"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/runtime/middleware"
+	"github.com/gorilla/sessions"
+	"github.com/pkg/errors"
+	"net/http"
 )
 
 type AuthHandler interface {
@@ -33,7 +33,7 @@ const SessionCookieName = "SESSION"
 const SessionFieldUID = "uid"
 const SessionFieldAuthenticated = "authenticated"
 
-func NewSessionStore() sessions.Store{
+func NewSessionStore() sessions.Store {
 	return sessions.NewCookieStore([]byte(SessionSecret))
 }
 
@@ -45,7 +45,7 @@ func NewAuthHandler(repo Repository, encryptor Encryptor, sessionStore sessions.
 	}
 }
 
-func (c *authHandlerImpl) Configure(registry *swagapi.GatewayAPI) () {
+func (c *authHandlerImpl) Configure(registry *swagapi.GatewayAPI) {
 	registry.AuthRegisterHandler = authapi.RegisterHandlerFunc(
 		func(params authapi.RegisterParams) middleware.Responder {
 			if params.Body == nil {
@@ -86,7 +86,7 @@ func (c *authHandlerImpl) Configure(registry *swagapi.GatewayAPI) () {
 				return authapi.NewLoginDefault(ex.StatusCode()).WithPayload(ex.ToSwaggerError())
 			}
 
-			response := &dto.AuthResponse{UID: claim.UID,}
+			response := &dto.AuthResponse{UID: claim.UID}
 
 			// set session value to mark user is logged in
 			session, _ := c.sessionStore.Get(params.HTTPRequest, SessionCookieName)
@@ -115,7 +115,7 @@ func (c *authHandlerImpl) Configure(registry *swagapi.GatewayAPI) () {
 				uid = ""
 			}
 
-			response := &dto.AuthResponse{UID: uid,}
+			response := &dto.AuthResponse{UID: uid}
 			return authapi.NewLoginOK().WithPayload(response)
 		})
 
