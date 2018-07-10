@@ -28,6 +28,7 @@ matrix:
       - PROJECT=FRONTEND
     before_script:
       - cd implementation-1ambda/service-frontend
+      - npm install -g vue-cli
     script:
       - make build
 
