@@ -37,8 +37,8 @@ VERSION 		= $(shell cat ./VERSION)
 
 APP				= server
 
-.PHONY: prepare
-prepare:
+.PHONY: install.tool
+install.tool:
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Installing prerequisites"
 
 	@ echo "\t golang:dep \t\t\t(dependency)"
@@ -65,21 +65,24 @@ prepare:
 
 	@ echo ""
 
-.PHONY: install
-install:
+.PHONY: install.dependency
+install.dependency:
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Installing dependencies"
 	@ $(GODEP) ensure
 	@ echo ""
 
+.PHONY: install
+install: install.tool install.dependency
+
 SWAGGER_SPEC 	= "../schema-swagger/gateway-rest.yaml"
-.PHONY: swagger-version
-swagger-version:
+.PHONY: swagger.version
+swagger.version:
 	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Updating swagger spec version: $(VERSION)"
 	@VERSION=$(VERSION) SWAGGER_FILE=$(SWAGGER_SPEC) ../script/update-swagger-version.sh
 	@ echo ""
 
-.PHONY: swagger-server
-swagger-server: swagger-version
+.PHONY: swagger.server
+swagger-server: swagger.version
 	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Cleaning swagger files"
 	@ rm -rf pkg/generated/swagger/* || true
 	@ mkdir -p pkg/generated/swagger || true
@@ -94,7 +97,7 @@ swagger-server: swagger-version
 	@ echo ""
 
 .PHONY: swagger
-swagger: swagger-version swagger-server
+swagger: swagger.version swagger.server
 
 .PHONY: build
 build:
@@ -121,25 +124,41 @@ test:
 	@ ginkgo -progress -race -cover -r -randomizeAllSpecs -randomizeSuites
 	@ echo ""
 
-.PHONY: lint
-lint:
-	@echo "[$(TAG)] ($(shell TZ=UTC date -u +'%H:%M:%S')) - Lint"
+.PHONY: coverage.convert
+coverage.convert: test
+	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Coverage Convert"
+	@ ../script/ginkgo-coverage.sh
+	@ echo ""
+
+.PHONY: coverage.push
+coverage.push: test
+	@ echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Coverage Push"
+	@ ../script/ginkgo-coverage.sh --codecov
+	@ echo ""
+
+.PHONY: coverage
+coverage: coverage.push
+
+.PHONY: check.lint
+check.lint:
+	@echo "[$(TAG)] ($(shell TZ=UTC date -u +'%H:%M:%S')) - Check Lint"
 	@$(GOLINT) --vendor --errors ./...  \
 		--exclude=vendor --exclude=pkg --exclude=internal/*mock_ \
 		--enable=unparam --enable=nakedret --enable=safesql \
 		--deadline=600s
 
-.PHONY: format
-format:
-	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Code Format"
+.PHONY: check.format
+check.format:
+	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Check Format"
 	@$(GOFMT) -l -w $(GOFILES)
 
-.PHONY: simplify
-simplify:
-	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Code Simplify"
+.PHONY: check.simplify
+check.simplify:
+	@echo "[$(TAG)] ($(shell TZ=UTC date -u '+%H:%M:%S')) - Check Simplify"
 	@gofmt -s -l -w $(GOFILES)
 
-check: format simplify lint
+.PHONY: check
+check: check.format check.simplify check.lint
 
 
 MOCKGEN			= mockgen
@@ -156,8 +175,8 @@ $(MOCK_PKG_DIRS):
 	@PKG_DIR=$(TARGET) ../script/generate-gomock.sh
 	@echo ""
 
-.PHONY: mock-internal
-mock-internal: $(MOCK_PKG_DIRS)
+.PHONY: mock.generate
+mock.generate: $(MOCK_PKG_DIRS)
 
 
 .PHONY: godoc
@@ -166,4 +185,4 @@ godoc:
 
 
 .PHONY: release
-release: prepare install clean swagger build
+release: install clean swagger build

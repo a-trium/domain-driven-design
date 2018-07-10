@@ -16,7 +16,7 @@ matrix:
     before_script:
       - cd implementation-1ambda/service-gateway
     script:
-      - make prepare check test build
+      - make install.tool check test coverage build
 
     after_success:
       - bash <(curl -s https://codecov.io/bash)
